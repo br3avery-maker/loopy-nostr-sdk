@@ -18,3 +18,5 @@ Record consequential changes, compatibility changes, repairs and security fixes 
 
 ## Unreleased
 Record accepted changes here as they are implemented and verified; link exact commits and affected tests. No release is implied by this section.
+
+- Unreleased reconciliation candidate: event-specific relay destination groups, policy limits, protected/inbox planning and exact-ID group receipt summaries; 10 new signed offline regressions and three archived-donor comparison cases. See [comparison](docs/RELAY_DELIVERY_RECONCILIATION.md). Review/CI and actual consumer adoption remain separate.

@@ -3,3 +3,5 @@ export * from './events.js';export * from './signers.js';export * from './nip55.
 export {eventIdentity,collectEventObservations} from './history.js';export * from './sync.js';
 
 export * from './edit.js';
+
+export * from './delivery.js';

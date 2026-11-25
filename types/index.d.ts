@@ -41,7 +41,24 @@ export interface HistoryCursor {relay:Endpoint;scope:string;watermark:number|nul
 export type HistoryStatus='window-read'|'partial'|'boundary-stalled'|'failed'|'cancelled'|'not-yet-in-window';
 export interface HistorySyncResult {observations:EventObservation[];cursors:Record<Endpoint,HistoryCursor>;relays:Array<{relay:Endpoint;pages:number;status:HistoryStatus;error:string|null}>}
 export interface HistorySyncOptions {relays:Endpoint[];filter:HistoryFilter;cursors?:Record<Endpoint,HistoryCursor>;pageSize?:number;boundaryLimit?:number;maxPages?:number;now?:number;timeoutMs?:number;signal?:AbortSignal;Socket?:any;query?:(url:Endpoint,filter:HistoryFilter&{since:number;until:number;limit:number},options:{signal?:AbortSignal;timeoutMs:number;maxEvents:number;Socket?:any})=>Promise<SignedEvent[]>}
+/** Advisory, offline event-specific relay routing. Explicit network/signing authorization remains separate. */
+export interface RelayDeliveryOptions {
+  signedLists?:SignedEvent[]; pinned?:Endpoint[]; defaults?:Endpoint[]; allowedRelays?:Endpoint[]; entitledRelays?:Endpoint[];
+  relayPolicies?:Array<{relay:Endpoint;observedAt:number;document:Record<string,unknown>}>;
+  now?:number; policyTTL?:number; redundancy?:number; maxCandidates?:number; visibility?:'public'|'private'; authPubkey?:Hex; authAvailable?:boolean;
+}
+export interface RelayDeliveryCandidate {relay:Endpoint;requiresAuthentication:boolean;policyObservedAt:number|null;warnings:string[]}
+export interface RelayDeliveryPlan {
+  eventId:Hex;kind:number;storageClass:string;frameBytes:number;visibility:'public'|'private';protectedEvent:boolean;at:number;
+  groups:Array<{id:string;required:number;selected:RelayDeliveryCandidate[];fallbacks:RelayDeliveryCandidate[];omitted:number;status:'recipient-list-missing'|'insufficient-candidates'|'planned-unverified'}>;
+  excluded:Array<{group:string;relay:Endpoint;reasons:string[]}>;
+}
+export interface RelayDeliveryReceipt {relay:Endpoint;eventId:Hex;accepted:boolean;readback?:boolean}
+export interface RelayDeliverySummary {eventId:Hex;status:'verified'|'accepted-ephemeral'|'partial-or-failed';groups:Array<{id:string;required:number;accepted:Endpoint[];delivered:Endpoint[];status:'verified'|'accepted-ephemeral'|'accepted-incomplete'|'not-delivered'}>}
 export namespace Nostr {
+  function planRelayDelivery(event:SignedEvent,options?:RelayDeliveryOptions):RelayDeliveryPlan;
+  function summarizeRelayDelivery(plan:RelayDeliveryPlan,receipts?:RelayDeliveryReceipt[]):RelayDeliverySummary;
+
   function reviewEventReplacement(baseline:SignedEvent,template:UnsignedEvent,pubkey:Hex):EventReplacementReview;
   function prepareEventReplacement(baseline:SignedEvent,options?:{pubkey?:Hex;content?:string;replaceTags?:Record<string,string[][]>;created_at?:number}):EventReplacementReview;
   function eventIdentity(event:SignedEvent):string;

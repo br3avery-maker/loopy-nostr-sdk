@@ -135,6 +135,10 @@
       "kind": "function"
     },
     {
+      "name": "planRelayDelivery",
+      "kind": "function"
+    },
+    {
       "name": "planRelays",
       "kind": "function"
     },
@@ -176,6 +180,10 @@
     },
     {
       "name": "reviewEventReplacement",
+      "kind": "function"
+    },
+    {
+      "name": "summarizeRelayDelivery",
       "kind": "function"
     },
     {

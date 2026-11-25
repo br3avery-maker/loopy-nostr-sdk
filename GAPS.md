@@ -10,3 +10,7 @@
 | GAP-006 | IC and application adoption | Prior local IC Forge and headless consumers tested on earlier candidates | Pin exact public SDK in existing adapters and real consumers; do not claim global installation | open |
 
 A missing external verification is not a green pass. All original private candidate archives remain untouched.
+
+## Bidirectional source reconciliation (open)
+
+The first relay delivery planning/receipt-summary implementation is in [comparison notes](docs/RELAY_DELIVERY_RECONCILIATION.md). Existing donor monitor/cache/cooldown, authenticated transport, fallback, Blossom preflight and publisher copy/MIME/gateway behavior remain open. Reconcile every relevant source family and test actual consumers; do not treat local regression success as complete coverage. Original specification-intelligence and signer-review tracks remain separate.

@@ -129,3 +129,7 @@ Verified relay receipts now require explicit acknowledgment and exact event ID.
 ## Open Specs registry adapter
 
 See [OPEN_SPECS.md](OPEN_SPECS.md) for signed document search, revision-aware indexing and advisory kind definitions.
+
+### Event-specific relay delivery
+
+`Nostr.planRelayDelivery(signedEvent, options)` and `Nostr.summarizeRelayDelivery(plan, receipts)` are offline advisory APIs. See [relay delivery reconciliation](RELAY_DELIVERY_RECONCILIATION.md) for group/policy contracts, exact receipts, explicit private/authentication boundaries and remaining transport work.

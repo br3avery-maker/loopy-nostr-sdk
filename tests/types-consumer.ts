@@ -64,3 +64,10 @@ void SpecsIntelligence.queryOpenSpecs({covers:[31337],outbox:false});
 
 const decodedAuthor: string | null | undefined = Moderation.decodeNip19('nevent1fixture').author;
 void decodedAuthor;
+
+import type {RelayDeliveryPlan,RelayDeliverySummary} from '../types/index.js';
+function typecheckDelivery(event:SignedEvent):RelayDeliverySummary {
+  const plan:RelayDeliveryPlan=Nostr.planRelayDelivery(event,{defaults:['wss://relay.example'],redundancy:2});
+  return Nostr.summarizeRelayDelivery(plan,[]);
+}
+void typecheckDelivery;

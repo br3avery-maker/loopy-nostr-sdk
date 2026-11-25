@@ -109,3 +109,7 @@ This candidate fixes premature NIP-46 relay connection and resolves IndexedDB wr
 ## Project documentation
 
 [Project](PROJECT.md) · [Architecture](ARCHITECTURE.md) · [Development](DEVELOPMENT.md) · [Capabilities](CAPABILITIES.md) · [Security](SECURITY.md) · [Reuse](REUSE.md) · [UI scope](UI.md) · [Changelog](CHANGELOG.md) · [Release](RELEASE.md) · [Gaps](GAPS.md)
+
+## Unreleased reconciliation: relay delivery
+
+See [event-specific relay planning and receipt summaries](docs/RELAY_DELIVERY_RECONCILIATION.md). Offline, additive APIs; no transport changes or publication authorization. The existing rc.10 candidate version is not a new release.
