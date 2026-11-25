@@ -1,4 +1,3 @@
-import shutil
 import tempfile
 import unittest
 from pathlib import Path
@@ -9,9 +8,31 @@ class StarterChecks(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.root = Path(self.temp.name)
-        source = Path(__file__).resolve().parents[1]
+        # Synthetic fixture: never use the actual project's completed docs as
+        # unfinished template inputs. This suite must pass after real fill-in.
+        def field(key):
+            return (
+                f'<!-- FILL:{key} | DISCOVER: fixture evidence. | ACCEPT: fixture value. -->\n'
+                f'{{{{FILL:{key}}}}}\n'
+            )
         for name in REQUIRED:
-            shutil.copy2(source / name, self.root / name)
+            title = '# Fixture\n\n'
+            if name == 'PROJECT.md':
+                value = title + '## Scope\n' + field('scope')
+            elif name == 'CAPABILITIES.md':
+                value = title + '## Inventory\n' + field('capability') + '\n| API | State |\n| --- | --- |\n| example | Unknown |\n'
+            elif name == 'UI.md':
+                value = (
+                    title
+                    + field('ui-scope').replace('{{FILL:ui-scope}}', '**Interface scope:** {{FILL:ui-scope}}')
+                    + field('ui-evidence').replace('{{FILL:ui-evidence}}', '**Scope evidence:** {{FILL:ui-evidence}}')
+                    + '\n## Design\n' + field('ui-design')
+                )
+            elif name in FILLED_DOCS:
+                value = title + '## Evidence\n' + field('fixture-value')
+            else:
+                value = title + 'Nonempty fixture document.\n'
+            (self.root / name).write_text(value, encoding='utf-8')
 
     def tearDown(self):
         self.temp.cleanup()
@@ -114,6 +135,19 @@ class StarterChecks(unittest.TestCase):
         p = self.root / 'UI.md'
         p.write_text(p.read_text().replace('**Interface scope:** headless\n', ''))
         self.assertTrue(any('Interface scope must' in e for e in scan(self.root, 'ready')[0]))
+
+    def test_real_repository_documents_are_populated(self):
+        source = Path(__file__).resolve().parents[1]
+        self.assertEqual(scan(source, 'ready'), ([], []))
+
+    def test_license_and_attribution_files_are_required(self):
+        for name in ('LICENSE', 'AI-DEVELOPMENT.md', 'THIRD_PARTY_NOTICES.md'):
+            with self.subTest(name=name):
+                p = self.root / name
+                old = p.read_text()
+                p.unlink()
+                self.assertTrue(any(name in e and 'missing required' in e for e in scan(self.root, 'template')[0]))
+                p.write_text(old)
 
 
 if __name__ == '__main__':
