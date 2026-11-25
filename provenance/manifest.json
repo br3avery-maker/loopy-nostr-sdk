@@ -1,6 +1,6 @@
 {
   "schema": "nsite-loopy-unified-sdk/1",
-  "version": "1.1.1-rc.9",
+  "version": "1.1.1-rc.10",
   "modules": [
     {
       "path": "src/adapters/android.js",
@@ -195,9 +195,10 @@
     },
     {
       "path": "src/moderation/identity.js",
-      "sha256": "34212df4c024e8857deaeec69342fd2da30b42d02f0daff8679856fab065006b",
+      "sha256": "25f831b22530935710f58db466cd823d61fb427ebd5e4b2f0bcaa374f5e518fc",
       "role": "protocol-adapter",
-      "lineage": "adapted from user-owned repo; see repo-capabilities.json"
+      "lineage": "adapted from user-owned repo; see repo-capabilities.json; rc.10 public review repair (docs/PUBLIC_REVIEW_REPAIRS.md)",
+      "parent_sha256": "34212df4c024e8857deaeec69342fd2da30b42d02f0daff8679856fab065006b"
     },
     {
       "path": "src/moderation/index.js",
@@ -281,9 +282,10 @@
     },
     {
       "path": "src/nostr/profiles.js",
-      "sha256": "ca66a4b0da801c7f644349abe8b41a71db67b8f8504f020c42d24b51c071936a",
+      "sha256": "b48633dd5993028127e99ea450d24bdbd17baa7ed3ae74c9d454ba2b3ea95cd6",
       "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
-      "lineage": "derived and standardized"
+      "lineage": "derived and standardized; rc.10 public review repair (docs/PUBLIC_REVIEW_REPAIRS.md)",
+      "parent_sha256": "ca66a4b0da801c7f644349abe8b41a71db67b8f8504f020c42d24b51c071936a"
     },
     {
       "path": "src/nostr/receipts.js",
@@ -443,5 +445,11 @@
       "private archive and unrelated repository inventories excluded"
     ],
     "source_tree_commit": "b679d53692a25d6e680ca342af7ee209a1601802"
+  },
+  "public_review_repairs": {
+    "parent_commit": "c43170c37f35637af8be12ddbddf84ee470bf011",
+    "parent_version": "1.1.1-rc.9",
+    "doc": "docs/PUBLIC_REVIEW_REPAIRS.md",
+    "tests": "tests/review-profiles-identifiers.test.js"
   }
 }

@@ -1,0 +1,10 @@
+# Public review repairs — 1.1.1-rc.10
+
+Parent: public candidate `c43170c37f35637af8be12ddbddf84ee470bf011` (1.1.1-rc.9), pull request #1. The two review findings concern `src/nostr/profiles.js` and `src/moderation/identity.js`.
+
+- Profile collection no longer shares the feed's global 100-event limit across authors. Each unique hex author/relay pair has its own bounded kind-0 query, with up to 16 requests in flight across all relays. Verified, parseable profiles select by newest observed timestamp and lowest ID on ties. One author's revisions cannot consume another's allocation. Failed or malformed responses identify the affected author and relay. `queried` means some response succeeded, not that all requested profiles were found. Results remain bounded observations (100 events per author/relay request), not exhaustive relay history or proof of global latest. The change trades additional requests for isolated author budgets; applications may cache results or restrict relays.
+- NIP-19 TLV decoding preserves a `nevent`'s type-0 event ID in `hex` and exposes the optional type-2 hint in `author` (null when absent). A hint is not evidence of the actual author. A missing event ID cannot be substituted by an author key. `nprofile` ignores unsupported author and kind TLVs; `naddr` retains its coordinate author. Existing public names and `hex` contract are preserved; TypeScript declares the additive field.
+
+Reference: [NIP-19](https://github.com/nostr-protocol/nips/blob/master/19.md). No new dependency or network write is introduced. The test fixture encoder is independent of the decoder; fixtures use test keys and example endpoints.
+
+The five cases in `tests/review-profiles-identifiers.test.js` fail on the parent and pass with the repair: >100 unique authors and duplicates; crowded revision history, invalid/unrelated events and timestamp ties; partial/total transport failures; author-bearing `nevent` in both TLV orders and missing ID; and `nprofile`/`naddr` prefix separation. The full source and packaging checks remain separate acceptance gates. This is not a live relay benchmark, browser/device test or package publication.

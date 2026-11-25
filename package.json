@@ -1,6 +1,6 @@
 {
   "name": "@chaoticka/nsite-loopy-sdk",
-  "version": "1.1.1-rc.9",
+  "version": "1.1.1-rc.10",
   "description": "Portable, source-derived Nostr/nsite SDK: event signatures, signers, relays, Blossom, publishing, archives and directory curation",
   "type": "module",
   "private": false,

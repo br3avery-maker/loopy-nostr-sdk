@@ -61,3 +61,6 @@ import { Intelligence as SpecsIntelligence } from "../types/index.js";
 const specLookup = SpecsIntelligence.lookupKindDefinitions(31337, []);
 void specLookup.proposals;
 void SpecsIntelligence.queryOpenSpecs({covers:[31337],outbox:false});
+
+const decodedAuthor: string | null | undefined = Moderation.decodeNip19('nevent1fixture').author;
+void decodedAuthor;

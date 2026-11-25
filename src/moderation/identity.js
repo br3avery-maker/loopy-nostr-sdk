@@ -13,12 +13,13 @@ export function decodeNip19(value){
  if(polymod([...expand(hrp),...words])!==1)throw Error('Invalid NIP-19 checksum');const raw=toBytes(words.slice(0,-6));if(!raw)throw Error('Invalid NIP-19 bits');
  if(hrp==='npub'||hrp==='note'){if(raw.length!==32)throw Error('NIP-19 public key/event ID must be 32 bytes');return {type:hrp,hex:hex(raw)}}
  if(hrp==='nprofile'||hrp==='nevent'||hrp==='naddr'){
-  let i=0,pubkey=null,relays=[],identifier=null,kind=null;while(i<raw.length){if(i+2>raw.length)throw Error('Incomplete NIP-19 TLV');const tag=raw[i++],len=raw[i++];if(i+len>raw.length)throw Error('Truncated NIP-19 TLV');const val=raw.subarray(i,i+len);i+=len;
-   if(tag===0){if(hrp==='naddr')identifier=new TextDecoder().decode(val);else if(len===32)pubkey=hex(val)}
+  let i=0,pubkey=null,eventId=null,author=null,relays=[],identifier=null,kind=null;while(i<raw.length){if(i+2>raw.length)throw Error('Incomplete NIP-19 TLV');const tag=raw[i++],len=raw[i++];if(i+len>raw.length)throw Error('Truncated NIP-19 TLV');const val=raw.subarray(i,i+len);i+=len;
+   if(tag===0){if(hrp==='naddr')identifier=new TextDecoder().decode(val);else if(len===32){if(hrp==='nevent')eventId=hex(val);else pubkey=hex(val)}}
    if(tag===1){const relay=new TextDecoder().decode(val);if(/^wss:\/\//.test(relay))relays.push(relay)}
-   if(tag===2&&len===32)pubkey=hex(val);
-   if(tag===3&&len===4)kind=(new DataView(val.buffer,val.byteOffset,4)).getUint32(0,false);
+   if(tag===2&&len===32){if(hrp==='naddr')pubkey=hex(val);else if(hrp==='nevent')author=hex(val);}
+   if(tag===3&&len===4&&hrp!=='nprofile')kind=(new DataView(val.buffer,val.byteOffset,4)).getUint32(0,false);
   }
+  if(hrp==='nevent'){if(!eventId)throw Error('NIP-19 missing event ID');return {type:hrp,hex:eventId,author,relays,identifier,kind};}
   if(!pubkey)throw Error('NIP-19 address missing pubkey');return {type:hrp,hex:pubkey,relays,identifier,kind};
  }
  throw Error('Unsupported NIP-19 prefix');

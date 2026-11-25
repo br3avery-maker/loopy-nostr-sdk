@@ -1,10 +1,10 @@
 # Release and publication controls
 
-**Artifact identity:** Source candidate `@chaoticka/nsite-loopy-sdk@1.1.1-rc.9`; build with `npm pack --ignore-scripts`. The local source file pins are in `provenance/manifest.json`; exact public commit and tarball digest must be recorded by the repository CI before a registry release. GAP-002 tracks release and independent installation.
+**Artifact identity:** Source candidate `@chaoticka/nsite-loopy-sdk@1.1.1-rc.10`; build with `npm pack --ignore-scripts`. The local source file pins are in `provenance/manifest.json`; exact public commit and tarball digest must be recorded by the repository CI before a registry release. GAP-002 tracks release and independent installation.
 
-**Versioning / updates:** Keep the existing npm package identity and semantic version progression; rc.9 supersedes the private rc.8 candidate without modifying its stored bytes. Document changed defaults/timing and maintain API compatibility. No automatic publication.
+**Versioning / updates:** Keep the existing npm package identity and semantic version progression; rc.10 supersedes public rc.9; the earlier private rc.8 archive and public rc.9 commit remain unchanged. Document changed defaults/timing and maintain API compatibility. No automatic publication.
 
-**Recovery and rollback:** Earlier candidates remain preserved with original hashes. Recovery uses checked-out exact prior source or an already verified versioned tarball; test consumer compatibility before switching. Public rc.9 clean-install and rollback acceptance still require the release gate (GAP-002).
+**Recovery and rollback:** Earlier candidates remain preserved with original hashes. Recovery uses checked-out exact prior source or an already verified versioned tarball; test consumer compatibility before switching. Public rc.10 clean-install and rollback acceptance still require the release gate (GAP-002).
 
 ## Release acceptance
 - Actual source and intended release bytes are inventoried, reviewed and hashed.

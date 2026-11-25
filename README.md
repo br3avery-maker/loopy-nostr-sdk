@@ -1,4 +1,4 @@
-# Loopy Nostr SDK 1.1.1-rc.9
+# Loopy Nostr SDK 1.1.1-rc.10
 
 **Executable JavaScript ESM SDK** recovered/adapted from the user's nsite source collection and validated independently. This is not an archive browser, design mockup, or a checklist masquerading as an SDK. It exposes source modules for Nostr identities/events, NIP-46/55 signers, relay discovery and transport, signed publication and readback, Blossom, NIP-5A sites, ZIP/archive preservation, content-addressed deduplication, collections, profile/feed functions and storage.
 
@@ -12,7 +12,7 @@ Requirements: Node 22 recommended (Node 20+ for offline) for offline tests and Z
 
 ```sh
 npm pack --ignore-scripts
-# From a separate consumer directory: npm install /path/to/chaoticka-nsite-loopy-sdk-1.1.1-rc.9.tgz
+# From a separate consumer directory: npm install /path/to/chaoticka-nsite-loopy-sdk-1.1.1-rc.10.tgz
 npm test                  # source tests (no network)
 npm run test:types       # type-check consumer against public .d.ts
 npm run verify           # tests + file/config checks
@@ -97,6 +97,10 @@ See [integration notes](docs/ANCHOR_INTELLIGENCE.md). The extracted advisory nam
 ## Open Specs discovery and registry lookup
 
 See [OPEN_SPECS.md](docs/OPEN_SPECS.md). Signed proposals augment, but do not replace, the bundled kind reference.
+
+## Public review repairs (rc.10)
+
+Profile retrieval uses bounded individual author/relay queries rather than a shared feed limit. NIP-19 event IDs remain independent of optional author hints. See [review repairs and regression cases](docs/PUBLIC_REVIEW_REPAIRS.md). All 185 local JavaScript tests, 15 SDK Python tests, TypeScript and 62 module pins/183 API export checks passed; current repository CI and independent review are separate gates.
 
 ## Public migration and license
 

@@ -181,7 +181,7 @@ export namespace Moderation {
   const BUILT_IN_NSFW_BAN_PUBKEYS:readonly Hex[];
   const BUILT_IN_NSFW_MEDIA_URLS:readonly string[];
   const BUILT_IN_NSFW_BLOB_HASHES:readonly Hex[];
-  function decodeNip19(value:string):{type:string;hex:Hex;relays?:string[];identifier?:string|null;kind?:number|null};
+  function decodeNip19(value:string):{type:string;hex:Hex;author?:Hex|null;relays?:string[];identifier?:string|null;kind?:number|null};
   function normalizePubkey(value:string|null|undefined):Hex|null;
   function normalizeEmojiHash(value:string|null|undefined):Hex|null;
   function normalizePubkeyList(values:readonly string[]):Hex[];

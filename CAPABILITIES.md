@@ -1,6 +1,6 @@
 # Capability and API inventory
 
-The complete machine-readable inventory is [docs/API_INDEX.json](docs/API_INDEX.json) (183 runtime API symbols). [API reference](docs/API_REFERENCE.md) and [TypeScript declarations](types/index.d.ts) define usage and contracts. The source families below are implemented; evidence is local rc.9 source tests, not live end-to-end production acceptance.
+The complete machine-readable inventory is [docs/API_INDEX.json](docs/API_INDEX.json) (183 runtime API symbols). [API reference](docs/API_REFERENCE.md) and [TypeScript declarations](types/index.d.ts) define usage and contracts. The source families below are implemented; evidence is local rc.9 and rc.10 source tests, not live end-to-end production acceptance.
 
 | API or capability | Source / export | Consumer or usage | Test evidence | State |
 | --- | --- | --- | --- | --- |
@@ -19,3 +19,5 @@ The complete machine-readable inventory is [docs/API_INDEX.json](docs/API_INDEX.
 ## Integration boundaries
 
 See GAPS.md for real host/browser/device and publication acceptance. An importable API is not a deployed application. Test exact event and blob bytes, not only acknowledgment.
+
+The rc.10 profile and NIP-19 corrections retain the public names and add an optional event author hint field. See [regression evidence](docs/PUBLIC_REVIEW_REPAIRS.md).
