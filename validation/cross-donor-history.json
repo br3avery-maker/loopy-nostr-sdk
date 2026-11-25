@@ -1,0 +1,36 @@
+{
+  "donorCommit": "04a7672a19588406d0bffe710053c7d3a6146cc9",
+  "sourceSha256": "752d36f380e47177332e205a915c5ed6d996a5bc92f17a315e82ffde82e0391b",
+  "method": "Original corpus.ts transpiled unchanged with injected query/parser/winner dependencies; fixture transport, no live network; baseline feed real SDK",
+  "cases": [
+    {
+      "case": "six events, five share timestamp, limit two",
+      "donorReturned": 2,
+      "donorExhausted": true,
+      "candidateReturned": 6,
+      "candidateStatus": "window-read"
+    },
+    {
+      "case": "empty result vs explicit failed transport",
+      "donorEmptyExhausted": true,
+      "candidateFailure": "failed",
+      "candidateWatermark": 20
+    },
+    {
+      "case": "identical event from two relays",
+      "baselineEvents": 1,
+      "baselineSightingsExposed": false,
+      "candidateEventCount": 1,
+      "candidateRelayCount": 2
+    }
+  ],
+  "candidate": "1.1.1-rc.2",
+  "new_js_tests": 17,
+  "js_total": 85,
+  "python_tests": 10,
+  "types": "PASS",
+  "module_pins": 49,
+  "api_symbols": 143,
+  "live_network": false,
+  "publication": false
+}

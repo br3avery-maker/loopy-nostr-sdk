@@ -1,15 +1,12 @@
 # Architecture and integration boundaries
 
-<!-- FILL:architecture-components | DISCOVER: actual source tree, entrypoints, manifests and existing architecture decisions. | ACCEPT: component responsibilities, ownership, dependency direction and source paths; separate proposed design from existing code. -->
 ## Components and dependency direction
-{{FILL:architecture-components}}
+`src/core` provides byte/hash/path/URL and configuration primitives. `vendor/nostr.js` supplies established cryptographic and NIP-46 primitives. `src/nostr` handles signed events, signer adapters, queries, profiles, history and receipt checks. `src/blossom` handles verified content transfer. `src/nsite` composes signed manifests and content retrieval/publication. `src/archive` and `src/storage` support content-addressed persistence and ZIP recovery. `src/directory`, `src/moderation`, `src/moji`, `src/anchor` and `src/intelligence` implement higher-level data and advisory operations. `src/adapters` integrates host callbacks. `src/index.js` exposes independent namespaces and an optional facade.
 
-<!-- FILL:architecture-flow | DISCOVER: real call sites, state stores, protocols, formats and consumer workflows. | ACCEPT: data flow, identities, persistence, failures, recovery and trust boundaries with navigable evidence. -->
 ## Data flow and state
-{{FILL:architecture-flow}}
+Caller configuration supplies explicit relays, signer and storage; verified signed event and exact content hash are data identity, not trust in document prose. Query → signature/filter check → revision/provenance selection → cache or advisory interpretation. Publication → immutable file/tag plan → user-approved signer → exact signed event → upload/hash readback and relay OK/exact-ID readback. Archive stores content by hash and verified revision; storage remains replaceable via its async contract. Transport failures/partial history and stale caches remain visible.
 
-<!-- FILL:architecture-contracts | DISCOVER: real public API/types, adapter contracts, compatibility tests and existing integrations. | ACCEPT: stable public boundaries, extension points and version/compatibility constraints or explicit implementation gaps. -->
 ## Contracts and integration
-{{FILL:architecture-contracts}}
+See `types/index.d.ts`, `types/intelligence/`, `docs/API_REFERENCE.md` and `docs/API_INDEX.json`. Each namespace is independently importable; `createNsiteSDK` composes them. Injected transports and storage are trusted host capabilities, not proof of actual remote delivery. `Intelligence` is advisory; signed proposals are not executable or authoritative protocol rules. Runtime transport, UI/host and packaging remain separable. The public candidate retains API symbols; default moderation policy data is empty, and signer/IndexedDB timing now follows the documented contracts.
 
 Keep domain logic reusable and host adapters separate when supported by the existing architecture. Do not create parallel services or move behavior merely to satisfy a diagram. Link decisions to PROJECT.md and actual source. No architecture document proves runtime behavior.

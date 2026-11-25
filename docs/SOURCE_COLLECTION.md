@@ -1,0 +1,3 @@
+# Source recovery and provenance
+
+The SDK includes source-derived and independently implemented reusable contracts. Private raw donor archives and original occurrence maps are not part of this repository or npm package. The module provenance manifest records source lineage and exact SHA-256 pins. The source collection script can export and restore code/document files from caller-provided ZIP/HTML inputs. It validates canonical hashes and paths, rejects symlink components and atomically replaces files; use a private output directory without concurrent untrusted writers. It does not execute recovered source or grant redistribution rights.

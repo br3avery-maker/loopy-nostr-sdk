@@ -1,0 +1,18 @@
+# Open Specs discovery and kind definitions (rc.7)
+
+Source contract: `nogringo/openspecs` at `04a7672a19588406d0bffe710053c7d3a6146cc9`, `packages/nostr/src/spec.ts` and `relay.ts`; original MIT notice retained in the previous comparison evidence. Independent Loopy implementation, not a copy of the upstream parser or network stack. Uses existing verified event copy, NIP-65 discovery, exact tag filter, historical snapshot and revision identity primitives.
+
+```js
+import { Intelligence } from '@chaoticka/nsite-loopy-sdk';
+const result = await Intelligence.queryOpenSpecs({covers:[31337]});
+const definitions = Intelligence.lookupKindDefinitions(31337, result.index.records.map(s => s.event));
+```
+
+- `parseOpenSpec` verifies a signed kind-30817 event and requires one nonblank `d` tag, preserving the exact wire coordinate. It retains the original signed event, exposes title/summary derivation, raw/numeric `k`, topics, status, reference markers, original publication time and blank replacement state. It does not render or execute Markdown; its simple summary is not the upstream renderer's full semantic summary.
+- `indexOpenSpecs` deduplicates exact IDs, preserves all observed revisions, and selects newest timestamp / lowest ID per coordinate. Blank replacements suppress older visible proposals. A valid nonblank `d` alone cannot prove which application produced a shared kind.
+- `lookupKindDefinitions` returns the bundled Anchor reference (not a live official registry), NIP-01 storage classification, and relevant signed community proposals. An explicitly reviewed exact event ID is a local review marker, not authoritative or executable protocol code; a new revision needs fresh review. No remote status or document changes the built-in registry, executable operations, or signing policy. No automatic implementation or protocol schema generation.
+- `queryOpenSpecs` uses bounded read-only relays, verified author write-relay discovery when available, and an exact-coordinate recheck without `k`/`t` predicates to detect withdrawn/changed revisions. The default importer relay is read-only. It returns signed observations, per-relay query results, capped pages, errors, coordinate resolution and `complete:false`. `not-observed` is not nonexistence. `revisionStatus:unconfirmed` means a search hit was not recovered by the coordinate recheck; `unreachable` means the recheck failed. These remain candidate observations, not confirmed current revisions. Hard-capped/partial responses cannot prove global completeness. Search only uses exact indexed tag values; no full-text search. Caller should reuse persisted signed observations and `Nostr.syncEventHistory` for bounded history and `Archive.unwrapSnapshot` for verified historical snapshots. Query limit/candidate bounds are caller configurable; author lookups above 20 are not expanded in the initial search. No write occurs.
+
+The optional local IC bridge exposes parse, index, and kind-definition lookup over supplied signed events. Network search remains an explicit SDK operation with a caller-selected transport. Document text is untrusted data, not an agent instruction. No signing, publication, or dependency change is needed.
+
+Tests use synthetic signed events and injected relay responses: same-time revision ties; collisions and tampering; unknown kind labels; review pins; withdrawal and snapshot recovery; outbox discovery; stale tag match recheck; partial/empty/failed reads; cancellation. Prior live experiment (Puter PR #29) demonstrated signed Open Specs retrieval with the older SDK; rc.7 itself is not live-tested in this host.

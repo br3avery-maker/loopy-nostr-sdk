@@ -1,0 +1,447 @@
+{
+  "schema": "nsite-loopy-unified-sdk/1",
+  "version": "1.1.1-rc.9",
+  "modules": [
+    {
+      "path": "src/adapters/android.js",
+      "sha256": "5671caf8d69d73804606f8478900bc0d32b66b028a4f40729f28e7718feb5adc",
+      "role": "browser and Android host integration",
+      "lineage": "derived and standardized"
+    },
+    {
+      "path": "src/adapters/browser.js",
+      "sha256": "73e9e0a5394d2d2e4b383b6385e9e7f409aac61493e29d5a661479e1f79129d4",
+      "role": "browser and Android host integration",
+      "lineage": "derived and standardized"
+    },
+    {
+      "path": "src/adapters/index.js",
+      "sha256": "1f307f3c835747048afdf6ea5020d35ad411282a3c2e48e2eeee7de6ec19d80d",
+      "role": "browser and Android host integration",
+      "lineage": "derived and standardized"
+    },
+    {
+      "path": "src/anchor/index.js",
+      "sha256": "9715acd62d59e288ed5375ee4fa09e16f8fde42fb6c8cfd724099e92172a6544",
+      "role": "protocol-adapter",
+      "lineage": "adapted from user-owned repo; see repo-capabilities.json; rc.6 Anchor consumer comparison"
+    },
+    {
+      "path": "src/anchor/kinds.js",
+      "sha256": "eaa7c15bda12e5bedc21ebefd989a45b562f30e27dbd659e7dddff02507aa79b",
+      "role": "protocol-adapter",
+      "lineage": "adapted from user-owned repo; see repo-capabilities.json"
+    },
+    {
+      "path": "src/anchor/relays.js",
+      "sha256": "5dd13db8e3d10ff979e74c8b1d197f04fed1eaeb14f177fe4677de47a9be8f53",
+      "role": "protocol-adapter",
+      "lineage": "adapted from user-owned repo; see repo-capabilities.json"
+    },
+    {
+      "path": "src/archive/catalog.js",
+      "sha256": "de531c3b224b4b2ae8802254465203e8e68dc558d606104664c756d1ae69b75a",
+      "role": "ZIP/CAS/version/directory lineage",
+      "lineage": "derived and standardized"
+    },
+    {
+      "path": "src/archive/chunks.js",
+      "sha256": "c24d65e7bcaab8ba45ef77bb84d26c5cc6aa2022e0612338139fcdf802ac4acd",
+      "role": "archive-cdc",
+      "lineage": "Reproduced Gear-v1 boundaries from br3avery-maker/Pretend-Internet/tools/nsite-archive/chunks.mjs"
+    },
+    {
+      "path": "src/archive/content-addressable.js",
+      "sha256": "82395489386542b69f04f972b4004bd18c2fffb70f17d77be240b881ff9bb814",
+      "role": "ZIP/CAS/version/directory lineage",
+      "lineage": "derived and standardized; rc.4 verified retrieval comparison"
+    },
+    {
+      "path": "src/archive/index.js",
+      "sha256": "c2dc49e90a2208391cef2364078f7c0651ac7408be10dcf8820bfafaa9f90807",
+      "role": "ZIP/CAS/version/directory lineage",
+      "lineage": "derived and standardized; rc.5 verified historical recovery"
+    },
+    {
+      "path": "src/archive/markdown-diff.js",
+      "role": "Bounded exact-source document comparison",
+      "lineage": "Independent implementation of Open Specs and existing archive contracts; see CROSS_DONOR_ARCHIVE.md",
+      "sha256": "4b14bfc087b32e61763928221f3a7d2c1ace3c9143beac303f985162fe3323ad"
+    },
+    {
+      "path": "src/archive/revisions.js",
+      "role": "Verified revision snapshot and content-addressed preservation",
+      "lineage": "Independent implementation of Open Specs and existing archive contracts; see CROSS_DONOR_ARCHIVE.md",
+      "sha256": "f678447ac47a1081d1617cf0080d20466297097c018f982d682942346d877186"
+    },
+    {
+      "path": "src/archive/versions.js",
+      "sha256": "8f22908d98e5d977103055a300dd47093d4df9e87c986a106acf92118526dd09",
+      "role": "ZIP/CAS/version/directory lineage",
+      "lineage": "derived and standardized; rc.5 verified historical recovery"
+    },
+    {
+      "path": "src/archive/zip.js",
+      "sha256": "055f352b6251309992ba717d57dcb98db5e920bfa1a9f9e2e4e82862762c2e82",
+      "role": "ZIP/CAS/version/directory lineage",
+      "lineage": "derived and standardized"
+    },
+    {
+      "path": "src/blossom/client.js",
+      "sha256": "89ed67dbe6305dbfd20f8b2a29e5795773049ec410306569b62c014af499963b",
+      "role": "BUD03/BUD11 signed server discovery and exact-byte uploads",
+      "lineage": "derived and standardized; rc.3 safe publication comparison; rc.4 verified retrieval comparison"
+    },
+    {
+      "path": "src/blossom/index.js",
+      "sha256": "e8f76c98d4ad1e080155c93ff29eb75d80515bcf991a27153f283ddd4c288476",
+      "role": "BUD03/BUD11 signed server discovery and exact-byte uploads",
+      "lineage": "derived and standardized"
+    },
+    {
+      "path": "src/core/bytes.js",
+      "sha256": "6b82c1128d482f3a2d86dcc304445ea9c63a7d6c3f080395a0c04c36a12d6d64",
+      "role": "sha256, URL/path validation and shared options",
+      "lineage": "derived and standardized"
+    },
+    {
+      "path": "src/core/index.js",
+      "sha256": "39ab9e88b396ae0692245a71e3719e3378d03de73c2dc16390484594eb786940",
+      "role": "sha256, URL/path validation and shared options",
+      "lineage": "derived and standardized"
+    },
+    {
+      "path": "src/core/options.js",
+      "sha256": "82246bf078e40775f9d3bd7765f2e7d6b45aee9b16cba0ce87d5783e1c9b5888",
+      "role": "sha256, URL/path validation and shared options",
+      "lineage": "derived and standardized"
+    },
+    {
+      "path": "src/core/urls.js",
+      "sha256": "106fe00c91130e0950821d074cd679e78d4c51ae1daf089db7dce8d0e0892aa4",
+      "role": "sha256, URL/path validation and shared options",
+      "lineage": "derived and standardized"
+    },
+    {
+      "path": "src/directory/index.js",
+      "sha256": "59a459db71af5b36af3d984f47a9d2d1b53efaddb69c112b1482ccf26d2fee4c",
+      "role": "search, collection, stack, filter and safe metadata",
+      "lineage": "derived and standardized"
+    },
+    {
+      "path": "src/directory/metadata.js",
+      "sha256": "0f7f42cb4f22397af29e531b997dfd354e3acf9e8afa8f71ba22794564b241da",
+      "role": "search, collection, stack, filter and safe metadata",
+      "lineage": "derived and standardized"
+    },
+    {
+      "path": "src/directory/model.js",
+      "sha256": "6a5a5a43f7aa291b11c0ebf55e89f5d9057887bfd5cddb529f89122526b8c9a2",
+      "role": "search, collection, stack, filter and safe metadata",
+      "lineage": "exact source from Nsite-Directory-Editor-v1.1.1.zip / Nsite-Directory-Editor/app/model.js"
+    },
+    {
+      "path": "src/index.js",
+      "sha256": "549bdd51d73c8ed8494bcab0901636518742d829fd8df5b5437ff87b51c56911",
+      "role": "general",
+      "lineage": "derived and standardized; rc.6 Anchor consumer comparison"
+    },
+    {
+      "path": "src/intelligence/ecosystemOptimizer.js",
+      "role": "Advisory Anchor intelligence extraction",
+      "lineage": "Anchor integration; see ANCHOR_INTELLIGENCE.md; rc.6 Anchor consumer comparison",
+      "sha256": "1fae0ebb4e34ced99f4048627f741cf44136a4fbb6854371bdaba356ffa8c648"
+    },
+    {
+      "path": "src/intelligence/engine.js",
+      "role": "Advisory Anchor intelligence extraction",
+      "lineage": "Anchor integration; see ANCHOR_INTELLIGENCE.md; rc.6 Anchor consumer comparison",
+      "sha256": "73c2fe30ca2593d83f4c0c9da422a8fe735e61fd7f28c8efc3d0a2ac84328053"
+    },
+    {
+      "path": "src/intelligence/index.js",
+      "role": "Advisory Anchor intelligence extraction",
+      "lineage": "Anchor integration; see ANCHOR_INTELLIGENCE.md; rc.6 Anchor consumer comparison",
+      "sha256": "c4c0b3041953ee8652015af99c1959c438bb14981a86cc5a255f2cf3436d91be"
+    },
+    {
+      "path": "src/intelligence/nipRegistry.js",
+      "role": "Advisory Anchor intelligence extraction",
+      "lineage": "Anchor integration; see ANCHOR_INTELLIGENCE.md; rc.6 Anchor consumer comparison",
+      "sha256": "9f16a68d578885809347d4b6968f81db2f23c0bf77d1375531a8e202505405fe"
+    },
+    {
+      "path": "src/intelligence/open-specs.js",
+      "sha256": "3b5e18e78fd3107e0a0aa6fece070b923e12665c0da4f059afcf903e61de16a8",
+      "source": "Open Specs source contract; independent Loopy adapter"
+    },
+    {
+      "path": "src/intelligence/relayIntelligence.js",
+      "role": "Advisory Anchor intelligence extraction",
+      "lineage": "Anchor integration; see ANCHOR_INTELLIGENCE.md; rc.6 Anchor consumer comparison; rc.8 review repair (docs/REVIEW_REPAIRS.md)",
+      "sha256": "3c4705f7950f9721c5e419c18a78dfe5df18537c55a1745e214b4fb49155be67"
+    },
+    {
+      "path": "src/intelligence/types.js",
+      "role": "Advisory Anchor intelligence extraction",
+      "lineage": "Anchor integration; see ANCHOR_INTELLIGENCE.md; rc.6 Anchor consumer comparison",
+      "sha256": "cbbab0e1731a97ef3ef27cd12156e1843b499fc324251f8345da5943dc610c59"
+    },
+    {
+      "path": "src/moderation/campaigns.js",
+      "sha256": "cdfe731da398cd2e17b3e5dd00abbbf247dd9942d78231a913ebbde6452e5f40",
+      "role": "protocol-adapter",
+      "lineage": "adapted from user-owned repo; see repo-capabilities.json"
+    },
+    {
+      "path": "src/moderation/identity.js",
+      "sha256": "34212df4c024e8857deaeec69342fd2da30b42d02f0daff8679856fab065006b",
+      "role": "protocol-adapter",
+      "lineage": "adapted from user-owned repo; see repo-capabilities.json"
+    },
+    {
+      "path": "src/moderation/index.js",
+      "sha256": "eccc557752a2cfebd8b5498c08db9e5caac4e544e1acd51dec04d414f60e0c5e",
+      "role": "protocol-adapter",
+      "lineage": "adapted from user-owned repo; see repo-capabilities.json"
+    },
+    {
+      "path": "src/moderation/lists.js",
+      "sha256": "0b76f55dd397f28ce21534dcd6228bb8ce577400c90c22850dc96370cf58b31d",
+      "role": "protocol-adapter",
+      "lineage": "adapted from user-owned repo; see repo-capabilities.json"
+    },
+    {
+      "path": "src/moji/index.js",
+      "sha256": "fb0320b48540629849299785e76530a9b5f827f7c47444285b89dc695f7ae2f0",
+      "role": "protocol-adapter",
+      "lineage": "adapted from user-owned repo; see repo-capabilities.json"
+    },
+    {
+      "path": "src/nostr/discovery.js",
+      "sha256": "5ba325691db48670425779b56662cffbec1907718b7fda32fa846a9c8fdc842c",
+      "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
+      "lineage": "derived and standardized; independent protocol hardening, NIP-01 and cross-donor regression cases 2026-11-25; rc.4 verified retrieval comparison",
+      "parent_sha256": "5d3015be7f26c7e970a04f99fdd7540fccbd655b059d533d0a8b705bec314d71"
+    },
+    {
+      "path": "src/nostr/edit.js",
+      "sha256": "ce5157c4f45ed56ba13b0bf74fe73cb0a15e508b7b98cb2739c2b8830627f281",
+      "role": "Explicit signed-baseline review and owned tag editing",
+      "lineage": "Protocol-based implementation compared with recovered donor sources; see CROSS_DONOR_PUBLICATION.md"
+    },
+    {
+      "path": "src/nostr/events.js",
+      "sha256": "463a4bf34e107f40027aae4ffa72c36be2ae601dc9bcf19ee44f95ce716a9288",
+      "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
+      "lineage": "derived and standardized; independent protocol hardening, NIP-01 and cross-donor regression cases 2026-11-25",
+      "parent_sha256": "349fb2243cb07bdb5b7475468211d0d85fd1703d98b6d7e4f74b7c0eaaf620a6"
+    },
+    {
+      "path": "src/nostr/feed.js",
+      "sha256": "e4dd55c38ad070fa75c138ff7ad389c2cca5e1522f6c20e2fb5e19d51fe22c3e",
+      "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
+      "lineage": "derived and standardized; rc.3 safe publication comparison; rc.6 Anchor consumer comparison"
+    },
+    {
+      "path": "src/nostr/filter.js",
+      "role": "shared NIP-01 local predicate extracted unchanged from rc.1 relay transport",
+      "lineage": "new implementation from protocol requirements and cross-donor behavior comparison; no donor text copied",
+      "sha256": "8fc66b7f9aee7515d9a062885e38ba55759ebc80d4cd4ea4b85f57bf5b78b558"
+    },
+    {
+      "path": "src/nostr/history.js",
+      "role": "verified event identities, revision materialization and relay provenance",
+      "lineage": "new implementation from protocol requirements and cross-donor behavior comparison; no donor text copied",
+      "sha256": "a38acae45b5c393ab469f8be35bf4d3b0b324949b0da59258210b23fe0591a53"
+    },
+    {
+      "path": "src/nostr/index.js",
+      "sha256": "7e1cec744d657c4c9117cc4f5259e7ee1918f6e802c105c8a58f3211329173a8",
+      "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
+      "lineage": "derived and standardized; rc.3 safe publication comparison"
+    },
+    {
+      "path": "src/nostr/nip55.js",
+      "sha256": "0afc61bd7c046880503561934a5c6b956aecd99e677c51841f760935ab7a41f2",
+      "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
+      "lineage": "derived and standardized"
+    },
+    {
+      "path": "src/nostr/nip65.js",
+      "sha256": "1b035cfe6c783909515c85e4dbf8fd522f5adda78abb2ab464edf80b99e2286c",
+      "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
+      "lineage": "derived and standardized"
+    },
+    {
+      "path": "src/nostr/other-nips.js",
+      "sha256": "020d1c4f70786deef360b843ef00c49f586820c4bff55b43ec6b610bcb69dda5",
+      "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
+      "lineage": "derived and standardized"
+    },
+    {
+      "path": "src/nostr/profiles.js",
+      "sha256": "ca66a4b0da801c7f644349abe8b41a71db67b8f8504f020c42d24b51c071936a",
+      "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
+      "lineage": "derived and standardized"
+    },
+    {
+      "path": "src/nostr/receipts.js",
+      "role": "Shared publication receipt validation",
+      "lineage": "Anchor integration; see ANCHOR_INTELLIGENCE.md; rc.6 Anchor consumer comparison",
+      "sha256": "13821acc2e5e3f2af4370d818ee06e7cf4f0f7f0da8b2325348509168073a684"
+    },
+    {
+      "path": "src/nostr/relay-transport.js",
+      "sha256": "bb427bbd272390417a409f65e4f7209f68e8fd75d117114f3766b8539a5daf00",
+      "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
+      "lineage": "derived and standardized; independent protocol hardening, NIP-01 and cross-donor regression cases 2026-11-25; rc.6 Anchor consumer comparison",
+      "parent_sha256": "a9ee6daf01a85df2f2677f72a2fb7151669a1c9fdd5ea378cac312e35792b6dd"
+    },
+    {
+      "path": "src/nostr/signers.js",
+      "sha256": "ad2cff95f8db8bb1f4197a0f86c5a9c9c5cf74cad6d7614725ea1f87406ce4f0",
+      "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
+      "lineage": "derived and standardized"
+    },
+    {
+      "path": "src/nostr/sync.js",
+      "role": "bounded resumable per-relay history and explicit ambiguous-boundary state",
+      "lineage": "new implementation from protocol requirements and cross-donor behavior comparison; no donor text copied",
+      "sha256": "11f84b04b5658f98d0776694aaad9d4b399ad9525c5a789d4a605256038b33d0"
+    },
+    {
+      "path": "src/nsite/files.js",
+      "sha256": "146fbe10a260285345cd30e1627e1b64dc8e1a1200c2595db3836e8f33c11ac9",
+      "role": "NIP5A manifest and verified publication pipeline",
+      "lineage": "derived and standardized"
+    },
+    {
+      "path": "src/nsite/index.js",
+      "sha256": "849ab8976717363e24ea26f38111683a663e25394e885dddf933045cbaf6d3e9",
+      "role": "NIP5A manifest and verified publication pipeline",
+      "lineage": "derived and standardized; rc.3 safe publication comparison; rc.4 verified retrieval comparison"
+    },
+    {
+      "path": "src/nsite/manifest.js",
+      "sha256": "91e24ef9222f6fc6aa71a5c0aca4082f43a70affb4f39b85121ef5c77578bc25",
+      "role": "NIP5A manifest and verified publication pipeline",
+      "lineage": "derived and standardized; rc.3 safe publication comparison; rc.4 verified retrieval comparison"
+    },
+    {
+      "path": "src/nsite/plan.js",
+      "sha256": "0bc0ef4529b4757498722ab24c04354e0e31570a86496ca60ecd3178b5f63370",
+      "role": "Shared immutable-byte publication preparation and digest-bound preview",
+      "lineage": "Protocol-based implementation compared with recovered donor sources; see CROSS_DONOR_PUBLICATION.md"
+    },
+    {
+      "path": "src/nsite/publisher.js",
+      "sha256": "ab20c86b043cc198b2492da3d67f8b4c5c9af3350b0cd4b9f1a0a1e3aba6e385",
+      "role": "NIP5A manifest and verified publication pipeline",
+      "lineage": "derived and standardized; rc.3 safe publication comparison; rc.6 Anchor consumer comparison"
+    },
+    {
+      "path": "src/nsite/retrieval.js",
+      "role": "Verified manifest resolution and content-addressed retrieval",
+      "lineage": "Independent implementation of recovered nsite-gateway, NostrApps and nostrsite patterns; see CROSS_DONOR_RETRIEVAL.md",
+      "sha256": "188f6ca8bb8e0cabe7e61c772218d9e3fd2dfe1efcc7fb8080fc5cb522c5c2eb"
+    },
+    {
+      "path": "src/storage/index.js",
+      "sha256": "579d4fd16b9b54956616ab47f5673083007ff5d2458998d307476b30601ccd27",
+      "role": "IndexedDB/memory interface",
+      "lineage": "derived and standardized"
+    },
+    {
+      "path": "src/storage/indexeddb.js",
+      "sha256": "5e081cd40fe36e2a5c0fe4ee9e7a757a20e47e8fd331963f4b4b0e42f559d0cf",
+      "role": "IndexedDB/memory interface",
+      "lineage": "derived and standardized"
+    },
+    {
+      "path": "src/storage/memory.js",
+      "sha256": "187b1fa74bb5a96de6acf48698e743eeb09bbd09771cc2d90d43251596adf3df",
+      "role": "IndexedDB/memory interface",
+      "lineage": "derived and standardized"
+    },
+    {
+      "path": "vendor/nostr-tools.LICENSE",
+      "sha256": "f0510d3b9d1223c45e8fdd2b49270ec8734fff491c7f7d1b948ee70162e1ceff",
+      "role": "unmodified vendor source and license",
+      "lineage": "Nsite-Directory-Editor-v1.1.1.zip / vendor"
+    },
+    {
+      "path": "vendor/nostr.js",
+      "sha256": "e1bdc026518da6cb69df04cc827f93410c1ed20c47017b3b6a43bfa8c1cd6d59",
+      "role": "unmodified vendor source and license",
+      "lineage": "Nsite-Directory-Editor-v1.1.1.zip / vendor"
+    }
+  ],
+  "notes": "Public SDK migration; private original archive inventory and full internal audit remain with preserved candidate. Module lineage and exact pins retained.",
+  "repo_audit": "provenance/repo-capabilities.json",
+  "candidate_parent": {
+    "version": "1.1.1-rc.7",
+    "archive_sha256": "edc2856adde9fcdeaefded002ed262c4b43e9240363d75b24582dd2092ae2e9e"
+  },
+  "cross_donor_review": "docs/CROSS_DONOR_TRANSPORT.md",
+  "candidate_ancestor": {
+    "version": "1.1.0",
+    "archive_sha256": "35dd53708d4b981c34d2e6987a9c4426c9061b1fb4660d475690a548cf6824fd"
+  },
+  "cross_donor_history_review": "docs/CROSS_DONOR_HISTORY.md",
+  "cross_donor_publication_review": "docs/CROSS_DONOR_PUBLICATION.md",
+  "cross_donor_retrieval_review": "docs/CROSS_DONOR_RETRIEVAL.md",
+  "cross_donor_archive_review": "docs/CROSS_DONOR_ARCHIVE.md",
+  "anchor_intelligence_review": "docs/ANCHOR_INTELLIGENCE.md",
+  "anchor_intelligence_source": {
+    "repository": "br3avery-maker/anchor",
+    "commit": "8b787cc071a657347b1bb29177eef9c2e7f4cf65",
+    "source_files": [
+      {
+        "path": "provenance/anchor-intelligence-source/ecosystemOptimizer.ts",
+        "sha256": "4ebd55515215aa049ccbe761f4c28059372a6c742d87788a82d418a01f372b84"
+      },
+      {
+        "path": "provenance/anchor-intelligence-source/engine.ts",
+        "sha256": "0bc40eef3e61d67b2be74b934d0956e8f089428caac585c9038c592a978dd895"
+      },
+      {
+        "path": "provenance/anchor-intelligence-source/nipRegistry.ts",
+        "sha256": "c64be49b1c660cc9f9dc6e6f6f6c46e3a330b55e8896cee51f2e191d29ab64cd"
+      },
+      {
+        "path": "provenance/anchor-intelligence-source/relayIntelligence.ts",
+        "sha256": "e990605ae587aad94f8af58e3d9d66a7b246e074ef7743a2372ca3e0d0824cce"
+      },
+      {
+        "path": "provenance/anchor-intelligence-source/types.ts",
+        "sha256": "dd7b85a25555c74dda4daa5557e7670c6477f1f9d1f6d84cdd4e382654681023"
+      }
+    ]
+  },
+  "open_specs_review": {
+    "repo": "https://github.com/nogringo/openspecs",
+    "commit": "04a7672a19588406d0bffe710053c7d3a6146cc9",
+    "paths": [
+      "packages/nostr/src/spec.ts",
+      "packages/nostr/src/relay.ts"
+    ],
+    "implementation": "Independent JS adapter over existing Loopy verification, history, filtering and relay discovery.",
+    "doc": "docs/OPEN_SPECS.md"
+  },
+  "review_repairs": {
+    "reviewed_commit": "063f48303e7cb27b121b6353d1611daee2cafae1",
+    "doc": "docs/REVIEW_REPAIRS.md",
+    "source_collection_script_sha256": "6276ba511539fd56ff26eec807aa898917c7e0479768cd227d4bcf786ca0fe61"
+  },
+  "public_migration": {
+    "parent": "1.1.1-rc.8",
+    "changes": [
+      "lazy bunker relay connection",
+      "IndexedDB transaction commit",
+      "public default moderation lists empty; caller-supplied policies preserved",
+      "private archive and unrelated repository inventories excluded"
+    ],
+    "source_tree_commit": "b679d53692a25d6e680ca342af7ee209a1601802"
+  }
+}

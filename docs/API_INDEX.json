@@ -1,0 +1,763 @@
+{
+  "Core": [
+    {
+      "name": "bytes",
+      "kind": "function"
+    },
+    {
+      "name": "encode",
+      "kind": "function"
+    },
+    {
+      "name": "endpoint",
+      "kind": "function"
+    },
+    {
+      "name": "endpoints",
+      "kind": "function"
+    },
+    {
+      "name": "hex",
+      "kind": "function"
+    },
+    {
+      "name": "normalizeOptions",
+      "kind": "function"
+    },
+    {
+      "name": "nsitePath",
+      "kind": "function"
+    },
+    {
+      "name": "sha256",
+      "kind": "function"
+    },
+    {
+      "name": "slug",
+      "kind": "function"
+    },
+    {
+      "name": "toBase64Url",
+      "kind": "function"
+    },
+    {
+      "name": "unhex",
+      "kind": "function"
+    }
+  ],
+  "Nostr": [
+    {
+      "name": "androidIntent",
+      "kind": "function"
+    },
+    {
+      "name": "assertSignedEvent",
+      "kind": "function"
+    },
+    {
+      "name": "blossomServers",
+      "kind": "function"
+    },
+    {
+      "name": "browserSigner",
+      "kind": "function"
+    },
+    {
+      "name": "bunkerSigner",
+      "kind": "function"
+    },
+    {
+      "name": "checkedSign",
+      "kind": "function"
+    },
+    {
+      "name": "collectEventObservations",
+      "kind": "function"
+    },
+    {
+      "name": "connectIdentity",
+      "kind": "function"
+    },
+    {
+      "name": "discoverBlossom",
+      "kind": "function"
+    },
+    {
+      "name": "discoverRelays",
+      "kind": "function"
+    },
+    {
+      "name": "encryptionAdapter",
+      "kind": "function"
+    },
+    {
+      "name": "eventIdentity",
+      "kind": "function"
+    },
+    {
+      "name": "eventTemplate",
+      "kind": "function"
+    },
+    {
+      "name": "fetchFeed",
+      "kind": "function"
+    },
+    {
+      "name": "fetchProfiles",
+      "kind": "function"
+    },
+    {
+      "name": "finalizeEvent",
+      "kind": "function"
+    },
+    {
+      "name": "generateSecretKey",
+      "kind": "function"
+    },
+    {
+      "name": "getPublicKey",
+      "kind": "function"
+    },
+    {
+      "name": "httpAuthHeader",
+      "kind": "function"
+    },
+    {
+      "name": "nostrConnectRequest",
+      "kind": "function"
+    },
+    {
+      "name": "npubEncode",
+      "kind": "function"
+    },
+    {
+      "name": "parseProfile",
+      "kind": "function"
+    },
+    {
+      "name": "planRelays",
+      "kind": "function"
+    },
+    {
+      "name": "prepareEventReplacement",
+      "kind": "function"
+    },
+    {
+      "name": "publishMany",
+      "kind": "function"
+    },
+    {
+      "name": "publishRelay",
+      "kind": "function"
+    },
+    {
+      "name": "publishTemplate",
+      "kind": "function"
+    },
+    {
+      "name": "queryRelay",
+      "kind": "function"
+    },
+    {
+      "name": "reaction",
+      "kind": "function"
+    },
+    {
+      "name": "relayAuthTemplate",
+      "kind": "function"
+    },
+    {
+      "name": "relayInfo",
+      "kind": "function"
+    },
+    {
+      "name": "relayList",
+      "kind": "function"
+    },
+    {
+      "name": "reviewEventReplacement",
+      "kind": "function"
+    },
+    {
+      "name": "syncEventHistory",
+      "kind": "function"
+    },
+    {
+      "name": "textNote",
+      "kind": "function"
+    },
+    {
+      "name": "verifyAndroidResult",
+      "kind": "function"
+    },
+    {
+      "name": "verifyEvent",
+      "kind": "function"
+    }
+  ],
+  "Nsite": [
+    {
+      "name": "NSITE_NAMED_KIND",
+      "kind": "constant"
+    },
+    {
+      "name": "NSITE_ROOT_KIND",
+      "kind": "constant"
+    },
+    {
+      "name": "compareFiles",
+      "kind": "function"
+    },
+    {
+      "name": "loadNsiteFile",
+      "kind": "function"
+    },
+    {
+      "name": "manifestTemplate",
+      "kind": "function"
+    },
+    {
+      "name": "mediaType",
+      "kind": "function"
+    },
+    {
+      "name": "normalizeFileMap",
+      "kind": "function"
+    },
+    {
+      "name": "nsiteAddress",
+      "kind": "function"
+    },
+    {
+      "name": "parseManifest",
+      "kind": "function"
+    },
+    {
+      "name": "planNsitePublication",
+      "kind": "function"
+    },
+    {
+      "name": "prepareManifestFiles",
+      "kind": "function"
+    },
+    {
+      "name": "publishNsite",
+      "kind": "function"
+    },
+    {
+      "name": "resolveManifestPath",
+      "kind": "function"
+    },
+    {
+      "name": "resolveNsiteManifest",
+      "kind": "function"
+    }
+  ],
+  "Blossom": [
+    {
+      "name": "blossomAuthHeader",
+      "kind": "function"
+    },
+    {
+      "name": "blossomUploadAuth",
+      "kind": "function"
+    },
+    {
+      "name": "fetchVerified",
+      "kind": "function"
+    },
+    {
+      "name": "uploadVerified",
+      "kind": "function"
+    }
+  ],
+  "Archive": [
+    {
+      "name": "GEAR_PROFILE",
+      "kind": "constant"
+    },
+    {
+      "name": "SNAPSHOT_KIND",
+      "kind": "constant"
+    },
+    {
+      "name": "archiveRevision",
+      "kind": "function"
+    },
+    {
+      "name": "buildArchiveCatalog",
+      "kind": "function"
+    },
+    {
+      "name": "chunkManifest",
+      "kind": "function"
+    },
+    {
+      "name": "compareMarkdown",
+      "kind": "function"
+    },
+    {
+      "name": "contentStore",
+      "kind": "function"
+    },
+    {
+      "name": "crc32",
+      "kind": "function"
+    },
+    {
+      "name": "diffVersions",
+      "kind": "function"
+    },
+    {
+      "name": "gearChunks",
+      "kind": "function"
+    },
+    {
+      "name": "groupVersions",
+      "kind": "function"
+    },
+    {
+      "name": "materializeVersion",
+      "kind": "function"
+    },
+    {
+      "name": "readZip",
+      "kind": "function"
+    },
+    {
+      "name": "restoreChunkManifest",
+      "kind": "function"
+    },
+    {
+      "name": "restoreRevision",
+      "kind": "function"
+    },
+    {
+      "name": "searchArchive",
+      "kind": "function"
+    },
+    {
+      "name": "snapshotTemplate",
+      "kind": "function"
+    },
+    {
+      "name": "unwrapSnapshot",
+      "kind": "function"
+    },
+    {
+      "name": "writeZip",
+      "kind": "function"
+    }
+  ],
+  "Directory": [
+    {
+      "name": "SORTS",
+      "kind": "constant"
+    },
+    {
+      "name": "VERSION",
+      "kind": "constant"
+    },
+    {
+      "name": "ageSeconds",
+      "kind": "function"
+    },
+    {
+      "name": "bulkGroup",
+      "kind": "function"
+    },
+    {
+      "name": "defaultRules",
+      "kind": "constant"
+    },
+    {
+      "name": "directoryRows",
+      "kind": "function"
+    },
+    {
+      "name": "effective",
+      "kind": "function"
+    },
+    {
+      "name": "emptyState",
+      "kind": "function"
+    },
+    {
+      "name": "exportCatalog",
+      "kind": "function"
+    },
+    {
+      "name": "groupState",
+      "kind": "function"
+    },
+    {
+      "name": "htmlMetadata",
+      "kind": "function"
+    },
+    {
+      "name": "matches",
+      "kind": "function"
+    },
+    {
+      "name": "membership",
+      "kind": "function"
+    },
+    {
+      "name": "moveQueue",
+      "kind": "function"
+    },
+    {
+      "name": "patch",
+      "kind": "function"
+    },
+    {
+      "name": "publicCatalog",
+      "kind": "function"
+    },
+    {
+      "name": "publisherCounts",
+      "kind": "function"
+    },
+    {
+      "name": "publisherKey",
+      "kind": "function"
+    },
+    {
+      "name": "reasons",
+      "kind": "function"
+    },
+    {
+      "name": "safeImage",
+      "kind": "function"
+    },
+    {
+      "name": "safeURL",
+      "kind": "function"
+    },
+    {
+      "name": "select",
+      "kind": "function"
+    },
+    {
+      "name": "setQueue",
+      "kind": "function"
+    },
+    {
+      "name": "similarityKey",
+      "kind": "function"
+    },
+    {
+      "name": "stackSites",
+      "kind": "function"
+    },
+    {
+      "name": "toggleState",
+      "kind": "function"
+    },
+    {
+      "name": "unstack",
+      "kind": "function"
+    },
+    {
+      "name": "upgrade",
+      "kind": "function"
+    },
+    {
+      "name": "validateCatalog",
+      "kind": "function"
+    },
+    {
+      "name": "validateRules",
+      "kind": "function"
+    },
+    {
+      "name": "validateWorkspace",
+      "kind": "function"
+    }
+  ],
+  "Storage": [
+    {
+      "name": "indexedDbStore",
+      "kind": "function"
+    },
+    {
+      "name": "memoryStore",
+      "kind": "function"
+    }
+  ],
+  "Adapters": [
+    {
+      "name": "androidHandoff",
+      "kind": "function"
+    },
+    {
+      "name": "browserEnvironment",
+      "kind": "function"
+    }
+  ],
+  "Moderation": [
+    {
+      "name": "BUILT_IN_NSFW_BAN_PUBKEYS",
+      "kind": "constant"
+    },
+    {
+      "name": "BUILT_IN_NSFW_BLOB_HASHES",
+      "kind": "constant"
+    },
+    {
+      "name": "BUILT_IN_NSFW_MEDIA_URLS",
+      "kind": "constant"
+    },
+    {
+      "name": "CAMPAIGN_ROLE_OPENERS",
+      "kind": "constant"
+    },
+    {
+      "name": "MOJI_CURATOR_BLOCKLIST_VERSION",
+      "kind": "constant"
+    },
+    {
+      "name": "campaignMatch",
+      "kind": "function"
+    },
+    {
+      "name": "clusterNsiteSpam",
+      "kind": "function"
+    },
+    {
+      "name": "decodeNip19",
+      "kind": "function"
+    },
+    {
+      "name": "filterNsites",
+      "kind": "function"
+    },
+    {
+      "name": "inspectNsiteSpam",
+      "kind": "function"
+    },
+    {
+      "name": "isEmojiAllowed",
+      "kind": "function"
+    },
+    {
+      "name": "mergeBlocklists",
+      "kind": "function"
+    },
+    {
+      "name": "muteListTemplate",
+      "kind": "function"
+    },
+    {
+      "name": "normalizeEmojiHash",
+      "kind": "function"
+    },
+    {
+      "name": "normalizeHashList",
+      "kind": "function"
+    },
+    {
+      "name": "normalizePubkey",
+      "kind": "function"
+    },
+    {
+      "name": "normalizePubkeyList",
+      "kind": "function"
+    },
+    {
+      "name": "parseCuratorBlocklist",
+      "kind": "function"
+    },
+    {
+      "name": "parseNip51MuteList",
+      "kind": "function"
+    }
+  ],
+  "Moji": [
+    {
+      "name": "buildStableEmojiKey",
+      "kind": "function"
+    },
+    {
+      "name": "collectNip30Emojis",
+      "kind": "function"
+    },
+    {
+      "name": "deriveEmojiStats",
+      "kind": "function"
+    },
+    {
+      "name": "deriveEmojiStatsFromHash",
+      "kind": "function"
+    },
+    {
+      "name": "extractEmojiHash",
+      "kind": "function"
+    },
+    {
+      "name": "parseNip30Event",
+      "kind": "function"
+    },
+    {
+      "name": "sanitizeEmojiShortcode",
+      "kind": "function"
+    }
+  ],
+  "Anchor": [
+    {
+      "name": "assessRelayOutbox",
+      "kind": "function"
+    },
+    {
+      "name": "buildPublicAccountBackup",
+      "kind": "function"
+    },
+    {
+      "name": "classifyEventStorage",
+      "kind": "function"
+    },
+    {
+      "name": "extractEventAssets",
+      "kind": "function"
+    },
+    {
+      "name": "kindSpec",
+      "kind": "function"
+    },
+    {
+      "name": "planVerifiedOutbox",
+      "kind": "function"
+    },
+    {
+      "name": "restorePublicAccountBackup",
+      "kind": "function"
+    },
+    {
+      "name": "sanitizePublicSession",
+      "kind": "function"
+    },
+    {
+      "name": "summarizePublicationReceipts",
+      "kind": "function"
+    }
+  ],
+  "facade": [
+    "createNsiteSDK",
+    "publish",
+    "query"
+  ],
+  "Intelligence": [
+    {
+      "name": "CANDIDATE_DISCOVERY_RELAYS",
+      "kind": "constant"
+    },
+    {
+      "name": "ECOSYSTEM_CLIENTS",
+      "kind": "constant"
+    },
+    {
+      "name": "ECOSYSTEM_DISCOVERY_RELAYS",
+      "kind": "constant"
+    },
+    {
+      "name": "LICENSE_GUIDE",
+      "kind": "constant"
+    },
+    {
+      "name": "LICENSE_OPTIONS",
+      "kind": "constant"
+    },
+    {
+      "name": "MUSIC_GENRE_SUGGESTIONS",
+      "kind": "constant"
+    },
+    {
+      "name": "NIP_KIND_REGISTRY",
+      "kind": "constant"
+    },
+    {
+      "name": "OPEN_SPEC_KIND",
+      "kind": "constant"
+    },
+    {
+      "name": "OPEN_SPEC_READ_RELAYS",
+      "kind": "constant"
+    },
+    {
+      "name": "analyzeAccountEcosystem",
+      "kind": "function"
+    },
+    {
+      "name": "analyzeNsiteIdentity",
+      "kind": "function"
+    },
+    {
+      "name": "auditCoverage",
+      "kind": "function"
+    },
+    {
+      "name": "auditSinglePublication",
+      "kind": "function"
+    },
+    {
+      "name": "buildRelayOptimizationPlan",
+      "kind": "function"
+    },
+    {
+      "name": "classifyEventStorage",
+      "kind": "function"
+    },
+    {
+      "name": "classifyRelay",
+      "kind": "function"
+    },
+    {
+      "name": "detectAndPrepareContent",
+      "kind": "function"
+    },
+    {
+      "name": "getKindSpec",
+      "kind": "function"
+    },
+    {
+      "name": "getLicensesForCategory",
+      "kind": "function"
+    },
+    {
+      "name": "indexOpenSpecs",
+      "kind": "function"
+    },
+    {
+      "name": "isSuitablePublicOutboxRole",
+      "kind": "function"
+    },
+    {
+      "name": "lookupKindDefinitions",
+      "kind": "function"
+    },
+    {
+      "name": "parseOpenSpec",
+      "kind": "function"
+    },
+    {
+      "name": "queryOpenSpecs",
+      "kind": "function"
+    },
+    {
+      "name": "reconstructPreferences",
+      "kind": "function"
+    },
+    {
+      "name": "recordCorrection",
+      "kind": "function"
+    },
+    {
+      "name": "roleClassLabel",
+      "kind": "function"
+    },
+    {
+      "name": "summarizeObservedActivity",
+      "kind": "function"
+    }
+  ]
+}

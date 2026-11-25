@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {Nostr} from '../src/index.js';
+const key=Nostr.generateSecretKey(),pubkey=Nostr.getPublicKey(key),signer={getPublicKey:async()=>pubkey,signEvent:async t=>Nostr.finalizeEvent(t,key)};
+test('NIP42 relay auth challenge binds exact relay',()=>{const t=Nostr.relayAuthTemplate({challenge:'abc',relay:'wss://relay.example'});assert.equal(t.kind,22242);assert.deepEqual(t.tags,[['relay','wss://relay.example'],['challenge','abc']]);});
+test('NIP98 HTTP authorization is signed and b64url encoded',async()=>{const header=await Nostr.httpAuthHeader({url:'https://api.example/posts',method:'POST',signer,pubkey});assert.match(header,/^Nostr [A-Za-z0-9_-]+$/);assert.throws(()=>Nostr.relayAuthTemplate({relay:'wss://r.example'}));});
+test('NIP44 requires trusted signer; no insecure fallback',async()=>{assert.throws(()=>Nostr.encryptionAdapter({}));const crypto=Nostr.encryptionAdapter({nip44:{encrypt:async()=> 'cipher',decrypt:async()=> 'plain'}});assert.equal(await crypto.encrypt('a','b'),'cipher');});

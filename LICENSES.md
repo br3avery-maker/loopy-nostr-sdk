@@ -1,0 +1,3 @@
+# License and distribution
+
+Original contributions the owner has authority to license are MIT; see [LICENSE](LICENSE). The unmodified `vendor/nostr.js` retains its embedded notices and `vendor/nostr-tools.LICENSE` (Unlicense) and `vendor/NOBLE-SCURE.LICENSE` (full MIT text for each embedded notice). Upstream rights and terms are unchanged. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for source acknowledgments, and [AI-DEVELOPMENT.md](AI-DEVELOPMENT.md) for corrections. Private raw source collections are excluded. Exact bundled dependency versions are not known from the minified bundle alone.

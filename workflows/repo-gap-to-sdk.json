@@ -1,0 +1,47 @@
+{
+  "name": "Loopy repository-wide capability recovery",
+  "schema": "nsite-loopy-workflow/1",
+  "steps": [
+    {
+      "id": "discover",
+      "tool": "GitHub code search and Code Quarry",
+      "gate": "Scan repositories by behavior/API; preserve exact owner/path/ref and search coverage, not just one project name"
+    },
+    {
+      "id": "compare",
+      "tool": "SDK typed exports + tests",
+      "gate": "Existing public contract wins; do not fork equivalent functionality"
+    },
+    {
+      "id": "classify",
+      "tool": "Capability Foundry",
+      "gate": "Label reuse/adapt/merge/separate/unresolved; explicit licensing and authority"
+    },
+    {
+      "id": "port",
+      "tool": "IC Loopy Library",
+      "gate": "Implement real independent code, not an inventory pointer; preserve protocol/host boundaries"
+    },
+    {
+      "id": "verify",
+      "tool": "Node tests + TS consumer + Python pins",
+      "gate": "Success and adversarial cases; no false live-connection claims"
+    },
+    {
+      "id": "docs",
+      "tool": "SDK API reference + docs generator",
+      "gate": "Typed methods, source links, failure behavior, mobile site nav"
+    },
+    {
+      "id": "deliver",
+      "tool": "Library + IC Live",
+      "gate": "Verified ZIP readback, inventory update and recovery handoff; no public deployment"
+    }
+  ],
+  "no_go": [
+    "never scrape or republish private keys",
+    "do not publish/activate without separate authority",
+    "do not reuse rejected Forge as implementation",
+    "do not conflate media URL fingerprint with verified blob hash"
+  ]
+}

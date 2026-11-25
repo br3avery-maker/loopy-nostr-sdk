@@ -2,11 +2,11 @@
 
 The root MIT license applies to original contributions the project has the right to license. Third-party material retains its original terms.
 
-## Current public tree
+## Current public source candidate
 
-The initial public revision `80c2cbb93f245341a61f43d56b4257e981e50939` contains the starter scaffold, not the SDK runtime or its bundled JavaScript. GitHub Actions references checkout and setup-python as external CI tools, not distributed runtime libraries.
+The 1.1.1-rc.9 public SDK contains original owner-controlled implementations and an unmodified vendored Nostr bundle. Private source archives and personal curation data are not included. GitHub Actions uses checkout and setup-python/setup-node as external CI tools, not distributed runtime libraries.
 
-## Notices identified for the SDK migration
+## Bundled notices
 
 The candidate's unmodified vendor/nostr.js bundle (recorded SHA-256 e1bdc026518da6cb69df04cc827f93410c1ed20c47017b3b6a43bfa8c1cd6d59) carries an accompanying nostr-tools Unlicense and embedded MIT copyright notices:
 
@@ -17,7 +17,7 @@ The candidate's unmodified vendor/nostr.js bundle (recorded SHA-256 e1bdc026518d
 | [noble-ciphers](https://github.com/paulmillr/noble-ciphers) | (c) 2023 Paul Miller (paulmillr.com) |
 | [scure-base](https://github.com/paulmillr/scure-base) | (c) 2022 Paul Miller (paulmillr.com) |
 
-The runtime bundle and [nostr-tools](https://github.com/nbd-wtf/nostr-tools) are not yet distributed in this tree. Preserve the vendor file, original Unlicense and full MIT permission texts with the original copyright notices when importing. Exact dependency versions have not been established from the embedded notices alone.
+The bundled [nostr-tools](https://github.com/nbd-wtf/nostr-tools) code retains its original [Unlicense](vendor/nostr-tools.LICENSE), embedded notices and the full MIT text for the four components in [vendor/NOBLE-SCURE.LICENSE](vendor/NOBLE-SCURE.LICENSE). Exact dependency versions have not been established from embedded notices alone. Open Specs is a reference-only comparison; its original copyright and MIT terms are preserved in [vendor/OPEN-SPECS.REFERENCE-LICENSE](vendor/OPEN-SPECS.REFERENCE-LICENSE).
 
 ## Reference-only acknowledgments
 
