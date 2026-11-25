@@ -1,0 +1,33 @@
+name: Bug or observed failure
+description: Record reproducible behavior and evidence without inventing a fix.
+title: 'bug: '
+body:
+  - type: textarea
+    id: observed
+    attributes:
+      label: Actual behavior
+      description: What happened, with reproduction steps and evidence? If unknown, explicitly say unverified.
+      placeholder: 'Observed in <file/version/environment>; expected <behavior>. Steps: ...'
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior and original requirement
+      description: Link the accepted requirement or original request, not only a rewritten summary.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Source, versions, tests and verification limits
+      placeholder: 'Commit/ref; source path; test command; actual output; device tests not run.'
+    validations:
+      required: true
+  - type: textarea
+    id: recovery
+    attributes:
+      label: Preservation and next action
+      description: Prior fixes and issues; state/data-loss risk; first bounded step; no secret values.
+    validations:
+      required: false

@@ -1,0 +1,32 @@
+name: Missing capability or discovery gap
+description: Preserve a real gap and the existing code or source to inspect first.
+title: 'gap: '
+body:
+  - type: textarea
+    id: desired
+    attributes:
+      label: Required outcome
+      description: Link the request or accepted criterion. A suggestion is not implementation authorization.
+    validations:
+      required: true
+  - type: textarea
+    id: research
+    attributes:
+      label: Existing implementations and evidence checked
+      placeholder: 'Repository, path, revision, related issue/PR, findings, unresolved sources.'
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance and verification
+      description: How will behavior be demonstrated in source, tests and target runtime?
+    validations:
+      required: true
+  - type: textarea
+    id: decision
+    attributes:
+      label: Open decision or exact blocker
+      description: Keep undecided scope undecided; do not fill with guesses.
+    validations:
+      required: false

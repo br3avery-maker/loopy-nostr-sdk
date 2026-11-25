@@ -1,0 +1,21 @@
+name: Repository starter readiness
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  starter-readiness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate all template annotations
+        run: python3 scripts/check_starter.py --mode template .
+      - name: Require populated documents in derived project
+        if: ${{ github.event.repository.is_template != true }}
+        run: python3 scripts/check_starter.py --mode ready .
+      - name: Test the checker itself
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
