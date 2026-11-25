@@ -1,17 +1,12 @@
-# {{FILL:project-title}}
-<!-- FILL:project-title | DISCOVER: current user request, canonical project issue, or existing product README. | ACCEPT: actual project name; do not invent a product. -->
+# Loopy Nostr SDK
 
-<!-- FILL:purpose | DISCOVER: current user-authored request or accepted project definition. | ACCEPT: 1-3 sentences describing what the project does, not aspirational features. -->
-{{FILL:purpose}}
+Loopy Nostr SDK is intended as a modular, local-first library for Nostr discovery, signing, publishing, Blossom storage, archival recovery and protocol intelligence. This public repository currently contains the starter scaffold; the SDK runtime has not yet been imported.
 
-<!-- FILL:project-state | DISCOVER: current implementation/CI/release evidence and accepted task scope. | ACCEPT: precise state with source locator; never imply code exists from this scaffold. -->
-**State:** {{FILL:project-state}}
+**State:** Starter scaffold; SDK source migration pending.
 
-<!-- FILL:status | DISCOVER: actual repository files, commits, test and release evidence. | ACCEPT: one evidence-qualified state: planned / in-development / tested-in-source / runtime-tested / published, plus source/date. -->
-**Verified current status:** {{FILL:status}}
+**Verified current status:** In development — scaffold inspected at `80c2cbb93f245341a61f43d56b4257e981e50939`; no runtime in this tree.
 
-<!-- FILL:entrypoint | DISCOVER: source tree, build configuration, or executable entrypoints. | ACCEPT: path and real command, or explicit 'not implemented (GAP-id)' if absent. -->
-**Start here:** {{FILL:entrypoint}}
+**Start here:** SDK runtime not yet imported; see [GAPS.md](GAPS.md).
 
 - Project requirements: [PROJECT.md](PROJECT.md)
 - Agent operating instructions: [AGENTS.md](AGENTS.md)
@@ -26,3 +21,7 @@
 - Change history: [CHANGELOG.md](CHANGELOG.md)
 
 **The template provides structure, not permission.** Creating a repository from it is authorized only by the owner’s separate request; signer credentials, software releases, and external publishing remain separately controlled.
+
+## License and development
+
+Our original software is [MIT licensed](LICENSE). See [third-party notices](THIRD_PARTY_NOTICES.md) and [our AI-assisted development and attribution-correction notice](AI-DEVELOPMENT.md). Contributions and good-faith corrections are welcome.

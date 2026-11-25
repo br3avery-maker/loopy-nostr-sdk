@@ -17,6 +17,10 @@ A `{{FILL:id}}` token, matching `<!-- FILL:id | DISCOVER: ... | ACCEPT: ... -->`
 
 Read [ARCHITECTURE.md](ARCHITECTURE.md), [REUSE.md](REUSE.md), [SECURITY.md](SECURITY.md) and [CHANGELOG.md](CHANGELOG.md) for their respective work. For any authorized interface work, read [UI.md](UI.md) and the current [AgentOps interface policy](https://github.com/br3avery-maker/AgentOps/blob/main/policies/interface-quality.md) **before** design or implementation. Personal interface chrome uses the exact [BreBre Colors](https://github.com/br3avery-maker/AgentOps/blob/main/policies/brebre-colors.json) and zero-purple rule unless the owner explicitly approves a project-specific exception. Check source palette and rendered behavior; preserve accessibility, content-first navigation and recovery. For a genuinely headless SDK, record the scope evidence and reasoned inapplicability rather than inventing UI tests.
 
+## Open software and attribution
+
+Apply the owner-approved MIT default to original contributions we have the right to license. Preserve [LICENSE](LICENSE), [AI-DEVELOPMENT.md](AI-DEVELOPMENT.md) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Update the inventory from actual source and packages, preserve third-party terms, and exclude unreviewed/private material. A disclaimer never overrides a license.
+
 ## Authority and safety
 
 Discussion/inspection is not blanket implementation authority. No new repository, signer secret, schedule, Nostr event, APK publication, public deployment, deletion, or permission change without the relevant explicit authorization; an owner may separately authorize using this template for new repositories. Do not export sensitive source material into a public issue. Keep this AGENTS.md short; project-specific details belong in PROJECT.md.
