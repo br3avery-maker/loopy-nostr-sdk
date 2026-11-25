@@ -94,9 +94,15 @@
     },
     {
       "path": "src/blossom/index.js",
-      "sha256": "e8f76c98d4ad1e080155c93ff29eb75d80515bcf991a27153f283ddd4c288476",
+      "sha256": "f77e3d6530d1cab13c3b7278ce10da11f204eccccc65dce379f1660e99d51a59",
       "role": "BUD03/BUD11 signed server discovery and exact-byte uploads",
-      "lineage": "derived and standardized"
+      "lineage": "derived and standardized; Blossom reconciliation batch 2"
+    },
+    {
+      "path": "src/blossom/replicas.js",
+      "sha256": "40ed855064e46d8147b9cb7a8bf214fc1b6e99781a0f88eb6f83cde8890d2c75",
+      "role": "Scoped batch authorization, metadata preflight and multi-origin exact-byte readback",
+      "lineage": "Independent reconciliation of Pretend Internet relay router and Safehouse publisher contracts; docs/BLOSSOM_RECONCILIATION.md"
     },
     {
       "path": "src/core/bytes.js",

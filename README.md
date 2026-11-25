@@ -113,3 +113,7 @@ This candidate fixes premature NIP-46 relay connection and resolves IndexedDB wr
 ## Unreleased reconciliation: relay delivery
 
 See [event-specific relay planning and receipt summaries](docs/RELAY_DELIVERY_RECONCILIATION.md). Offline, additive APIs; no transport changes or publication authorization. The existing rc.10 candidate version is not a new release.
+
+## Blossom reconciliation (draft batch 2)
+
+See [Blossom publishing reconciliation](docs/BLOSSOM_RECONCILIATION.md) for explicit BUD-06 metadata preflight, bounded BUD-11 multi-hash authorization templates and multi-origin readback with exact bytes, size and MIME. These are additive building blocks; multi-copy upload orchestration, gateway verification and application adoption remain open. No network publication is implied.

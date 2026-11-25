@@ -14,3 +14,5 @@ A missing external verification is not a green pass. All original private candid
 ## Bidirectional source reconciliation (open)
 
 The first relay delivery planning/receipt-summary implementation is in [comparison notes](docs/RELAY_DELIVERY_RECONCILIATION.md). Existing donor monitor/cache/cooldown, authenticated transport, fallback, Blossom preflight and publisher copy/MIME/gateway behavior remain open. Reconcile every relevant source family and test actual consumers; do not treat local regression success as complete coverage. Original specification-intelligence and signer-review tracks remain separate.
+
+Reconciliation batch 2: preflight, batch authorization template and distinct-origin copy verification implemented; see [BLOSSOM_RECONCILIATION.md](docs/BLOSSOM_RECONCILIATION.md). Multi-copy upload/manifest binding, gateway verification, actual resume, monitor/cache/cooldown and authenticated relay execution remain outstanding. Broader donor coverage and app adoption remain open; no closure implied.

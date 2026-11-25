@@ -20,3 +20,5 @@ Record consequential changes, compatibility changes, repairs and security fixes 
 Record accepted changes here as they are implemented and verified; link exact commits and affected tests. No release is implied by this section.
 
 - Unreleased reconciliation candidate: event-specific relay destination groups, policy limits, protected/inbox planning and exact-ID group receipt summaries; 10 new signed offline regressions and three archived-donor comparison cases. See [comparison](docs/RELAY_DELIVERY_RECONCILIATION.md). Review/CI and actual consumer adoption remain separate.
+
+- Reconciliation batch 2 (unreleased draft): three additive Blossom APIs for preflight, scoped batch authorization and multi-origin copy readback; eight offline regressions. Reconstructed rc.9 + both reconciliation batches: 198 JavaScript tests, 15 Python tests, TypeScript, 64 module pins and 188 API symbols. Exact stacked-head CI is separate. See [BLOSSOM_RECONCILIATION.md](docs/BLOSSOM_RECONCILIATION.md).

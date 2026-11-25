@@ -71,3 +71,11 @@ function typecheckDelivery(event:SignedEvent):RelayDeliverySummary {
   return Nostr.summarizeRelayDelivery(plan,[]);
 }
 void typecheckDelivery;
+
+// Reconciled Blossom publication prerequisites and verified storage replicas.
+const blobMetadata={sha256:'a'.repeat(64),size:12,type:'text/html'};
+const blobOptions={servers:['https://blossom.example']};
+void Blossom.preflightBlob(blobMetadata,blobOptions).then(result=>result.decisions[0]?.verified);
+const batchAuth=Blossom.blossomBatchUploadAuth({hashes:[blobMetadata.sha256],...blobOptions});
+void batchAuth.tags;
+void Blossom.verifyBlobCopies(blobMetadata,{...blobOptions,required:2}).then(result=>result.copies[0]?.verified);

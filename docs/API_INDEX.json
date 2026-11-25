@@ -267,6 +267,10 @@
       "kind": "function"
     },
     {
+      "name": "blossomBatchUploadAuth",
+      "kind": "function"
+    },
+    {
       "name": "blossomUploadAuth",
       "kind": "function"
     },
@@ -275,7 +279,15 @@
       "kind": "function"
     },
     {
+      "name": "preflightBlob",
+      "kind": "function"
+    },
+    {
       "name": "uploadVerified",
+      "kind": "function"
+    },
+    {
+      "name": "verifyBlobCopies",
       "kind": "function"
     }
   ],

@@ -133,3 +133,7 @@ See [OPEN_SPECS.md](OPEN_SPECS.md) for signed document search, revision-aware in
 ### Event-specific relay delivery
 
 `Nostr.planRelayDelivery(signedEvent, options)` and `Nostr.summarizeRelayDelivery(plan, receipts)` are offline advisory APIs. See [relay delivery reconciliation](RELAY_DELIVERY_RECONCILIATION.md) for group/policy contracts, exact receipts, explicit private/authentication boundaries and remaining transport work.
+
+## Reconciled Blossom prerequisites and replicas
+
+`Blossom.preflightBlob`, `Blossom.blossomBatchUploadAuth` and `Blossom.verifyBlobCopies` expose explicit advisory upload preflight, scoped unsigned batch authorization and MIME/size/hash-verified multi-origin readback. See [BLOSSOM_RECONCILIATION.md](BLOSSOM_RECONCILIATION.md). None uploads or signs on behalf of the caller.

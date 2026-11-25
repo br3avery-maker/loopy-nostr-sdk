@@ -120,7 +120,14 @@ export namespace Nsite {
   function normalizeFileMap(input:FileMap):Record<string,Uint8Array>;
   function publishNsite(files:FileMap,options:PublicationOptions):Promise<{job:object;event:SignedEvent;manifest:ManifestRecord;receipts:PublishReceipts}>;
 }
+export interface BlobMetadata {sha256:Hex;size:number;type:string}
+export interface BlobPreflightDecision {server:string;status:number|null;code:string;verified:false}
+export interface BlobReadbackCopy {server:string;hash:Hex;size:number;type:string;verified:true}
+export interface BlobNetworkOptions {servers:string[];fetcher?:typeof fetch;signal?:AbortSignal;timeoutMs?:number}
 export namespace Blossom {
+  function preflightBlob(blob:BlobMetadata,options:BlobNetworkOptions):Promise<BlobMetadata & {decisions:BlobPreflightDecision[];selected:string[];fallbacks:string[]}>;
+  function blossomBatchUploadAuth(options:{hashes:Hex[];servers:string[];now?:number;expiresIn?:number}):UnsignedEvent;
+  function verifyBlobCopies(blob:BlobMetadata,options:BlobNetworkOptions & {required?:number;maxBytes?:number}):Promise<BlobMetadata & {required:number;copies:BlobReadbackCopy[];failed:Array<{server:string;code:string}>;status:'verified'|'partial'|'unverified'}>;
   function blossomAuthHeader(event:SignedEvent):string;
   function blossomUploadAuth(options:{hash:Hex;server:string;expiresIn?:number;now?:number}):UnsignedEvent;
   function uploadVerified(data:string|Uint8Array,options:{server:string;signer:Signer;pubkey:Hex;path?:string;fetcher?:typeof fetch;signal?:AbortSignal}):Promise<{hash:Hex;size:number;server:string;verified:true;url:string}>;
