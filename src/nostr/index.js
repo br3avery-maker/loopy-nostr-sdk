@@ -10,4 +10,4 @@ export * from './store.js';
 export * from './nip05.js';
 export * from './health-cache.js';
 export * from './giftwrap.js';
-export { decodeNip19, noteEncode, nprofileEncode, neventEncode, naddrEncode } from '../moderation/identity.js';
+export { decodeNip19, noteEncode, nprofileEncode, neventEncode, naddrEncode } from './nip19.js';

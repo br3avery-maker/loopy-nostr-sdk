@@ -1,6 +1,6 @@
 import { isHex, assertSafeInt } from '../core/guards.js';
 import { defaultFetch, sdkError } from '../core/http.js';
-import { mediaType } from '../nsite/files.js';
+import { mediaType } from '../core/media.js';
 import { fetchVerified, uploadVerified } from './client.js';
 import { normalizeBlobServers, preflightBlob, verifyBlobCopies } from './replicas.js';
 

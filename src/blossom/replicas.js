@@ -2,6 +2,7 @@ import { endpoint } from '../core/urls.js';
 import { isHex, assertSafeInt } from '../core/guards.js';
 import { defaultFetch, boundedFetch, sdkError } from '../core/http.js';
 import { mapLimit } from '../core/concurrency.js';
+import { contentTypeMatches } from '../core/media.js';
 import { eventTemplate } from '../nostr/events.js';
 import { fetchVerified } from './client.js';
 
@@ -122,16 +123,7 @@ export function blossomBatchUploadAuth({ hashes, servers, now = Math.floor(Date.
   });
 }
 
-function contentTypeMatches(expected, value) {
-  const actual = String(value ?? '').split(';')[0].trim().toLowerCase();
-  const js = ['text/javascript', 'application/javascript', 'application/x-javascript'];
-  const icon = ['image/x-icon', 'image/vnd.microsoft.icon'];
-  return (
-    actual === expected ||
-    (js.includes(expected) && js.includes(actual)) ||
-    (icon.includes(expected) && icon.includes(actual))
-  );
-}
+
 
 function classifyCopyFailure(err, capturedCode) {
   if (capturedCode) return capturedCode;

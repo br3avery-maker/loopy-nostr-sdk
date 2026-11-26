@@ -1,48 +1,6 @@
 import { nsitePath } from '../core/urls.js';
 import { bytes, sha256 } from '../core/bytes.js';
-
-const MEDIA_TYPES = Object.freeze({
-  html: 'text/html; charset=utf-8',
-  htm: 'text/html; charset=utf-8',
-  xhtml: 'application/xhtml+xml',
-  css: 'text/css; charset=utf-8',
-  js: 'text/javascript; charset=utf-8',
-  mjs: 'text/javascript; charset=utf-8',
-  cjs: 'text/javascript; charset=utf-8',
-  json: 'application/json',
-  map: 'application/json',
-  xml: 'application/xml',
-  svg: 'image/svg+xml',
-  png: 'image/png',
-  jpg: 'image/jpeg',
-  jpeg: 'image/jpeg',
-  gif: 'image/gif',
-  webp: 'image/webp',
-  avif: 'image/avif',
-  ico: 'image/x-icon',
-  woff: 'font/woff',
-  woff2: 'font/woff2',
-  ttf: 'font/ttf',
-  otf: 'font/otf',
-  wasm: 'application/wasm',
-  webmanifest: 'application/manifest+json',
-  txt: 'text/plain; charset=utf-8',
-  md: 'text/markdown; charset=utf-8',
-  csv: 'text/csv; charset=utf-8',
-  pdf: 'application/pdf',
-  mp4: 'video/mp4',
-  webm: 'video/webm',
-  mp3: 'audio/mpeg',
-  ogg: 'audio/ogg',
-});
-
-export function mediaType(path) {
-  const filename = String(path ?? '').split('/').pop() || '';
-  const dot = filename.lastIndexOf('.');
-  if (dot <= 0 || dot === filename.length - 1) return 'application/octet-stream';
-  const ext = filename.slice(dot + 1).toLowerCase();
-  return MEDIA_TYPES[ext] || 'application/octet-stream';
-}
+export { mediaType } from '../core/media.js';
 
 export function normalizeFileMap(input) {
   if (!input || typeof input !== 'object' || Array.isArray(input)) {

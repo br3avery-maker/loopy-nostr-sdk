@@ -1,147 +1,145 @@
 # Public API reference — Nsite Loopy SDK 1.1.1-rc.10
 
-`import {createNsiteSDK, Core, Nostr, Nsite, Blossom, Archive, Directory, Storage, Adapters, Moderation, Moji, Anchor, Intelligence} from '@chaoticka/nsite-loopy-sdk'`. `docs/API_INDEX.json` is the generated complete export list; `types/index.d.ts` is the TypeScript consumer contract. All storage and network functions are explicit: imports have no side effects.
+> Generated deterministically from `docs/API_INDEX.json` and `package.json` via `python3 scripts/sync_docs.py --write`.
+
+`import { createNsiteSDK, Core, Nostr, Nsite, Blossom, Archive, Directory, Storage, Adapters, Moderation, Moji, Anchor, Intelligence, Testing } from '@chaoticka/nsite-loopy-sdk';`
+
+- **Runtime API inventory**: 246 symbols across 13 namespaces (plus `createNsiteSDK` facade).
+- **Machine-readable index**: `docs/API_INDEX.json`
+- **TypeScript declarations**: `types/index.d.ts` and per-namespace subpath `.d.ts` files (strict typed, zero `any`).
+- **Side-effect free**: importing any namespace performs zero network, storage, or signing I/O.
 
 ## Facade
 
-`createNsiteSDK(options?)` accepts `{relays:string[], server?:HTTPS_URL, signer?:Signer, storage?:StorageAdapter, Socket?:WebSocketConstructor, fetcher?:fetch, clock?:()=>seconds}`. It returns `{options, core, nostr, nsite, blossom, archive, directory, storage, adapters, moderation, moji, anchor, intelligence, publish(files,overrides), query(filter,overrides)}`. `publish` reads the approved signer's identity if `pubkey` isn't supplied. A facade is optional: every namespace can be used independently.
+`createNsiteSDK(options?)` accepts `{ relays?, server?, signer?, storage?, pool?, Socket?, fetcher?, clock? }` and returns:
 
-## Core (11 exports)
+- All 12 core/domain namespaces (`core`, `nostr`, `nsite`, `blossom`, `archive`, `directory`, `storage`, `adapters`, `moderation`, `moji`, `anchor`, `intelligence`) plus normalized `options`.
+- `publish(files, overrides?)` — runs `Nsite.publishNsite` using configured defaults (resolving `pubkey` from `signer` when omitted).
+- `query(filter, overrides?)` — queries a single `relay` or multiple `relays`, reusing an injected `RelayPool` (`overrides.pool || options.pool`) when provided and returning deduplicated, sorted `SignedEvent[]`.
+- `close({ closePool = true } = {})` — closes configured `storage` and (unless `closePool: false`) configured `pool`.
 
-- `bytes(input)` UTF-8/ArrayBuffer/Uint8Array to bytes; `encode(text)`, `hex(bytes)`, `unhex(hex)`; `toBase64Url(bytes)`; `sha256(bytes,{cryptoProvider?})` returns lowercase SHA-256 hex.
-- `endpoint(value,type='relay')`: canonical plain `wss://` relay or `https://` Blossom URL, rejects credentials, fragments, queries and unsafe local targets for Blossom.
-- `endpoints(urls,type,max)`: validate and deduplicate endpoint list.
-- `nsitePath(path)`: canonical leading slash and dot/traversal protection; `slug(value)`: 1–13 lower-case canonical named-site identifier.
-- `normalizeOptions(options)`: validates and returns standard runtime options.
+## Subpath imports
 
-## Nostr (37 exports)
+| Subpath | Entry module | Type declarations |
+| --- | --- | --- |
+| `@chaoticka/nsite-loopy-sdk` | `./src/index.js` | `./types/index.d.ts` |
+| `@chaoticka/nsite-loopy-sdk/core` | `./src/core/index.js` | `./types/core.d.ts` |
+| `@chaoticka/nsite-loopy-sdk/nostr` | `./src/nostr/index.js` | `./types/nostr.d.ts` |
+| `@chaoticka/nsite-loopy-sdk/nsite` | `./src/nsite/index.js` | `./types/nsite.d.ts` |
+| `@chaoticka/nsite-loopy-sdk/blossom` | `./src/blossom/index.js` | `./types/blossom.d.ts` |
+| `@chaoticka/nsite-loopy-sdk/archive` | `./src/archive/index.js` | `./types/archive.d.ts` |
+| `@chaoticka/nsite-loopy-sdk/directory` | `./src/directory/index.js` | `./types/directory.d.ts` |
+| `@chaoticka/nsite-loopy-sdk/storage` | `./src/storage/index.js` | `./types/storage.d.ts` |
+| `@chaoticka/nsite-loopy-sdk/adapters` | `./src/adapters/index.js` | `./types/adapters.d.ts` |
+| `@chaoticka/nsite-loopy-sdk/moderation` | `./src/moderation/index.js` | `./types/moderation.d.ts` |
+| `@chaoticka/nsite-loopy-sdk/moji` | `./src/moji/index.js` | `./types/moji.d.ts` |
+| `@chaoticka/nsite-loopy-sdk/anchor` | `./src/anchor/index.js` | `./types/anchor.d.ts` |
+| `@chaoticka/nsite-loopy-sdk/intelligence` | `./src/intelligence/index.js` | `./types/intelligence/index.d.ts` |
+| `@chaoticka/nsite-loopy-sdk/testing` | `./src/testing/index.js` | `./types/testing.d.ts` |
 
-- `generateSecretKey()`, `getPublicKey(secret)`, `finalizeEvent(unsigned,secret)`: crypto/test primitives. Do not serialize test private keys into public artifacts; normal apps should use external signers.
-- `verifyEvent(event)`: BIP-340 signature verification on clean canonical event fields, guarding against vendor verification memoization. `assertSignedEvent(event)` throws on invalid signatures.
-- `eventTemplate({kind,created_at,content,tags})`, `checkedSign(signer,template,expectedPubkey)`: snapshot approved event fields before invoking the signer; reject changed fields or author identity.
-- `browserSigner(window.nostr)`: NIP-07 adapter, errors when absent. `bunkerSigner(uri,options)`: NIP-46 signer object requiring `.connect()` then approval; `.close()` stops session.
-- `nostrConnectRequest({relays,name,perms,secret?,clientSecret?})`: generate client-initiated `nostrconnect://` copy code and `start(signal)` listener; start listening before app switch; do not regenerate pending attempts casually.
-- `androidIntent({type,requestId,event?,currentPubkey?,callbackUrl?})`: creates Android NIP-55 request URI; **launch only**, not login. `verifyAndroidResult(...)` validates correlation, author, content and signature after Android host returns. `connectIdentity(signer)` confirms identity via the signer.
-- `relayList(kind10002)`: signed NIP-65 read/write list; `planRelays({authorList,recipientLists,defaults,max})`: bounded role-aware relay selection. `discoverRelays(pubkey,{bootstrap,query,defaults,max})`: retrieve latest signed kind10002 and diagnostics; equal timestamps choose lowest event ID. `relayInfo(url,{fetcher})`: NIP-11 metadata over HTTPS. `blossomServers(kind10063)` / `discoverBlossom(pubkey,{bootstrap,query})`: signed BUD-03 discovery with the same deterministic tie-break.
-- `queryRelay(relay,filter,{Socket,timeoutMs,signal,verify,maxEvents})`: finite REQ/EOSE; returns verified deduplicated signed events matching all locally checkable NIP-01 constraints, bounded by the lower of maxEvents and filter.limit. Errors are not empty results; a local cap is not proof of relay exhaustion. NIP-50 search and other extension predicates remain relay-defined. `publishRelay(relay,event,{Socket,...})`: waits for actual OK, then requests signed exact-ID readback on the same connection; `publishMany(event,relays,{writer?})`: returns verified/failure receipts without hiding partial failures.
-- `textNote(content,{replyTo?})`: kind1 plain note, with `e`/`p` reply tags; `reaction(target,emoji='+')`: kind7 reaction. `publishTemplate(template,{signer,pubkey,relays,publisher?})`: checked signed publication, requiring readback. `fetchFeed({authors,kinds,relays,query?,limit?})`: verified, deduped, time-sorted events plus per-relay failures.
-- `eventIdentity(event)`: verified NIP-01 event ID or replacement coordinate; preserves exact first `d` tag. `collectEventObservations(rows)`: returns verified event records, distinct per-event relay sightings, latest revisions and rejected inputs. `syncEventHistory({relays,filter,cursors?,pageSize?,boundaryLimit?,maxPages?,now?,query?,signal?})`: read-only bounded per-relay historical scan. Persists no state automatically; commit observations before cursors. `window-read` is relay-reported coverage, not proof of a complete corpus. See `CROSS_DONOR_HISTORY.md`.
-- `parseProfile(signedKind0)` / `fetchProfiles({pubkeys,relays,query?})`: extract bounded metadata from signed profiles. `fetchProfiles` deduplicates authors, queries each author/relay independently (up to 16 simultaneous queries, 100 observed events per request), and selects the newest observed valid profile with lowest event ID on ties. Partial failures include the affected `pubkey` and relay; `queried` does not guarantee completeness.
-- `relayAuthTemplate({challenge,relay})`: NIP-42 challenge-bound template; `httpAuthHeader({url,method,signer,pubkey})`: signed NIP-98 HTTP auth. `encryptionAdapter(nip44Signer)`: delegates to trusted signer; **does not invent homemade NIP-44 encryption**.
+## Cross-brick contracts
 
-- `prepareEventReplacement(signedBaseline,{pubkey?,content?,replaceTags?,created_at?})`: preserve exact address and unowned tags, including original publication metadata; returns unsigned template and review. `reviewEventReplacement(baseline,template,pubkey)` checks signature, account, kind, identity, newer timestamp, exact tag multiset changes and removed profile fields. No signing, automatic safety verdict or freshness claim.
+| Brick pair / boundary | Exact contract |
+| --- | --- |
+| `createNsiteSDK({ pool })` + `Nostr.createRelayPool` | `sdk.query(filter)` returns `SignedEvent[]` (matching unpooled `queryRelay`), throwing only if every relay fails; `pool.query(relays, filter)` returns `{ events, relays, failed }`. |
+| `Nsite.publishNsite` (v2) + `Nsite.createRelayRevisionResolver` | Pass `resolveCurrent: Nsite.createRelayRevisionResolver({ relays, pool, Socket })` to v2 `publishNsite`; returns newest verified manifest `SignedEvent`, `null` on `not-found`, or throws on unreachable/invalid relays. |
+| `Nostr.createEventStore` + `{ verify: false }` | Skips redundant BIP-340 re-verification for pre-verified regular, replaceable, and addressable events while strictly validating shape, hex IDs/pubkeys, and integer timestamps. |
+| `Nostr.createRelayHealthCache` + `Nostr.planRelayDelivery` | `await healthCache.exportForDelivery({ now })` returns `{ observations, relayPolicies, monitorEvents }`, spreading directly into `planRelayDelivery(event, { ...exported })`. |
+| `Core.boundedFetch(url, init, options)` | 3-argument signature: `(url, fetchInit, { fetcher, timeoutMs, maxBytes, signal, read, acceptRedirects })`. |
+| `Storage.scopedStore(adapter, namespace)` | Isolates keys under `${namespace}:`; `namespace` must be non-empty and must not contain `:`. |
+| `Core.mediaType` / `Nsite.mediaType` | Single shared implementation in `src/core/media.js` (`mediaType`, `baseMediaType`, `contentTypeMatches`). |
+| `Nostr.decodeNip19` / `Moderation.decodeNip19` | Single shared implementation in `src/nostr/nip19.js` (`decodeNip19`, `noteEncode`, `nprofileEncode`, `neventEncode`, `naddrEncode`). |
 
-## Nsite (11 exports)
+## Core (34 exports)
 
-- `NSITE_ROOT_KIND=15128`, `NSITE_NAMED_KIND=35128`, `nsiteAddress(pubkey,{identifier?,gateway?})`: root/named nsite URLs.
-- `prepareManifestFiles(fileMap,{maxFiles?,maxBytes?})`: normalizes each path, hashes exact bytes and computes deterministic aggregate of sorted `<hash> <path>\n` records. Returns `{entries,aggregate,totalBytes}`.
-- `manifestTemplate(prepared,{identifier?,server?,title?,description?,created_at?})`: unsigned kind15128/35128 manifest. `parseManifest(signedEvent,{verify?,now?})`: signature check, path bounds, aggregate check and site URL.
-- `normalizeFileMap(fileMap)`, `compareFiles(before,after)`, `mediaType(path)`: normalized file paths, changed hashes, MIME types.
-- `planNsitePublication(files,{pubkey,server,relays,identifier?,title?,description?,created_at?,baseline?})`: read-only, digest-bound plan with exact unsigned template, file hashes, changes and observed baseline status. See `CROSS_DONOR_PUBLICATION.md`.
-- `publishNsite(fileMap,{signer,pubkey,server,relays,identifier,title,description,uploader?,publisher?,checkpoint?,signal?})`: prepare → upload each exact asset → verify → sign manifest → publish → independent relay readback → stage receipt. Supports signed `baseline`, `approvedPlan` (plan ID), `allowFileRemovals`, and optional `resolveCurrent` recheck; use the exact plan timestamp. Stops on any failed gate. Returns `{job,event,manifest,receipts}`.
+Stateless primitives for bytes, UTF-8, hex, Base64/Base64url, SHA-256, MIME/media-type matching (`mediaType`, `baseMediaType`, `contentTypeMatches`), canonical URL/endpoint/path/slug validation, bounded HTTP reads (`boundedFetch`), bounded async concurrency (`mapLimit`), runtime capability checks, account session invalidation (`createAccountSession`), and versioned schema migrations (`migrateSchema`).
 
-## Blossom (4 exports)
+- **Functions (34)**: `assertHex`, `assertSafeHttpUrl`, `assertSafeInt`, `baseMediaType`, `boundedFetch`, `bytes`, `canonicalGatewayHost`, `checkRuntimeCapabilities`, `classifyEventStorage`, `contentTypeMatches`, `createAccountSession`, `decode`, `defaultFetch`, `encode`, `endpoint`, `endpoints`, `fromBase64Url`, `hasLoneSurrogate`, `hex`, `isForbiddenKey`, `isHex`, `isPrivateOrLocalHost`, `mapLimit`, `mediaType`, `migrateSchema`, `normalizeOptions`, `nsitePath`, `safeHttpUrl`, `sdkError`, `sha256`, `slug`, `toBase64`, `toBase64Url`, `unhex`
 
-- `blossomUploadAuth({hash,server,now?,expiresIn?})`: unsigned kind24242 upload auth (caller signs).
-- `blossomAuthHeader(signedEvent)`: Nostr event base64url authorization header.
-- `uploadVerified(bytes,{server,signer,pubkey,path,fetcher?,signal?})`: cryptographic sign → PUT `/upload` → descriptor check → GET hash readback and SHA-256 comparison. Returns `{hash,size,server,url,verified:true}` only after exact byte match.
-- `fetchVerified(hash,{servers,fetcher?,signal?})`: tries verified HTTPS Blossom URLs in order and returns first exact-hash copy. Throws if none match.
+## Nostr (58 exports)
 
-## Archive (9 exports)
+BIP-340 Schnorr signing/verification, canonical event templates and replacement review, NIP-07/46/55 signers and reconnectable bunker descriptors, NIP-19 codecs, NIP-05 verification, NIP-11 metadata, NIP-42 relay auth, NIP-65 relay lists and update planning, NIP-98 HTTP auth, NIP-09 deletion templates, NIP-17/59 gift-wrap DMs (`rumorTemplate`, `sealTemplate`, `giftWrapEvent`, `unwrapGiftWrap`), single-shot and pooled relay transports (`queryRelay`, `subscribeRelay`, `createRelayPool`), persistent `StorageAdapter`-backed event store (`createEventStore`), relay health cache (`createRelayHealthCache`), and event-specific relay delivery planning/execution (`planRelayDelivery`, `executeRelayDelivery`).
 
-- `writeZip(fileMap,{maxFiles,maxBytes})`: deterministic stored ZIP with CRC32 and central directory, no external compressor. `readZip(bytes,{maxFiles,maxOutputBytes,maxRatio,inflate?})`: validates central directory, names, CRC, sizes, path traversal, symlinks and expansion. Reads stored/DEFLATE; Node uses built-in `zlib` for DEFLATE, browsers may inject `inflate`.
-- `crc32(bytes)`: ZIP checksum (not a cryptographic hash).
-- `contentStore(storage?)`: content-addressed `put/get/verify/saveManifest/loadManifest/keys`, using hash identity and shared storage interface.
-- `diffVersions(previous,next)`, `materializeVersion(manifest,store)`, `groupVersions(versions)`: compare historical manifest paths, rebuild version from CAS and group by publisher/root/named identifier.
-- `buildArchiveCatalog(versions,{pages?,jobs?,settings?})` / `searchArchive(catalog,{query,sort,offset,limit,publisher,includeHidden})`: searchable version lineage; hide local entries without erasing raw input.
+- **Functions (58)**: `androidIntent`, `assertSignedEvent`, `blossomServers`, `browserSigner`, `bunkerSigner`, `checkedSign`, `collectEventObservations`, `connectIdentity`, `createBunkerSessionDescriptor`, `createEventStore`, `createRelayHealthCache`, `createRelayPool`, `decodeNip19`, `deletionTemplate`, `discoverBlossom`, `discoverRelays`, `encryptionAdapter`, `eventIdentity`, `eventTemplate`, `executeRelayDelivery`, `fetchFeed`, `fetchProfiles`, `finalizeEvent`, `generateSecretKey`, `getPublicKey`, `giftWrapEvent`, `httpAuthHeader`, `naddrEncode`, `neventEncode`, `nostrConnectRequest`, `noteEncode`, `nprofileEncode`, `npubEncode`, `parseProfile`, `planRelayDelivery`, `planRelayListUpdate`, `planRelays`, `prepareEventReplacement`, `publishMany`, `publishRelay`, `publishTemplate`, `queryRelay`, `reaction`, `relayAuthTemplate`, `relayInfo`, `relayList`, `restoreBunkerSigner`, `reviewEventReplacement`, `rumorTemplate`, `sealTemplate`, `subscribeRelay`, `summarizeRelayDelivery`, `syncEventHistory`, `textNote`, `unwrapGiftWrap`, `verifyAndroidResult`, `verifyEvent`, `verifyNip05`
+
+## Nsite (16 exports)
+
+NIP-5A root (kind `15128`) and named (kind `35128`) static site addressing, file-map normalization, cross-platform path portability checks (`checkPortablePaths`), deterministic manifest preparation and parsing, digest-bound publication plans (`planNsitePublication`), v1 and opt-in v2 multi-copy resumable publication (`publishNsite`), verified retrieval (`resolveNsiteManifest`, `resolveManifestPath`, `loadNsiteFile`), and live/pooled baseline revision resolver (`createRelayRevisionResolver`).
+
+- **Constants (2)**: `NSITE_NAMED_KIND`, `NSITE_ROOT_KIND`
+- **Functions (14)**: `checkPortablePaths`, `compareFiles`, `createRelayRevisionResolver`, `loadNsiteFile`, `manifestTemplate`, `mediaType`, `normalizeFileMap`, `nsiteAddress`, `parseManifest`, `planNsitePublication`, `prepareManifestFiles`, `publishNsite`, `resolveManifestPath`, `resolveNsiteManifest`
+
+## Blossom (9 exports)
+
+BUD-01/BUD-06/BUD-11 unsigned upload and batch authorization templates, exact-byte verified uploads with optional Content-Type checks (`uploadVerified`), multi-server verified retrieval (`fetchVerified`), multi-origin copy verification (`verifyBlobCopies`), unreferenced blob auditing (`findUnreferencedBlobs`), and replica repair (`repairBlobReplicas`).
+
+- **Functions (9)**: `blossomAuthHeader`, `blossomBatchUploadAuth`, `blossomUploadAuth`, `fetchVerified`, `findUnreferencedBlobs`, `preflightBlob`, `repairBlobReplicas`, `uploadVerified`, `verifyBlobCopies`
+
+## Archive (20 exports)
+
+Deterministic stored and async DEFLATE ZIP reading/writing (`readZip`, `writeZip`, `writeZipAsync`), CRC32, Gear CDC chunking (`GEAR_PROFILE`, `gearChunks`, `chunkManifest`, `restoreChunkManifest`), content-addressed blob store (`contentStore`), version diffing and materialization, searchable archive catalogs, lossless Markdown source comparison (`compareMarkdown`), and kind `1349` signed revision snapshots (`snapshotTemplate`, `unwrapSnapshot`, `archiveRevision`, `restoreRevision`).
+
+- **Constants (2)**: `GEAR_PROFILE`, `SNAPSHOT_KIND`
+- **Functions (18)**: `archiveRevision`, `buildArchiveCatalog`, `chunkManifest`, `compareMarkdown`, `contentStore`, `crc32`, `diffVersions`, `gearChunks`, `groupVersions`, `materializeVersion`, `readZip`, `restoreChunkManifest`, `restoreRevision`, `searchArchive`, `snapshotTemplate`, `unwrapSnapshot`, `writeZip`, `writeZipAsync`
 
 ## Directory (31 exports)
 
-Source-derived `Nsite Directory Editor/app/model.js` plus `htmlMetadata`:
+Versioned Nsite directory workspace curation: schema validation/upgrade, rules matching, clone stacking/unstacking, bulk collection grouping, queue navigation, publisher counts, safe URL/image normalization, static HTML metadata extraction, and reversible public/full catalog exports.
 
-- `emptyState`, `validateCatalog`, `validateWorkspace`, `validateRules`, `upgrade`, `VERSION`, `defaultRules`: versioned workspace and schema checks.
-- `effective`, `matches`, `reasons`, `select`, `directoryRows`, `SORTS`, `safeURL`, `safeImage`, `htmlMetadata`: effective metadata, filter rules, search/sort, safe links/images, static metadata.
-- `patch`, `bulkGroup`, `stackSites`, `unstack`, `membership`, `groupState`, `toggleState`, `publisherCounts`, `publisherKey`, `similarityKey`, `setQueue`, `moveQueue`, `ageSeconds`: revisioned edits, clone stacks independent of collections, search/sort, queue navigation.
-- `exportCatalog`, `publicCatalog`: reversible JSON export and public-only catalog with hidden entries filtered.
+- **Constants (3)**: `SORTS`, `VERSION`, `defaultRules`
+- **Functions (28)**: `ageSeconds`, `bulkGroup`, `directoryRows`, `effective`, `emptyState`, `exportCatalog`, `groupState`, `htmlMetadata`, `matches`, `membership`, `moveQueue`, `patch`, `publicCatalog`, `publisherCounts`, `publisherKey`, `reasons`, `safeImage`, `safeURL`, `select`, `setQueue`, `similarityKey`, `stackSites`, `toggleState`, `unstack`, `upgrade`, `validateCatalog`, `validateRules`, `validateWorkspace`
 
-## Storage (2 exports)
+## Storage (4 exports)
 
-`memoryStore(seed?)`: async clone-on-read `get/set/delete/keys` in memory. `indexedDbStore({name,store,indexedDBProvider?})`: same contract via browser IndexedDB. Secrets must be managed by the signer; don't store `nsec` or bunker connection tokens in the generic library.
+Unified async `StorageAdapter` contract (`get`/`set`/`delete`/`keys`/`close?`) with in-memory (`memoryStore`), browser IndexedDB (`indexedDbStore`), Node filesystem (`fsStore`), and namespace-isolated wrapper (`scopedStore`) adapters.
+
+- **Functions (4)**: `fsStore`, `indexedDbStore`, `memoryStore`, `scopedStore`
 
 ## Adapters (2 exports)
 
-`browserEnvironment({signer?,storage?,Socket?,fetcher?})`: browser host capability detection. `androidHandoff({launch,onReturn})`: host-provided NIP-55 request and correlated result. **Requires a native Android host callback, not just a URL click.**
+Host capability detection (`browserEnvironment`) and Android NIP-55 correlated intent handoff (`androidHandoff`). Requires an explicit host callback on Android; never fakes login from a URL click.
 
-## Failure states
+- **Functions (2)**: `androidHandoff`, `browserEnvironment`
 
-- `Error` indicates unverified publication, network timeout, corrupt archive, signature mismatch, missing signer, incompatible host, or invalid bytes; callers should not substitute a success message.
-- `fetchFeed`/`discoverRelays` return diagnostics when at least one relay failed. A signed event fetched from one relay does not prove availability on others.
-- Pure operations (`writeZip`, `nsitePath`, `manifestTemplate`) have no network or side effects.
+## Moderation (24 exports)
 
-Machine-readable export inventory: `docs/API_INDEX.json`; typed API: `types/index.d.ts`; tested call graph: `docs/DEEPINK_CONSUMER.md`.
+Deterministic spam campaign detection (`campaignMatch`, `inspectNsiteSpam`, `clusterNsiteSpam`, `filterNsites`), curator blocklist parsing/merging, NIP-51 mute lists (`parseNip51MuteList`, `muteListTemplate`), compiled emoji policy filters (`compileEmojiPolicy`, `isEmojiAllowed`), and NIP-19/hex normalization helpers. Public default ban lists are empty; callers provide explicit policies.
 
-## Moderation
+- **Constants (5)**: `BUILT_IN_NSFW_BAN_PUBKEYS`, `BUILT_IN_NSFW_BLOB_HASHES`, `BUILT_IN_NSFW_MEDIA_URLS`, `CAMPAIGN_ROLE_OPENERS`, `MOJI_CURATOR_BLOCKLIST_VERSION`
+- **Functions (19)**: `campaignMatch`, `clusterNsiteSpam`, `compileEmojiPolicy`, `decodeNip19`, `filterNsites`, `inspectNsiteSpam`, `isEmojiAllowed`, `mergeBlocklists`, `muteListTemplate`, `naddrEncode`, `neventEncode`, `normalizeEmojiHash`, `normalizeHashList`, `normalizePubkey`, `normalizePubkeyList`, `noteEncode`, `nprofileEncode`, `parseCuratorBlocklist`, `parseNip51MuteList`
 
-- `campaignMatch(description)` preserves the confirmed three-signal spam campaign: role opener, resource promise after opener, real external link (not `index.html` or `Node.js`).
-- `inspectNsiteSpam(site)` distinguishes `confirmed`, `review` and `clear` with inspectable reasons; `clusterNsiteSpam(sites)` detects repeated description templates from distinct authors without turning a guess into an irreversible block.
-- `filterNsites(sites,{bannedPubkeys,hideConfirmed,hideSuspected=false,ownPubkey})` excludes confirmed spam from *visible* results, protects local/pinned items, and returns all hidden rows plus decisions. Original records stay untouched.
-- `parseCuratorBlocklist(json)` and `mergeBlocklists` import/export user-curated publisher and SHA-256 media hashes. Known NSFW publisher/hashes/URL lists are *data*, not media downloads. No content is fetched or rendered.
-- `isEmojiAllowed(candidate,policy)` supports open-with-banlist or verified-safe-publishers-only, without filename/shortcode keyword censorship. `normalizePubkey`, `decodeNip19`, `normalizeEmojiHash` validate identifiers. For `nevent`, `hex` is always the event ID and `author` is the optional author hint (or null), never a verified identity claim.
-- `parseNip51MuteList(signedEvent)` verifies a kind-10000 event signature before extracting muted authors. `muteListTemplate(pubkeys)` creates an unsigned template only; no automatic publish.
+## Moji (7 exports)
 
-## Moji
+Stable SHA-256 or canonical URL emoji identity (`extractEmojiHash`, `buildStableEmojiKey`), shortcode sanitization, deterministic hash-driven stats (`deriveEmojiStatsFromHash`, `deriveEmojiStats`), and verified NIP-30 pack extraction (`parseNip30Event`, `collectNip30Emojis`).
 
-- `extractEmojiHash(url)` extracts an embedded Blossom SHA-256 when present, or computes a deterministic canonical URL fingerprint otherwise; a URL fingerprint is **not** a verified media content hash.
-- `buildStableEmojiKey(url,source)` uses `nip30:<hash>` or `reserve:<hash>`, not a mutable shortcode. `deriveEmojiStatsFromHash` and `deriveEmojiStats` port MojiSurvivor's deterministic hash-driven stats and rarity tiers.
-- `parseNip30Event(signedEvent,{policy})` imports signed kind 30030 / 10030 emoji tags while applying publisher/media bans. `collectNip30Emojis(events)` deduplicates by media identity, returns exclusions and unresolved `a` references. It never claims to have fetched linked packs automatically.
+- **Functions (7)**: `buildStableEmojiKey`, `collectNip30Emojis`, `deriveEmojiStats`, `deriveEmojiStatsFromHash`, `extractEmojiHash`, `parseNip30Event`, `sanitizeEmojiShortcode`
 
-## Anchor
+## Anchor (9 exports)
 
-- `sanitizePublicSession`, `buildPublicAccountBackup`, `restorePublicAccountBackup`: public-only account configuration exports. No `nsec`, bunker URI, signer credential, or private auth state. Restore is **always read-only until reapproved** and checks saved signed publication events.
-- `summarizePublicationReceipts` separates accepted `OK` from **independently retrieved**. `extractEventAssets` parses the `imeta` URL tags from verified events without fetching or rendering media.
-- `kindSpec`, `classifyEventStorage` are derived from Anchor's NIP-kind registry and NIP-01 storage rules.
-- `assessRelayOutbox`, `planVerifiedOutbox` accept probe evidence, do not assume unknown relays are healthy, and recommend writes only when an actual write probe is recorded.
+Public-only account backup/restore without private credentials (`sanitizePublicSession`, `buildPublicAccountBackup`, `restorePublicAccountBackup`), receipt summaries (`summarizePublicationReceipts`), verified event asset extraction (`extractEventAssets`), event storage classification, kind specs, and evidence-backed outbox planning (`assessRelayOutbox`, `planVerifiedOutbox`).
 
-## Archive (Gear profile additions)
+- **Functions (9)**: `assessRelayOutbox`, `buildPublicAccountBackup`, `classifyEventStorage`, `extractEventAssets`, `kindSpec`, `planVerifiedOutbox`, `restorePublicAccountBackup`, `sanitizePublicSession`, `summarizePublicationReceipts`
 
-- `GEAR_PROFILE`, `gearChunks(data)` reproduce Pretend Internet's exact Gear CDC profile (`gear-v1-16k-64k-256k`); chunking is internal and does not replace Blossom whole-file SHA-256 or NIP-5A aggregates.
-- `chunkManifest(bytes)` creates a hashed reusable chunk manifest; `restoreChunkManifest(manifest,read)` verifies every chunk and final whole-file bytes.
-- **No Hashtree codec bundled.** This does not claim byte-for-byte HTS-01 node interoperability; use the canonical upstream `@hashtree/core` encoder separately.
+## Intelligence (28 exports)
 
-## Verified retrieval and cache policy
+Host-independent advisory rules for preference reconstruction (`reconstructPreferences`), root-vs-named nsite safety (`analyzeNsiteIdentity`), intelligent content preparation (`detectAndPrepareContent`), relay/media coverage auditing (`auditCoverage`), relay role classification (`classifyRelay`, `buildRelayOptimizationPlan`), single-release and full-account ecosystem optimization (`auditSinglePublication`, `analyzeAccountEcosystem`), and signed Open Specs discovery/indexing (`parseOpenSpec`, `indexOpenSpecs`, `queryOpenSpecs`, `lookupKindDefinitions`).
 
-See [CROSS_DONOR_RETRIEVAL.md](CROSS_DONOR_RETRIEVAL.md) for `Nsite.resolveNsiteManifest`, `Nsite.resolveManifestPath`, `Nsite.loadNsiteFile`, bounded `Blossom.fetchVerified`, and failure/cache semantics.
+- **Constants (9)**: `CANDIDATE_DISCOVERY_RELAYS`, `ECOSYSTEM_CLIENTS`, `ECOSYSTEM_DISCOVERY_RELAYS`, `LICENSE_GUIDE`, `LICENSE_OPTIONS`, `MUSIC_GENRE_SUGGESTIONS`, `NIP_KIND_REGISTRY`, `OPEN_SPEC_KIND`, `OPEN_SPEC_READ_RELAYS`
+- **Functions (19)**: `analyzeAccountEcosystem`, `analyzeNsiteIdentity`, `auditCoverage`, `auditSinglePublication`, `buildRelayOptimizationPlan`, `classifyEventStorage`, `classifyRelay`, `detectAndPrepareContent`, `getKindSpec`, `getLicensesForCategory`, `indexOpenSpecs`, `isSuitablePublicOutboxRole`, `lookupKindDefinitions`, `parseOpenSpec`, `queryOpenSpecs`, `reconstructPreferences`, `recordCorrection`, `roleClassLabel`, `summarizeObservedActivity`
 
-## Archive — signed revisions and source comparison (rc.5)
+## Testing (4 exports)
 
-- `SNAPSHOT_KIND = 1349`; `snapshotTemplate(event,{created_at?,maxBytes?})` validates the original author signature and builds an **unsigned** snapshot template compatible with Open Specs' e/k/p/a binding. The caller supplies an explicitly approved archivist signer using `Nostr.checkedSign`. No implicit network operation.
-- `unwrapSnapshot(signedSnapshot,{expectedCoordinate?,maxBytes?})`: verifies both signatures and exactly one matching e/k/p/a tag of each type; returns `{event,coordinate,snapshotId,archivist}` or throws. Archivist identity is separate from original author identity.
-- `archiveRevision(event,store,{maxBytes?})` writes canonical signed wire fields to existing CAS and independently verifies readback; returns `{schema:'nostr-revision/1',coordinate,eventId,hash,size}`. `restoreRevision(record,store,{maxBytes?})` rechecks hash, size, signature and record identity. Caller persists the record and, if needed, the signed snapshot separately using the existing storage/CAS interfaces.
-- `compareMarkdown(base,other,{maxBytes?,maxCells?})`: lossless line-based source comparison, returns `{changed,exact,similarity,changes:[{kind,text}]}`. `exact:false` means the optimal line alignment exceeded the bounded LCS budget; unchanged prefix/suffix plus complete replacement preserve both sources. Similarity is the matched-line fraction, not semantic similarity. Render text as text; no HTML is produced.
-- `materializeVersion(manifest,store,{maxFiles?,maxBytes?})`: checks canonical unique paths, snapshots manifest references, independently verifies every blob digest, bounds total bytes. Pass a manifest parsed from a verified event when author authenticity matters. `groupVersions` orders equal-timestamp parsed manifests by event ID.
+Zero-dependency offline test harnesses for SDK consumers: disposable BIP-340/NIP-44 test signers (`createTestSigner`), in-memory NIP-01/NIP-42 mock WebSocket relays (`createMockRelay`), in-memory BUD-01/06/11 mock Blossom servers (`createMockBlossom`), and strict browser-like fetch enforcement (`withStrictBrowserFetch`).
 
-## Intelligence (22 exports)
+- **Functions (4)**: `createMockBlossom`, `createMockRelay`, `createTestSigner`, `withStrictBrowserFetch`
 
-Host-independent Anchor content preparation and advisory ecosystem intelligence. See [Anchor intelligence integration](ANCHOR_INTELLIGENCE.md) for typed operations, donor provenance, limitations and safe publication boundaries.
+## Failure states and honesty boundaries
 
-Verified relay receipts now require explicit acknowledgment and exact event ID.
+- Errors are never silently converted into empty results or verified receipts: failed relays, missing readback, signature mismatches, corrupt ZIP/CAS payloads, and unreachable baseline checks throw or return explicit failure diagnostics.
+- Local offline examples and tests (using `Testing` mocks) exercise real BIP-340 cryptography, NIP-5A manifest hashing, ZIP codecs, and protocol state machines, but are distinct from live relay/Blossom deployment or physical Android device verification.
 
-## Open Specs registry adapter
+## Companion guides
 
-See [OPEN_SPECS.md](OPEN_SPECS.md) for signed document search, revision-aware indexing and advisory kind definitions.
-
-### Event-specific relay delivery
-
-`Nostr.planRelayDelivery(signedEvent, options)` and `Nostr.summarizeRelayDelivery(plan, receipts)` are offline advisory APIs. See [relay delivery reconciliation](RELAY_DELIVERY_RECONCILIATION.md) for group/policy contracts, exact receipts, explicit private/authentication boundaries and remaining transport work.
-
-## Reconciled Blossom prerequisites and replicas
-
-`Blossom.preflightBlob`, `Blossom.blossomBatchUploadAuth` and `Blossom.verifyBlobCopies` expose explicit advisory upload preflight, scoped unsigned batch authorization and MIME/size/hash-verified multi-origin readback. See [BLOSSOM_RECONCILIATION.md](BLOSSOM_RECONCILIATION.md). None uploads or signs on behalf of the caller.
-
-### Opt-in version-2 publication
-
-See [PUBLICATION_RECONCILIATION.md](PUBLICATION_RECONCILIATION.md). The existing plan/publish functions accept `storageServers`, `requiredCopies`, and optional `gateway` hostname; execution requires approved digest and verified current-revision resolver, and accepts `resume` with the typed version-2 checkpoint. The original single-server contract remains supported.
-
-### Authenticated relay delivery
-
-`Nostr.executeRelayDelivery(event, options)` recomputes an approved-destination plan and performs bounded fallback, optionally using a caller-approved NIP-42 signer. Signed NIP-66 monitor hints and principal-scoped observations can inform planning; neither is proof of relay compatibility. See [relay authentication reconciliation](RELAY_AUTH_RECONCILIATION.md) for cancellation, protected/ephemeral event semantics and remaining integration limits.
+- [Options](OPTIONS.md) · [Cross-donor transport](CROSS_DONOR_TRANSPORT.md) · [History sync](CROSS_DONOR_HISTORY.md) · [Publication & plans](CROSS_DONOR_PUBLICATION.md) · [Verified retrieval](CROSS_DONOR_RETRIEVAL.md) · [Archive & snapshots](CROSS_DONOR_ARCHIVE.md)
+- [Relay delivery reconciliation](RELAY_DELIVERY_RECONCILIATION.md) · [Relay auth reconciliation](RELAY_AUTH_RECONCILIATION.md) · [Blossom reconciliation](BLOSSOM_RECONCILIATION.md) · [Publication v2 reconciliation](PUBLICATION_RECONCILIATION.md)
+- [Anchor intelligence](ANCHOR_INTELLIGENCE.md) · [Open Specs registry](OPEN_SPECS.md) · [Round 2 audit](ROUND2_AUDIT.md)

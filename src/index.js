@@ -22,6 +22,16 @@ export function createNsiteSDK(options={}){
     async publish(files,overrides={}){const signer=overrides.signer||config.signer;const pubkey=overrides.pubkey||(signer?.getPublicKey?await signer.getPublicKey():undefined);return Nsite.publishNsite(files,{...config,...overrides,signer,pubkey})},
     async query(filter,overrides={}){
       const opts={Socket:config.Socket,...overrides};
+      const activePool=overrides.pool||config.pool;
+      if(activePool){
+        const targets=overrides.relay?[Core.endpoint(overrides.relay,'relay')]:(Array.isArray(overrides.relays)?Core.endpoints(overrides.relays,'relay'):config.relays);
+        if(!targets.length)throw Core.sdkError('No relay selected',{code:'no-relay',stage:'query'});
+        const res=await activePool.query(targets,filter,opts);
+        if(!res.relays.length&&res.failed.length){
+          throw Core.sdkError(res.failed[0].error||'Relay query failed',{code:res.failed[0].code||'network',relay:res.failed[0].relay,stage:'query'});
+        }
+        return res.events;
+      }
       if(overrides.relay)return Nostr.queryRelay(overrides.relay,filter,opts);
       const relays=Array.isArray(overrides.relays)?Core.endpoints(overrides.relays,'relay'):config.relays;
       if(!relays.length)throw Core.sdkError('No relay selected',{code:'no-relay',stage:'query'});
@@ -35,11 +45,13 @@ export function createNsiteSDK(options={}){
       if(!fulfilled&&firstError)throw firstError;
       return [...byId.values()].sort((a,b)=>(b.created_at-a.created_at)||(a.id<b.id?-1:a.id>b.id?1:0));
     },
-    async close(){
-      const results=await Promise.allSettled([
+    async close({closePool=true}={}){
+      const tasks=[
         Promise.resolve().then(()=>config.signer?.close?.()),
         Promise.resolve().then(()=>config.storage?.close?.())
-      ]);
+      ];
+      if(closePool&&config.pool)tasks.push(Promise.resolve().then(()=>config.pool?.close?.()));
+      const results=await Promise.allSettled(tasks);
       const rejected=results.find(r=>r.status==='rejected');
       if(rejected)throw rejected.reason;
     }

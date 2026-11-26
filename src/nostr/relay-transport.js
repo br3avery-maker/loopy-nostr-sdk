@@ -1,17 +1,20 @@
 import { endpoint, endpoints } from '../core/urls.js';
 import { isHex, classifyEventStorage } from '../core/guards.js';
 import { sdkError } from '../core/http.js';
-import { assertSignedEvent, checkedSign } from './events.js';
+import { assertSignedEvent } from './events.js';
 import { verifiedCopy } from './history.js';
-import { relayAuthTemplate } from './other-nips.js';
 import { isVerifiedReceipt } from './receipts.js';
 import { matchesFilter } from './filter.js';
-
-function frame(raw) {
-  try { return JSON.parse(typeof raw === 'string' ? raw : String(raw)); } catch { return null; }
-}
-
-const isAuthRequired = reason => typeof reason === 'string' && (reason === 'auth-required' || reason.startsWith('auth-required:'));
+import {
+  parseWireFrame,
+  isAuthRequired,
+  isAuthChallengeFrame,
+  classifyRelayRefusal,
+  validateRelayFilter,
+  validateRelayAuthOptions,
+  createFrameBudget,
+  signRelayAuthChallenge,
+} from './wire.js';
 
 /** Finite NIP-01 REQ, EOSE and EVENT handling; bounded against hostile relays and supports optional NIP-42 AUTH. */
 export function queryRelay(
@@ -31,22 +34,16 @@ export function queryRelay(
 ) {
   url = endpoint(url);
   if (!Socket) throw new Error('WebSocket transport unavailable');
-  if (!filter || typeof filter !== 'object' || Array.isArray(filter)) throw new TypeError('Expected one Nostr filter object');
-  filter = structuredClone(filter);
+  filter = validateRelayFilter(filter);
   if (!Number.isSafeInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 120000) throw new RangeError('Invalid query timeout');
   if (!Number.isSafeInteger(maxEvents) || maxEvents < 1) throw new RangeError('maxEvents must be a positive integer');
   if (!Number.isSafeInteger(maxFrames) || maxFrames < 1 || !Number.isSafeInteger(maxBytes) || maxBytes < 1024) {
     throw new RangeError('Invalid query frame or byte limits');
   }
-  if (Object.hasOwn(filter, 'limit') && (!Number.isSafeInteger(filter.limit) || filter.limit < 0)) {
-    throw new RangeError('Filter limit must be a nonnegative integer');
-  }
-  if (authSigner !== undefined && (typeof authSigner?.signEvent !== 'function' || !isHex(authPubkey, 64))) {
-    throw new TypeError('Explicit verified AUTH signer and identity required');
-  }
+  validateRelayAuthOptions(authSigner, authPubkey);
 
   const cap = Math.min(maxEvents, filter.limit ?? maxEvents);
-  const encoder = new TextEncoder();
+  const budget = createFrameBudget({ maxFrames, maxBytes, relay: url, code: 'size-limit' });
 
   return new Promise((resolve, reject) => {
     const ws = new Socket(url);
@@ -55,8 +52,6 @@ export function queryRelay(
     let done = false;
     let open = false;
     let timer;
-    let frameCount = 0;
-    let receivedBytes = 0;
     let challenge = null;
     let authId = null;
     let authAttempted = false;
@@ -90,7 +85,7 @@ export function queryRelay(
       Promise.resolve()
         .then(() => {
           if (done) throw sdkError('Relay query cancelled', { code: 'cancelled', retryable: false, relay: url });
-          return checkedSign(authSigner, relayAuthTemplate({ challenge: usedChallenge, relay: url }), authPubkey);
+          return signRelayAuthChallenge({ challenge: usedChallenge, relay: url, authSigner, authPubkey });
         })
         .then(auth => {
           if (done) return;
@@ -98,7 +93,7 @@ export function queryRelay(
             return finish(sdkError('Relay AUTH challenge changed', { code: 'auth-required', retryable: true, relay: url }));
           }
           authId = auth.id;
-          send(['AUTH', verifiedCopy(auth)]);
+          send(['AUTH', auth]);
         })
         .catch(cause => finish(sdkError('Relay authentication denied or invalid', { code: 'auth-required', retryable: false, relay: url, cause })));
     };
@@ -114,12 +109,11 @@ export function queryRelay(
     };
     ws.onmessage = ({ data }) => {
       if (done) return;
-      if (typeof data !== 'string' || ++frameCount > maxFrames || (receivedBytes += encoder.encode(data).length) > maxBytes) {
-        return finish(sdkError('Relay response limit exceeded', { code: 'size-limit', retryable: false, relay: url }));
-      }
-      const m = frame(data);
-      if (!Array.isArray(m)) return;
-      if (m[0] === 'AUTH' && typeof m[1] === 'string' && m[1].length > 0 && m[1].length <= 512) {
+      const limitErr = budget.consume(data);
+      if (limitErr) return finish(limitErr);
+      const m = parseWireFrame(data);
+      if (!m) return;
+      if (isAuthChallengeFrame(m)) {
         challenge = m[1];
         if (authPending) tryAuthenticate();
         return;
@@ -175,9 +169,7 @@ export function publishRelay(
   event = verify ? verifiedCopy(event) : structuredClone(event);
   if (!Socket) throw new Error('WebSocket transport unavailable');
   if (!Number.isSafeInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 120000) throw new RangeError('Invalid publication timeout');
-  if (authSigner !== undefined && (!verify || typeof authSigner?.signEvent !== 'function' || !isHex(authPubkey, 64))) {
-    throw new TypeError('Explicit verified AUTH signer and identity required');
-  }
+  validateRelayAuthOptions(authSigner, authPubkey, { requireVerify: verify });
   const protectedEvent = event.tags.some(t => t[0] === '-');
   if (protectedEvent && (!authSigner || authPubkey !== event.pubkey)) throw new Error('Protected event requires author authentication');
   if (requireAuthentication && !authSigner) throw new Error('Authentication capability required');
@@ -185,7 +177,7 @@ export function publishRelay(
   const ephemeral = acceptEphemeral === true && classifyEventStorage(event.kind) === 'ephemeral';
   if (signal?.aborted) return Promise.reject(sdkError('Publish cancelled', { code: 'cancelled', retryable: false, relay: url }));
 
-  const encoder = new TextEncoder();
+  const budget = createFrameBudget({ maxFrames: 1024, maxBytes: 2097152, relay: url, code: 'size' });
 
   return new Promise((resolve, reject) => {
     const ws = new Socket(url);
@@ -199,8 +191,6 @@ export function publishRelay(
     let attempted = false;
     let authenticated = false;
     let afterAuth = 'event';
-    let frameCount = 0;
-    let received = 0;
 
     const abort = () => finish(sdkError('Publish cancelled', { code: 'cancelled', retryable: false, relay: url }));
     const finish = err => {
@@ -218,23 +208,7 @@ export function publishRelay(
         resolve(receipt);
       }
     };
-    const refused = reason => {
-      const prefix = typeof reason === 'string' ? reason.split(':', 1)[0].trim().toLowerCase() : '';
-      const map = {
-        'auth-required': 'auth-required',
-        'rate-limited': 'rate-limited',
-        'unsupported-kind': 'unsupported-kind',
-        'payment-required': 'payment-required',
-        blocked: 'policy',
-        restricted: 'policy',
-        'event-too-large': 'size',
-        pow: 'pow',
-        duplicate: 'duplicate',
-        invalid: 'invalid',
-      };
-      const code = map[prefix] ?? 'rejected';
-      return sdkError('Relay refused signed event', { code, retryable: code === 'rate-limited', relay: url });
-    };
+    const refused = reason => classifyRelayRefusal(reason, url);
     const send = message => {
       if (done) return;
       try { ws.send(JSON.stringify(message)); } catch (cause) {
@@ -254,7 +228,7 @@ export function publishRelay(
       Promise.resolve()
         .then(() => {
           if (done) throw sdkError('Publish cancelled', { code: 'cancelled', retryable: false, relay: url });
-          return checkedSign(authSigner, relayAuthTemplate({ challenge: usedChallenge, relay: url }), authPubkey);
+          return signRelayAuthChallenge({ challenge: usedChallenge, relay: url, authSigner, authPubkey });
         })
         .then(auth => {
           if (done) return;
@@ -263,7 +237,7 @@ export function publishRelay(
           }
           authId = auth.id;
           phase = 'auth-ack';
-          send(['AUTH', verifiedCopy(auth)]);
+          send(['AUTH', auth]);
         })
         .catch(cause => finish(sdkError('Relay authentication denied or invalid', { code: 'auth-required', retryable: false, relay: url, cause })));
     };
@@ -294,12 +268,11 @@ export function publishRelay(
     };
     ws.onmessage = ({ data }) => {
       if (done) return;
-      if (typeof data !== 'string' || ++frameCount > 1024 || (received += encoder.encode(data).length) > 2097152) {
-        return finish(sdkError('Relay response limit exceeded', { code: 'size', retryable: false, relay: url }));
-      }
-      const m = frame(data);
-      if (!Array.isArray(m)) return;
-      if (m[0] === 'AUTH' && typeof m[1] === 'string' && m[1].length > 0 && m[1].length <= 512) {
+      const limitErr = budget.consume(data);
+      if (limitErr) return finish(limitErr);
+      const m = parseWireFrame(data);
+      if (!m) return;
+      if (isAuthChallengeFrame(m)) {
         if (phase === 'auth-ack' && challenge !== m[1]) {
           return finish(sdkError('Relay AUTH challenge changed', { code: 'auth-required', retryable: true, relay: url }));
         }

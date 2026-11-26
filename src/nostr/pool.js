@@ -1,57 +1,19 @@
 import { endpoint, endpoints } from '../core/urls.js';
 import { isHex, classifyEventStorage, assertSafeInt } from '../core/guards.js';
 import { sdkError } from '../core/http.js';
-import { assertSignedEvent, checkedSign } from './events.js';
+import { assertSignedEvent } from './events.js';
 import { verifiedCopy } from './history.js';
-import { relayAuthTemplate } from './other-nips.js';
 import { matchesFilter } from './filter.js';
-
-function parseFrame(raw) {
-  try {
-    return JSON.parse(typeof raw === 'string' ? raw : String(raw));
-  } catch {
-    return null;
-  }
-}
-
-const isAuthRequired = reason =>
-  typeof reason === 'string' && (reason === 'auth-required' || reason.startsWith('auth-required:'));
-
-function classifyRefusal(reason, relay) {
-  const prefix = typeof reason === 'string' ? reason.split(':', 1)[0].trim().toLowerCase() : '';
-  const map = {
-    'auth-required': 'auth-required',
-    'rate-limited': 'rate-limited',
-    'unsupported-kind': 'unsupported-kind',
-    'payment-required': 'payment-required',
-    blocked: 'policy',
-    restricted: 'policy',
-    'event-too-large': 'size',
-    pow: 'pow',
-    duplicate: 'duplicate',
-    invalid: 'invalid',
-  };
-  const code = map[prefix] ?? 'rejected';
-  return sdkError('Relay refused signed event', { code, retryable: code === 'rate-limited', relay });
-}
-
-function validateFilter(filter) {
-  if (!filter || typeof filter !== 'object' || Array.isArray(filter)) {
-    throw new TypeError('Expected one Nostr filter object');
-  }
-  if (Object.hasOwn(filter, 'limit') && (!Number.isSafeInteger(filter.limit) || filter.limit < 0)) {
-    throw new RangeError('Filter limit must be a nonnegative integer');
-  }
-  return structuredClone(filter);
-}
-
-function validateAuth(authSigner, authPubkey, { requireVerify = true } = {}) {
-  if (authSigner !== undefined) {
-    if (!requireVerify || typeof authSigner?.signEvent !== 'function' || !isHex(authPubkey, 64)) {
-      throw new TypeError('Explicit verified AUTH signer and identity required');
-    }
-  }
-}
+import {
+  parseWireFrame as parseFrame,
+  isAuthRequired,
+  isAuthChallengeFrame,
+  classifyRelayRefusal as classifyRefusal,
+  validateRelayFilter as validateFilter,
+  validateRelayAuthOptions as validateAuth,
+  createFrameBudget,
+  signRelayAuthChallenge,
+} from './wire.js';
 
 /**
  * Single-relay persistent NIP-01 subscription with explicit EOSE vs live-event distinction,
@@ -90,13 +52,11 @@ export function subscribeRelay(
   }
 
   const ws = new Socket(url);
-  const encoder = new TextEncoder();
+  const budget = createFrameBudget({ maxFrames, maxBytes, relay: url, code: 'size-limit' });
   const seenIds = new Set();
   let subId = 'sub-' + Math.random().toString(36).slice(2);
   let open = false;
   let eosed = false;
-  let frameCount = 0;
-  let receivedBytes = 0;
   let challenge = null;
   let authId = null;
   let authAttempted = false;
@@ -153,7 +113,7 @@ export function subscribeRelay(
     Promise.resolve()
       .then(() => {
         if (closed) throw sdkError('Relay subscription cancelled', { code: 'cancelled', retryable: false, relay: url });
-        return checkedSign(authSigner, relayAuthTemplate({ challenge: usedChallenge, relay: url }), authPubkey);
+        return signRelayAuthChallenge({ challenge: usedChallenge, relay: url, authSigner, authPubkey });
       })
       .then(auth => {
         if (closed) return;
@@ -165,7 +125,7 @@ export function subscribeRelay(
           return;
         }
         authId = auth.id;
-        send(['AUTH', verifiedCopy(auth)]);
+        send(['AUTH', auth]);
       })
       .catch(cause =>
         close({
@@ -209,20 +169,14 @@ export function subscribeRelay(
   };
   ws.onmessage = ({ data }) => {
     if (closed) return;
-    if (
-      typeof data !== 'string' ||
-      ++frameCount > maxFrames ||
-      (receivedBytes += encoder.encode(data).length) > maxBytes
-    ) {
-      close({
-        sendClose: false,
-        reasonError: sdkError('Relay response limit exceeded', { code: 'size-limit', retryable: false, relay: url }),
-      });
+    const limitErr = budget.consume(data);
+    if (limitErr) {
+      close({ sendClose: false, reasonError: limitErr });
       return;
     }
     const m = parseFrame(data);
-    if (!Array.isArray(m)) return;
-    if (m[0] === 'AUTH' && typeof m[1] === 'string' && m[1].length > 0 && m[1].length <= 512) {
+    if (!m) return;
+    if (isAuthChallengeFrame(m)) {
       challenge = m[1];
       if (authPending) tryAuthenticate();
       return;
@@ -394,7 +348,7 @@ export function createRelayPool({
           if (signal?.aborted) throw sdkError('Relay operation cancelled', { code: 'cancelled', retryable: false, relay });
           let signed;
           try {
-            signed = await checkedSign(signer, relayAuthTemplate({ challenge: usedChallenge, relay }), pubkey);
+            signed = await signRelayAuthChallenge({ challenge: usedChallenge, relay, authSigner: signer, authPubkey: pubkey });
           } catch (cause) {
             throw sdkError('Relay authentication denied or invalid', {
               code: 'auth-required',

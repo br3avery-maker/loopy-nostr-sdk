@@ -14,6 +14,7 @@ export type {
   PublicationOptions,
   PublicationPlan,
   PublicationPlanOptions,
+  RelayRevisionResolverOptions,
   ResumablePublicationJob,
   RetrievalError,
   RetrievalTransport,
@@ -23,6 +24,7 @@ export type {
 export declare const resolveNsiteManifest: typeof Nsite.resolveNsiteManifest;
 export declare const resolveManifestPath: typeof Nsite.resolveManifestPath;
 export declare const loadNsiteFile: typeof Nsite.loadNsiteFile;
+export declare const createRelayRevisionResolver: typeof Nsite.createRelayRevisionResolver;
 export declare const planNsitePublication: typeof Nsite.planNsitePublication;
 export declare const NSITE_ROOT_KIND: typeof Nsite.NSITE_ROOT_KIND;
 export declare const NSITE_NAMED_KIND: typeof Nsite.NSITE_NAMED_KIND;

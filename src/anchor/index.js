@@ -1,6 +1,6 @@
 /** Portable public-only account recovery & publication receipts, adapted from Nostr Anchor. */
 import { assertSignedEvent } from '../nostr/events.js';
-import { normalizePubkey } from '../moderation/identity.js';
+import { normalizePubkey } from '../nostr/nip19.js';
 import { isForbiddenKey, safeHttpUrl } from '../core/guards.js';
 import { endpoint } from '../core/urls.js';
 

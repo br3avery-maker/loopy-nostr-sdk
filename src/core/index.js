@@ -6,3 +6,4 @@ export * from './options.js';
 export * from './concurrency.js';
 export * from './session.js';
 export * from './schemas.js';
+export * from './media.js';

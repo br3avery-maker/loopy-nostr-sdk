@@ -121,3 +121,10 @@ See [Blossom publishing reconciliation](docs/BLOSSOM_RECONCILIATION.md) for expl
 ## Publication reconciliation (draft batch 3)
 
 [Digest-bound multi-copy publication and resume](docs/PUBLICATION_RECONCILIATION.md) extend the existing Nsite planner and publisher through opt-in version-2 settings. Saved manifest signatures and independently verified existing copies can be reused; gateway verification is a separate explicit result. No release or live publication is implied.
+
+## Unreleased modular hardening & Round 2 baseline
+
+- **13-layer strictly acyclic DAG**: enforced by `validation/verify_repo_audit.py` (89 pinned modules, 246 runtime symbols across 13 namespaces + `createNsiteSDK`, strict zero-`any` TypeScript declarations, auto-synced `docs/API_REFERENCE.md` via `scripts/sync_docs.py --check`).
+- **Offline runnable examples** (no network, no public signing): `examples/offline-publish-plan.js`, `examples/archive-cas.js`, `examples/relay-pool-store.js`, `examples/blossom-replica-repair.js`, `examples/giftwrap-dm.js`, and `examples/v2-resumable-publish.js`.
+- **Verified offline locally**: 304 Node tests and 35 Python tests. CI `tsc`, live relay/Blossom writes, physical Android device handoff, and npm publication remain separate gates. See [ROUND2_AUDIT.md](docs/ROUND2_AUDIT.md) and [CHANGELOG.md](CHANGELOG.md).
+

@@ -1,5 +1,5 @@
 import { Core } from './index.js';
-export type { AccountSession, BoundedFetchOptions, BoundedFetchResult, Endpoint, Hex, RuntimeCapabilities, SDKOptions, SchemaMigrationResult, SdkErrorDetails } from './index.js';
+export type { AccountSession, BoundedFetchOptions, BoundedFetchResult, Endpoint, Hex, RuntimeCapabilities, SDKOptions, SchemaDocument, SchemaMigrationResult, SdkErrorDetails } from './index.js';
 export declare const encode: typeof Core.encode;
 export declare const decode: typeof Core.decode;
 export declare const bytes: typeof Core.bytes;
@@ -9,6 +9,9 @@ export declare const sha256: typeof Core.sha256;
 export declare const toBase64: typeof Core.toBase64;
 export declare const toBase64Url: typeof Core.toBase64Url;
 export declare const fromBase64Url: typeof Core.fromBase64Url;
+export declare const mediaType: typeof Core.mediaType;
+export declare const baseMediaType: typeof Core.baseMediaType;
+export declare const contentTypeMatches: typeof Core.contentTypeMatches;
 export declare const isPrivateOrLocalHost: typeof Core.isPrivateOrLocalHost;
 export declare const endpoint: typeof Core.endpoint;
 export declare const endpoints: typeof Core.endpoints;

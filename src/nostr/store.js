@@ -49,6 +49,18 @@ function assertStorage(storage) {
   }
 }
 
+function uncheckedIdentity(ev) {
+  const cls = classifyEventStorage(ev.kind);
+  if (cls === 'regular') return ev.id;
+  if (cls === 'replaceable') return `${ev.kind}:${ev.pubkey}:`;
+  if (cls === 'addressable') {
+    const tags = Array.isArray(ev.tags) ? ev.tags : [];
+    const d = tags.find(t => Array.isArray(t) && t[0] === 'd')?.[1] ?? '';
+    return `${ev.kind}:${ev.pubkey}:${d}`;
+  }
+  return ev.id;
+}
+
 /**
  * StorageAdapter-backed NIP-01 verified event store honoring regular, replaceable, and
  * addressable replacement semantics (newest created_at, lowest lexicographic id tie-break),
@@ -62,12 +74,16 @@ export function createEventStore(storage) {
   const DEL_ID_PREFIX = 'del:';
   const DEL_ADDR_PREFIX = 'deladdr:';
 
-  async function isTombstoned(ev) {
+  function identityFor(ev, verify) {
+    return verify ? eventIdentity(ev) : uncheckedIdentity(ev);
+  }
+
+  async function isTombstoned(ev, verify = false) {
     const idTomb = await storage.get(DEL_ID_PREFIX + ev.id);
     if (idTomb && idTomb.deletedBy === ev.pubkey) return true;
     const cls = classifyEventStorage(ev.kind);
     if (cls === 'addressable' || cls === 'replaceable') {
-      const identity = eventIdentity(ev);
+      const identity = identityFor(ev, verify);
       const addrTomb = await storage.get(DEL_ADDR_PREFIX + identity);
       if (addrTomb && addrTomb.deletedBy === ev.pubkey && ev.created_at <= addrTomb.deletedAt) {
         return true;
@@ -79,14 +95,21 @@ export function createEventStore(storage) {
   return {
     async put(input, { verify = true } = {}) {
       const ev = verify ? verifiedCopy(input) : structuredClone(input);
-      if (!ev || !isHex(ev.id, 64) || !isHex(ev.pubkey, 64) || !Number.isSafeInteger(ev.kind)) {
+      if (
+        !ev ||
+        !isHex(ev.id, 64) ||
+        !isHex(ev.pubkey, 64) ||
+        !Number.isSafeInteger(ev.kind) ||
+        !Number.isSafeInteger(ev.created_at) ||
+        !Array.isArray(ev.tags)
+      ) {
         throw new TypeError('Valid signed Nostr event required');
       }
       const cls = classifyEventStorage(ev.kind);
       if (cls === 'ephemeral') {
         return { stored: false, reason: 'ephemeral', id: ev.id };
       }
-      if (await isTombstoned(ev)) {
+      if (await isTombstoned(ev, verify)) {
         return { stored: false, reason: 'deleted', id: ev.id };
       }
       if (cls === 'regular') {
@@ -95,7 +118,7 @@ export function createEventStore(storage) {
         await storage.set(EVT_PREFIX + ev.id, ev);
         return { stored: true, id: ev.id, replacedId: null };
       }
-      const identity = eventIdentity(ev);
+      const identity = identityFor(ev, verify);
       const current = await storage.get(IDX_PREFIX + identity);
       if (current) {
         if (current.id === ev.id) return { stored: false, reason: 'duplicate', id: ev.id };
@@ -113,7 +136,7 @@ export function createEventStore(storage) {
       if (!isHex(id, 64)) throw new TypeError('Event ID must be 64-char lowercase hex');
       const ev = await storage.get(EVT_PREFIX + id);
       if (!ev) return null;
-      if (await isTombstoned(ev)) return null;
+      if (await isTombstoned(ev, false)) return null;
       return ev;
     },
 
@@ -130,7 +153,7 @@ export function createEventStore(storage) {
         if (!key.startsWith(EVT_PREFIX)) continue;
         const ev = await storage.get(key);
         if (!ev) continue;
-        if (await isTombstoned(ev)) continue;
+        if (await isTombstoned(ev, false)) continue;
         if (matchesFilter(ev, filter)) matched.push(ev);
       }
       matched.sort((a, b) => b.created_at - a.created_at || a.id.localeCompare(b.id));
@@ -162,7 +185,7 @@ export function createEventStore(storage) {
             await storage.delete(EVT_PREFIX + targetId);
             const cls = classifyEventStorage(existing.kind);
             if (cls === 'replaceable' || cls === 'addressable') {
-              const identity = eventIdentity(existing);
+              const identity = uncheckedIdentity(existing);
               const idx = await storage.get(IDX_PREFIX + identity);
               if (idx?.id === targetId) await storage.delete(IDX_PREFIX + identity);
             }

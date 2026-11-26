@@ -2,6 +2,7 @@ import { parseManifest } from './manifest.js';
 import { defaultFetch, boundedFetch } from '../core/http.js';
 import { mapLimit } from '../core/concurrency.js';
 import { assertSafeInt } from '../core/guards.js';
+import { contentTypeMatches } from '../core/media.js';
 import { checkedSign } from '../nostr/events.js';
 import { verifiedCopy, eventIdentity } from '../nostr/history.js';
 import { verifiedReceipts } from '../nostr/receipts.js';
@@ -17,17 +18,7 @@ const matchesTemplate = (event, plan) =>
 const cancelled = signal => {
   if (signal?.aborted) throw new Error('Publication cancelled');
 };
-const baseType = v => String(v ?? '').split(';')[0].trim().toLowerCase();
-const jsTypes = ['text/javascript', 'application/javascript', 'application/x-javascript'];
-const iconTypes = ['image/x-icon', 'image/vnd.microsoft.icon'];
-const correctType = (expected, actual) => {
-  const act = baseType(actual);
-  return (
-    expected === act ||
-    (jsTypes.includes(expected) && jsTypes.includes(act)) ||
-    (iconTypes.includes(expected) && iconTypes.includes(act))
-  );
-};
+
 
 function uploadFailureCode(err) {
   if (err?.code && typeof err.code === 'string') return err.code;
@@ -92,7 +83,7 @@ async function checkGateway(plan, fetcher, signal, { timeoutMs = 30000, concurre
             signal: controller.signal,
             fetcher: async (_hashURL, init) => {
               const response = await fetcher(url, { ...init, redirect: 'error', credentials: 'omit', cache: 'no-store' });
-              if (response.redirected || !response.ok || !correctType(entry.type, response.headers?.get?.('content-type'))) {
+              if (response.redirected || !response.ok || !contentTypeMatches(entry.type, response.headers?.get?.('content-type'))) {
                 throw new Error('Gateway response or MIME mismatch');
               }
               return response;

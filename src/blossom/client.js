@@ -3,7 +3,7 @@ import { bytes, sha256, toBase64Url, encode } from '../core/bytes.js';
 import { isHex, assertSafeInt } from '../core/guards.js';
 import { defaultFetch, boundedFetch, sdkError } from '../core/http.js';
 import { eventTemplate, checkedSign, verifyEvent } from '../nostr/events.js';
-import { mediaType } from '../nsite/files.js';
+import { mediaType, baseMediaType, contentTypeMatches } from '../core/media.js';
 
 export function blossomAuthHeader(signedEvent) {
   if (!signedEvent || typeof signedEvent !== 'object') throw new TypeError('Signed Blossom auth event required');
@@ -48,21 +48,7 @@ function validateUploadAuthEvent(authEvent, { hash, host, pubkey, now }) {
   return authEvent;
 }
 
-const JS_MEDIA_TYPES = ['text/javascript', 'application/javascript', 'application/x-javascript'];
-const ICON_MEDIA_TYPES = ['image/x-icon', 'image/vnd.microsoft.icon'];
 
-function baseMediaType(value) {
-  return String(value ?? '').split(';')[0].trim().toLowerCase();
-}
-
-function readbackTypeMatches(expected, actualHeader) {
-  const act = baseMediaType(actualHeader);
-  return (
-    act === expected ||
-    (JS_MEDIA_TYPES.includes(expected) && JS_MEDIA_TYPES.includes(act)) ||
-    (ICON_MEDIA_TYPES.includes(expected) && ICON_MEDIA_TYPES.includes(act))
-  );
-}
 
 /** Real BUD-11 upload + descriptor + exact-byte readback; signer stays external. */
 export async function uploadVerified(
@@ -126,7 +112,7 @@ export async function uploadVerified(
   const expectedBase = baseMediaType(uploadContentType);
   if (verifyContentType) {
     const actualHeader = remote.headers?.get?.('content-type');
-    if (!readbackTypeMatches(expectedBase, actualHeader)) {
+    if (!contentTypeMatches(expectedBase, actualHeader)) {
       throw sdkError('Blossom download content type mismatch', { code: 'mime-mismatch', server: base, retryable: false });
     }
     return {

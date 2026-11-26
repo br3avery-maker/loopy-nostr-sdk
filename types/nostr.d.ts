@@ -1,17 +1,20 @@
 import { Nostr } from './index.js';
 export type {
   BunkerSessionDescriptor,
+  BunkerTransportLike,
   Endpoint,
   EventHistoryRecord,
   EventObservation,
   EventRelaySighting,
   EventReplacementReview,
+  EventStore,
   Hex,
   HistoryCursor,
   HistoryFilter,
   HistoryStatus,
   HistorySyncOptions,
   HistorySyncResult,
+  NostrFilter,
   PublishReceipts,
   RelayDeliveryCandidate,
   RelayDeliveryExecutionOptions,
@@ -21,6 +24,7 @@ export type {
   RelayDeliverySummary,
   RelayHealthCache,
   RelayListEntry,
+  RelayPool,
   RelayPublishOptions,
   RelayReceipt,
   RelayTransportObservation,
@@ -28,6 +32,8 @@ export type {
   SignedEvent,
   Signer,
   UnsignedEvent,
+  WebSocketConstructor,
+  WebSocketLike,
 } from './index.js';
 export declare const planRelayDelivery: typeof Nostr.planRelayDelivery;
 export declare const summarizeRelayDelivery: typeof Nostr.summarizeRelayDelivery;

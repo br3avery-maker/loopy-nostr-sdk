@@ -7,7 +7,7 @@ import { discoverRelays, discoverBlossom } from '../nostr/discovery.js';
 import { queryRelay } from '../nostr/relay-transport.js';
 import { fetchVerified } from '../blossom/client.js';
 import { parseManifest, NSITE_NAMED_KIND, NSITE_ROOT_KIND } from './manifest.js';
-import { mediaType } from './files.js';
+import { mediaType } from '../core/media.js';
 
 const newer = (a, b) => a.created_at > b.created_at || (a.created_at === b.created_at && a.id < b.id);
 const aborted = signal => {
@@ -302,3 +302,54 @@ export async function loadNsiteFile(
   aborted(signal);
   return output('blossom', fetched.data, fetched.server);
 }
+
+/**
+ * Build a `resolveCurrent` callback for v2 `publishNsite` backed by live relay queries
+ * (or an injected `RelayPool`). Fails closed when relays are unreachable or return an
+ * invalid manifest so a baseline mismatch is never mistaken for an empty site.
+ */
+export function createRelayRevisionResolver({
+  bootstrap = [],
+  relays = [],
+  storage,
+  timeoutMs = 8000,
+  Socket,
+  query = queryRelay,
+  pool,
+} = {}) {
+  if (pool !== undefined && (!pool || typeof pool.query !== 'function')) {
+    throw new TypeError('pool must provide a query() method');
+  }
+  if (typeof query !== 'function') {
+    throw new TypeError('query must be a function');
+  }
+  const effectiveQuery = pool
+    ? async (url, filter, opts) => {
+        const res = await pool.query([url], filter, opts);
+        if (res.errors?.length && !res.events?.length) {
+          throw new Error(res.errors[0]?.error || 'Pooled relay query failed');
+        }
+        return res.events;
+      }
+    : query;
+
+  return async function resolveCurrent({ pubkey, identifier = '', relays: callRelays = [], signal } = {}) {
+    const mergedRelays = [...new Set([...(Array.isArray(callRelays) ? callRelays : []), ...relays])];
+    const resolved = await resolveNsiteManifest(pubkey, {
+      identifier,
+      bootstrap,
+      relays: mergedRelays,
+      storage,
+      mode: 'refresh',
+      query: effectiveQuery,
+      signal,
+      timeoutMs,
+      Socket,
+    });
+    if (resolved.status === 'resolved') return resolved.event;
+    if (resolved.status === 'not-found') return null;
+    const detail = resolved.errors.map(e => e.error).filter(Boolean).join('; ');
+    throw new Error(`Unable to verify current nsite revision (${resolved.status})${detail ? ': ' + detail : ''}`);
+  };
+}
+

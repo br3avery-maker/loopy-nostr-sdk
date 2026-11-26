@@ -16,11 +16,12 @@ All **safe, low-risk small tweaks** uncovered during Loops 1–2 have been appli
 | Browser/Edge portability | **Clean** | Zero static `node:` imports, zero DOM globals (`window`, `document`, `localStorage`), zero unguarded `fetch()` calls outside `src/core/http.js` and `src/testing/index.js`. |
 | Workflow integrity | **Clean** | All 4 `workflows/*.json` files resolve cleanly against live exports. |
 | Brick swappability (`Storage`, `Signer`, `Transport`, `CAS`) | **Hardened (Round 2 tweaks)** | Fixed `fsStore` binary `Uint8Array` loss + unified `keys(prefix)` across all 4 `Storage` adapters and `createAccountSession`. |
-| Layer DAG strictness | **2 cycles remain** | `blossom <-> nsite` and `nostr <-> moderation` (saved as **Big Job 1**). |
-| Transport deduplication | **Duplicate framing/auth** | `src/nostr/pool.js` (885 lines) and `src/nostr/relay-transport.js` (382 lines) duplicate NIP-01 frame parsing and NIP-42 AUTH (saved as **Big Job 2**). |
-| Module size balance | **3 large monoliths** | `ecosystemOptimizer.js` (1,281 lines), `engine.js` (947 lines), `directory/model.js` (578 lines) (saved as **Big Job 3**). |
-| Documentation freshness | **Drift detected** | `docs/API_REFERENCE.md` is missing 85+ symbols; `CAPABILITIES.md` still cites `188` symbols vs `242` actual (saved as **Big Job 4**). |
-| TypeScript strictness | **27 `any` + loose `object`** | `types/index.d.ts` has 24 `any` uses and bare `object` signatures; `tsc` not installed locally (saved as **Big Job 5**). |
+| Layer DAG strictness | **Clean (Big Job 1 DONE)** | Strictly acyclic 13-layer DAG enforced by `validation/verify_repo_audit.py` via `src/core/media.js` and `src/nostr/nip19.js`. |
+| Transport deduplication | **Clean (Big Job 2 DONE)** | Unified NIP-01/NIP-42 engine in `src/nostr/wire.js` shared by `relay-transport.js` and `pool.js`; optional `createNsiteSDK({ pool })` injection. |
+| Module size balance | **Decomposed (Big Job 3 DONE)** | `ecosystemOptimizer.js` split into `src/intelligence/ecosystem/*` and `engine.js` split into `src/intelligence/analysis/*` with defensive input normalization. |
+| Documentation freshness | **Synced (Big Job 4 DONE)** | `docs/API_REFERENCE.md` deterministically generated/checked by `scripts/sync_docs.py` (246 symbols across 13 namespaces); ledgers updated; 4 new offline examples added. |
+| TypeScript strictness | **Strict zero-`any` (Big Job 5 DONE)** | Eliminated all `any` and loose `object` declarations across `types/*.d.ts` (CI `tsc` verification remains a separate gate). |
+| Cross-brick ergonomics | **Aligned (Big Job 6 DONE)** | `Nostr.createEventStore` `{ verify: false }` skips redundant Schnorr checks on replaceable/addressable events; `Nsite.createRelayRevisionResolver` bridges v2 `publishNsite`. |
 
 ---
 

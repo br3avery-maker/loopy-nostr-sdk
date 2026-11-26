@@ -24,10 +24,10 @@
     },
     {
       "path": "src/anchor/index.js",
-      "sha256": "0ce1c4fdb46db5d17338e27e53e6a3fc5550f6da7037dc811ecc5a64ca945e48",
+      "sha256": "135c82a9c5ae38406c037d2cc24b3a2720c9156c62f94c7245da40ebc72b8099",
       "role": "protocol-adapter",
       "lineage": "adapted from user-owned repo; see repo-capabilities.json; rc.6 Anchor consumer comparison",
-      "parent_sha256": "8faf81708b6da5ffa1886e8bce90e8bf1cb5b766924c2318d23623de517b6712"
+      "parent_sha256": "0ce1c4fdb46db5d17338e27e53e6a3fc5550f6da7037dc811ecc5a64ca945e48"
     },
     {
       "path": "src/anchor/kinds.js",
@@ -98,10 +98,10 @@
     },
     {
       "path": "src/blossom/client.js",
-      "sha256": "ef30bd33ad0983a4d9150dd216da441e0715b1c6d6f4d0bd7a926f4940c824a2",
+      "sha256": "796006139a9017b0db10418d9d262176fffebadbcb81ed1633efded78db0ad16",
       "role": "BUD03/BUD11 signed server discovery and exact-byte uploads",
       "lineage": "derived and standardized; rc.3 safe publication comparison; rc.4 verified retrieval comparison",
-      "parent_sha256": "640658b9f8728ee5557599f223d5299df12f676005f0432ddabaf3a291cf7642"
+      "parent_sha256": "ef30bd33ad0983a4d9150dd216da441e0715b1c6d6f4d0bd7a926f4940c824a2"
     },
     {
       "path": "src/blossom/index.js",
@@ -112,10 +112,10 @@
     },
     {
       "path": "src/blossom/replicas.js",
-      "sha256": "488cde550fe419182a8de3c50f4ee586a4ed8d360dfb3793f5484747112fbc3e",
+      "sha256": "7183a551b192e166479de2323efe5b0f6d7be883aaf0c53c541d222b99d3f3cc",
       "role": "Scoped batch authorization, metadata preflight and multi-origin exact-byte readback",
       "lineage": "Independent reconciliation of Pretend Internet relay router and Safehouse publisher contracts; docs/BLOSSOM_RECONCILIATION.md; publication reconciliation batch 3",
-      "parent_sha256": "7e36cdd92bfa7190e80050ce3b53a4cab67c534459e97328e1cf69aa4151db0e"
+      "parent_sha256": "488cde550fe419182a8de3c50f4ee586a4ed8d360dfb3793f5484747112fbc3e"
     },
     {
       "path": "src/core/bytes.js",
@@ -126,17 +126,17 @@
     },
     {
       "path": "src/core/index.js",
-      "sha256": "75cc812ff62b08c448206e60ae6bcbb9ec46916b7bee4f8b9c8df114e698f4e0",
+      "sha256": "af46a2aad4c014b5588e6332ee0ecdab7af209b3939cdeaba0ebbe285580b0fd",
       "role": "sha256, URL/path validation and shared options",
       "lineage": "derived and standardized",
-      "parent_sha256": "9b5a2e055ce7a5405bdcd2583b6122d12663d3b07b32e6a59999f19d33adfcdb"
+      "parent_sha256": "75cc812ff62b08c448206e60ae6bcbb9ec46916b7bee4f8b9c8df114e698f4e0"
     },
     {
       "path": "src/core/options.js",
-      "sha256": "e17d4e986280e6137fb772eb80f6373a5cfe7c363b4a42b3a6c3aef13e996807",
+      "sha256": "a2d79cca453d99fbde3b4e6cbb7e29e569047e4ae4901d7fbe40778995c0640d",
       "role": "sha256, URL/path validation and shared options",
       "lineage": "derived and standardized",
-      "parent_sha256": "82246bf078e40775f9d3bd7765f2e7d6b45aee9b16cba0ce87d5783e1c9b5888"
+      "parent_sha256": "e17d4e986280e6137fb772eb80f6373a5cfe7c363b4a42b3a6c3aef13e996807"
     },
     {
       "path": "src/core/urls.js",
@@ -167,23 +167,24 @@
     },
     {
       "path": "src/index.js",
-      "sha256": "134e9cfba65454e579b2cb1baf8360a8c179a90c44c161bc8620117ffe5bc795",
+      "sha256": "8bc2fa59ad4b59236f7ebbfd41daaa6eac2e05bad300be77dfc6c5675c91dbb3",
       "role": "general",
       "lineage": "derived and standardized; rc.6 Anchor consumer comparison",
-      "parent_sha256": "0657a3bd16c663362b2d83fdf8bf8d3fa034c94156b57fddfd27b10344fc4944"
+      "parent_sha256": "134e9cfba65454e579b2cb1baf8360a8c179a90c44c161bc8620117ffe5bc795"
     },
     {
       "path": "src/intelligence/ecosystemOptimizer.js",
       "role": "Advisory Anchor intelligence extraction",
       "lineage": "Anchor integration; see ANCHOR_INTELLIGENCE.md; rc.6 Anchor consumer comparison",
-      "sha256": "1fae0ebb4e34ced99f4048627f741cf44136a4fbb6854371bdaba356ffa8c648"
+      "sha256": "060572235dd0465a647100dc1cb7d9722a145ac60e2123d2dcf11e3b00bbfc0c",
+      "parent_sha256": "1fae0ebb4e34ced99f4048627f741cf44136a4fbb6854371bdaba356ffa8c648"
     },
     {
       "path": "src/intelligence/engine.js",
       "role": "Advisory Anchor intelligence extraction",
       "lineage": "Anchor integration; see ANCHOR_INTELLIGENCE.md; rc.6 Anchor consumer comparison; exact named nsite identifier precedence review repair",
-      "sha256": "3f911cf65456233914204ee56abfe521b435622a251de6fd29926a3dd59ec160",
-      "parent_sha256": "7e9776d224ab4f96b29baac3bfea236e8e83f39fa4f035e2fa780e5550920dde"
+      "sha256": "83a728b503e1e8f6e82780aec0eddfafb964f9297e81a4c18640d556a339fde9",
+      "parent_sha256": "3f911cf65456233914204ee56abfe521b435622a251de6fd29926a3dd59ec160"
     },
     {
       "path": "src/intelligence/index.js",
@@ -226,10 +227,10 @@
     },
     {
       "path": "src/moderation/identity.js",
-      "sha256": "18fdc91f9cbbc7ef4f94f3b45591e3a0b2d1d79568dbc0b1a27609f19ee3e9cb",
+      "sha256": "5f226577106aa2eea9065df900129c5317bb7c82aa06b0927ab759111c9b27e5",
       "role": "protocol-adapter",
       "lineage": "adapted from user-owned repo; see repo-capabilities.json; rc.10 public review repair (docs/PUBLIC_REVIEW_REPAIRS.md)",
-      "parent_sha256": "d39767e3f90b9d87f15a305c223bc1358225e16322cb36d5e230d0514ac5674d"
+      "parent_sha256": "18fdc91f9cbbc7ef4f94f3b45591e3a0b2d1d79568dbc0b1a27609f19ee3e9cb"
     },
     {
       "path": "src/moderation/index.js",
@@ -302,10 +303,10 @@
     },
     {
       "path": "src/nostr/index.js",
-      "sha256": "9af4c2f12edb6f5a67917586962707325fd7d9a6545008ddc6f5f38fc5a474ee",
+      "sha256": "cffaad9edd4eb159ccad6b67a625b9efe2609dc3e3c69d8dce7f623514514ef0",
       "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
       "lineage": "derived and standardized; rc.3 safe publication comparison; event-specific delivery reconciliation",
-      "parent_sha256": "feb13a6a3e48e1cfc50f9075b8f3c8605819d7afad3aad2b03d797694f671606"
+      "parent_sha256": "9af4c2f12edb6f5a67917586962707325fd7d9a6545008ddc6f5f38fc5a474ee"
     },
     {
       "path": "src/nostr/nip55.js",
@@ -344,10 +345,10 @@
     },
     {
       "path": "src/nostr/relay-transport.js",
-      "sha256": "43b6f97d7d09714f43a5f9efaf5913ee3808d791b1f7a5db331a391f614d5044",
+      "sha256": "196d949ab9b6a95e7fb5f7c58172df6d35f1c14de3010be2b34c30f15740ac18",
       "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
       "lineage": "derived and standardized; independent protocol hardening, NIP-01 and cross-donor regression cases 2026-11-25; rc.6 Anchor consumer comparison; Pretend Internet relay router reconciliation batch 4 (docs/RELAY_AUTH_RECONCILIATION.md)",
-      "parent_sha256": "932cd796ecd5d2ca515ded6166eb0ec3dc0b77cf28e07efc9104debbaef1ca7d"
+      "parent_sha256": "43b6f97d7d09714f43a5f9efaf5913ee3808d791b1f7a5db331a391f614d5044"
     },
     {
       "path": "src/nostr/signers.js",
@@ -365,10 +366,10 @@
     },
     {
       "path": "src/nsite/files.js",
-      "sha256": "e64350aa1c4408aceafd8dc351d299465b68532f5ab9c1a8f04807de99a9d4a4",
+      "sha256": "500e1a6fcb7ea046c11af98d746849a34deb1527f5de24ddca3e6dc6d9c5f901",
       "role": "NIP5A manifest and verified publication pipeline",
       "lineage": "derived and standardized; publication reconciliation batch 3",
-      "parent_sha256": "c478c32d71ab17790df4d328805c4ecb569126a0c4b07fff87675df75462316d"
+      "parent_sha256": "e64350aa1c4408aceafd8dc351d299465b68532f5ab9c1a8f04807de99a9d4a4"
     },
     {
       "path": "src/nsite/index.js",
@@ -401,8 +402,8 @@
       "path": "src/nsite/retrieval.js",
       "role": "Verified manifest resolution and content-addressed retrieval",
       "lineage": "Independent implementation of recovered nsite-gateway, NostrApps and nostrsite patterns; see CROSS_DONOR_RETRIEVAL.md",
-      "sha256": "44f02a1c679c46510cd20b5b207176db105dc7b0f4dd34b737e86432c6957f45",
-      "parent_sha256": "d621176a48a5eea8b34a61d402ed6a5e6c3b2ca0e9772e536fb8dba219ca0e75"
+      "sha256": "bad4dc9539fdfd7a25ec4d82e24b35d508d8231a070e7489f47a84e99502a241",
+      "parent_sha256": "44f02a1c679c46510cd20b5b207176db105dc7b0f4dd34b737e86432c6957f45"
     },
     {
       "path": "src/storage/index.js",
@@ -441,8 +442,8 @@
       "path": "src/nsite/resumable.js",
       "role": "Digest-bound replica upload and resumable site verification orchestration",
       "lineage": "Independent adaptation of Safehouse publisher contracts using existing Loopy verified transport; docs/PUBLICATION_RECONCILIATION.md",
-      "sha256": "04ba68c21d43a1ff54509eb67ca4b478932708a0509a1766ef1339b71cb6e0a2",
-      "parent_sha256": "f94989a3058151b6468723a169d4ca249d19b722e675c28021a43122dcba1241"
+      "sha256": "9cac20edb7a3fadfa668c22e63b7fea70716e51a2dcc8dcf00a669a76325345c",
+      "parent_sha256": "04ba68c21d43a1ff54509eb67ca4b478932708a0509a1766ef1339b71cb6e0a2"
     },
     {
       "path": "src/core/guards.js",
@@ -466,10 +467,10 @@
     },
     {
       "path": "src/blossom/repair.js",
-      "sha256": "ae78b5564717aed22bd166f9d87f7b79224f8a4200c0385b7bdb8fc9bac9c5b5",
+      "sha256": "37f3c118702d09cabb24e56ba7e3092e484f508d3c868d1abd857b78d738173e",
       "role": "shared stateless core brick",
       "lineage": "derived and standardized; modular core contract consolidation",
-      "parent_sha256": "429fbccdc8c6f56b47d525c80eedef9d0c91ffa0a436e478ff1bfc26e51fe85d"
+      "parent_sha256": "ae78b5564717aed22bd166f9d87f7b79224f8a4200c0385b7bdb8fc9bac9c5b5"
     },
     {
       "path": "src/core/concurrency.js",
@@ -486,16 +487,17 @@
     },
     {
       "path": "src/nostr/pool.js",
-      "sha256": "228c98bb686b9394dc97fa3f124f61261643ea867fe16c58905a121d0e8c7189",
+      "sha256": "8d792dbd5c9185941ba5379e1fd28272ee601c9c4da8b1c1fd97e92162fb95f1",
       "role": "shared stateless core brick",
-      "lineage": "derived and standardized; modular core contract consolidation"
+      "lineage": "derived and standardized; modular core contract consolidation",
+      "parent_sha256": "228c98bb686b9394dc97fa3f124f61261643ea867fe16c58905a121d0e8c7189"
     },
     {
       "path": "src/nostr/store.js",
-      "sha256": "a9409f78d965518d59719bcbf7498ed6df1686387504dad0f10d8958bf313458",
+      "sha256": "178498c1dd884e1e19101be6e07575999babf0384d7b72ad1277c342bac0257a",
       "role": "shared stateless core brick",
       "lineage": "derived and standardized; modular core contract consolidation",
-      "parent_sha256": "38b724ba0cca0a65a002c0034e412993ac3dfdffddea6d801ffcbe973412ec80"
+      "parent_sha256": "a9409f78d965518d59719bcbf7498ed6df1686387504dad0f10d8958bf313458"
     },
     {
       "path": "src/storage/fs.js",
@@ -536,6 +538,66 @@
       "role": "shared stateless core brick",
       "lineage": "derived and standardized; modular core contract consolidation",
       "parent_sha256": "09ab73a100a6ed1622f88903df8aada5680a0e58df48c6f054f1c79f2362e2ab"
+    },
+    {
+      "path": "src/core/media.js",
+      "sha256": "1c7a4b4dda6e1e476cef483e68f9669982279a6191215c70611e04076af09b29",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation"
+    },
+    {
+      "path": "src/intelligence/analysis/content-preparation.js",
+      "sha256": "ff6118e1a06ebbe59ef045c3e0542666d2fb7148e02804fcf8436d75357d069b",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation"
+    },
+    {
+      "path": "src/intelligence/analysis/coverage.js",
+      "sha256": "75381e3ca345fcc1115db887c2043a4f1a762b0a91f78e9ea5591fdeeaa0dd8e",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation"
+    },
+    {
+      "path": "src/intelligence/analysis/helpers.js",
+      "sha256": "d47a217d8bef4bece43847cc0db92352ace6911957eb2d634e71b24abb126bce",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation"
+    },
+    {
+      "path": "src/intelligence/analysis/identity-preferences.js",
+      "sha256": "5ff6f4021f5497b0ff5f03ca94c263e139d0da7b4a5bb786bcffc5ff16e64254",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation"
+    },
+    {
+      "path": "src/intelligence/ecosystem/account-ecosystem.js",
+      "sha256": "c1345b86c2e154829d4bdfaa804f88599e7efd1ef2e5e3f1b40bd6e85373b649",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation"
+    },
+    {
+      "path": "src/intelligence/ecosystem/helpers.js",
+      "sha256": "0b46834eefea088b70c40c6ea8accacfb4b7fe2769751e33575df1a7d5e3a8f1",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation"
+    },
+    {
+      "path": "src/intelligence/ecosystem/single-publication.js",
+      "sha256": "a994f0b91bbb68459365a92d0882de218db4310ba73b2ba2efd5f42c757d7724",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation"
+    },
+    {
+      "path": "src/nostr/nip19.js",
+      "sha256": "955ceeeff04d8b1ccc70e29b4287774d80bd45f92463db4009b9cee9b43ca43a",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation"
+    },
+    {
+      "path": "src/nostr/wire.js",
+      "sha256": "3cf613397db4015418d2017796c51566a00d3de0b7ae008144763794f06e587c",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation"
     }
   ],
   "notes": "Public SDK migration; private original archive inventory and full internal audit remain with preserved candidate. Module lineage and exact pins retained.",

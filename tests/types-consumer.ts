@@ -153,4 +153,21 @@ const _strictFetch = withStrictBrowserFetch(_mockBlossom.fetcher);
 const _verifiedUpload = Blossom.uploadVerified('hi', { server: 'https://blossom.example', signer, pubkey: live.pubkey, verifyContentType: true });
 void [_session, _migrated, _healthCache, _rumor, sealTemplate, giftWrapEvent, unwrapGiftWrap, _portable, _asyncZip, _bunkerDesc, _restoredBunker, _testSigner, _mockRelay, _mockBlossom, _strictFetch, _verifiedUpload];
 
+// Round 2 Big Jobs 1-6 strict types, shared media helpers, pooled SDK, and revision resolver.
+import { mediaType as coreMediaType, baseMediaType, contentTypeMatches } from '../types/core.js';
+import { createRelayRevisionResolver } from '../types/nsite.js';
+import type { DirectoryState, EventStore, RelayPool } from '../types/index.js';
+const _mime: string = coreMediaType('/site/index.html');
+const _baseMime: string = baseMediaType('text/html; charset=utf-8');
+const _mimeMatch: boolean = contentTypeMatches('text/html', 'text/html; charset=utf-8');
+const _typedPool: RelayPool = _pool;
+const _typedStore: EventStore = _eventStore;
+const _typedDirState: DirectoryState = state;
+const _pooledSdk = createNsiteSDK({ relays: ['wss://r.example'], pool: _typedPool });
+const _pooledClose: Promise<void> = _pooledSdk.close({ closePool: false });
+const _resolver = createRelayRevisionResolver({ pool: _typedPool, relays: ['wss://r.example'] });
+const _resolvedEvent: Promise<SignedEvent | null> = _resolver({ pubkey: live.pubkey, identifier: 'demo' });
+void [_mime, _baseMime, _mimeMatch, _typedPool, _typedStore, _typedDirState, _pooledSdk, _pooledClose, _resolvedEvent];
+
+
 

@@ -10,7 +10,7 @@ The complete source candidate 1.1.1-rc.10: ESM runtime and TypeScript declaratio
 No public npm release, Nostr write, private donor archive distribution, account-bound data or global IC installation in this migration. Keep signing and external writes explicit. Consumer UI and Android runtime integration remain separate. No personal moderation defaults in public distribution; consumers provide policy arrays. Preserve third-party licenses and attribution.
 
 ## Canonical source and history
-This repository is the public SDK source home. `package.json` identifies 1.1.1-rc.10; `provenance/manifest.json` pins 65 runtime/vendor module paths, and `docs/API_INDEX.json` lists 188 exports. Earlier 1.1.0 and rc.1–rc.8 candidates are preserved separately; public rc.9 is preserved at commit `c43170c37f35637af8be12ddbddf84ee470bf011`; source lineage and review repairs are described in `CHANGELOG.md` and `docs/`. Historical private recovery archives are not shipped.
+This repository is the public SDK source home. `package.json` identifies 1.1.1-rc.10; on the current working head, `provenance/manifest.json` pins 89 runtime/vendor module paths across a 13-layer acyclic DAG, and `docs/API_INDEX.json` lists 246 runtime exports across 13 namespaces (with `docs/API_REFERENCE.md` synced via `scripts/sync_docs.py`). Earlier 1.1.0 and rc.1–rc.8 candidates are preserved separately; public rc.9 is preserved at commit `c43170c37f35637af8be12ddbddf84ee470bf011`; source lineage and review repairs are described in `CHANGELOG.md` and `docs/`. Historical private recovery archives are not shipped.
 
 ## Decision log
 Record decisions with date, decision-maker, alternatives, why, and impact. Do not treat an unapproved proposal as accepted.

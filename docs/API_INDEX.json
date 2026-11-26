@@ -13,6 +13,10 @@
       "kind": "function"
     },
     {
+      "name": "baseMediaType",
+      "kind": "function"
+    },
+    {
       "name": "boundedFetch",
       "kind": "function"
     },
@@ -30,6 +34,10 @@
     },
     {
       "name": "classifyEventStorage",
+      "kind": "function"
+    },
+    {
+      "name": "contentTypeMatches",
       "kind": "function"
     },
     {
@@ -82,6 +90,10 @@
     },
     {
       "name": "mapLimit",
+      "kind": "function"
+    },
+    {
+      "name": "mediaType",
       "kind": "function"
     },
     {
@@ -374,6 +386,10 @@
     },
     {
       "name": "compareFiles",
+      "kind": "function"
+    },
+    {
+      "name": "createRelayRevisionResolver",
       "kind": "function"
     },
     {
