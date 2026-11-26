@@ -141,3 +141,7 @@ See [OPEN_SPECS.md](OPEN_SPECS.md) for signed document search, revision-aware in
 ### Opt-in version-2 publication
 
 See [PUBLICATION_RECONCILIATION.md](PUBLICATION_RECONCILIATION.md). The existing plan/publish functions accept `storageServers`, `requiredCopies`, and optional `gateway` hostname; execution requires approved digest and verified current-revision resolver, and accepts `resume` with the typed version-2 checkpoint. The original single-server contract remains supported.
+
+### Authenticated relay delivery
+
+`Nostr.executeRelayDelivery(event, options)` recomputes an approved-destination plan and performs bounded fallback, optionally using a caller-approved NIP-42 signer. Signed NIP-66 monitor hints and principal-scoped observations can inform planning; neither is proof of relay compatibility. See [relay authentication reconciliation](RELAY_AUTH_RECONCILIATION.md) for cancellation, protected/ephemeral event semantics and remaining integration limits.

@@ -2,6 +2,7 @@ import { endpoint, endpoints } from '../core/urls.js';
 import { verifiedCopy } from './history.js';
 import { classifyEventStorage } from '../anchor/kinds.js';
 import { isVerifiedReceipt } from './receipts.js';
+import { publishRelay } from './relay-transport.js';
 
 const hex = value => typeof value === 'string' && /^[0-9a-f]{64}$/.test(value);
 const nowSeconds = () => Math.floor(Date.now() / 1000);
@@ -67,14 +68,32 @@ function policyRows(rows, now, ttl) {
   }
   return records;
 }
+/** Fresh signed NIP-66 observations are advisory; local transport evidence is principal-scoped. */
+function monitorEvidence(events, now, ttl) {
+  const winners = new Map();
+  for (const raw of bounded(events,256,'monitor reports')) {
+    let e, relay; try { e=routingEvent(raw); const d=e.tags.filter(t=>t[0]==='d'); if(e.kind!==30166||d.length!==1||e.created_at<now-ttl||e.created_at>now+60)continue; relay=endpoint(d[0][1]); } catch { continue; }
+    const key=JSON.stringify([relay,e.pubkey]), old=winners.get(key);
+    if(!old||e.created_at>old.event.created_at||(e.created_at===old.event.created_at&&e.id<old.event.id))winners.set(key,{relay,event:e});
+  }
+  return [...winners.values()];
+}
+const observationCodes=new Set(['accepted','unsupported-kind','rate-limited','network','timeout','rejected','policy','auth-required','payment-required','size']);
+function transportEvidence(rows, now, ttl, principal) {
+  return bounded(rows,2048,'local transport observations').flatMap(r=>{
+    try { if(!r||r.principal!==principal||!hex(r.eventId)||!hex(r.author)||!Number.isInteger(r.kind)||r.kind<0||r.kind>65535||!Number.isSafeInteger(r.at)||r.at<now-ttl||r.at>now+60||typeof r.accepted!=='boolean'||!observationCodes.has(r.code))return [];
+      return [{relay:endpoint(r.relay),eventId:r.eventId,author:r.author,kind:r.kind,at:r.at,code:r.code,accepted:r.accepted,readback:r.accepted&&r.readback===true}]; } catch { return []; }
+  });
+}
 /** Offline, event-specific delivery planning. No transport, discovery, auth or publication. */
 export function planRelayDelivery(input, {
   signedLists = [], pinned = [], defaults = [], allowedRelays, entitledRelays = [],
-  relayPolicies = [], now = nowSeconds(), policyTTL = 21600, redundancy = 2,
+  relayPolicies = [], monitorEvents = [], observations = [], now = nowSeconds(), policyTTL = 21600, monitorTTL = 3600, observationTTL = 3600, redundancy = 2,
   maxCandidates = 32, visibility = 'public', authPubkey, authAvailable = false,
 } = {}) {
   const e = routingEvent(input);
   if (!Number.isSafeInteger(now) || now < 0 || !Number.isSafeInteger(policyTTL) || policyTTL < 0) throw new RangeError('Invalid policy observation time');
+  if (![monitorTTL,observationTTL].every(t=>Number.isSafeInteger(t)&&t>=0&&t<=86400)) throw new RangeError('Invalid evidence TTL');
   if (!Number.isInteger(redundancy) || redundancy < 1 || redundancy > 8 || !Number.isInteger(maxCandidates) || maxCandidates < 1 || maxCandidates > 64) throw new RangeError('Invalid delivery limits');
   if (!['public', 'private'].includes(visibility) || (authPubkey !== undefined && !hex(authPubkey)) || typeof authAvailable !== 'boolean') throw new TypeError('Invalid visibility or authentication capability');
   if ([22242, 24242, 27235].includes(e.kind)) throw new Error('Transport auth event is not publishable');
@@ -94,6 +113,7 @@ export function planRelayDelivery(input, {
   };
   const filter = urls => [...new Set(urls)].filter(url => (!allowed || allowed.has(url)) && safeHint(url));
   const lists = newestLists(signedLists, now), policies = policyRows(relayPolicies, now, policyTTL);
+  const monitors=monitorEvidence(monitorEvents,now,monitorTTL), outcomes=transportEvidence(observations,now,observationTTL,authPubkey??'anonymous');
   let groups;
   if (e.kind === 1059) {
     if (recipients.length !== 1) throw new Error('Gift wrap requires exactly one recipient');
@@ -104,7 +124,7 @@ export function planRelayDelivery(input, {
     if (!allowed?.size) throw new Error('Private delivery requires explicit approved destinations');
     groups = [{ id: 'private', urls: filter([...pins, ...allowed]) }];
   } else {
-    groups = [{ id: 'author', urls: filter([...pins, ...listed(lists.get(`10002:${e.pubkey}`), 'write'), ...seeds]) }];
+    groups = [{ id: 'author', urls: filter([...pins, ...listed(lists.get(`10002:${e.pubkey}`), 'write'), ...seeds]), preferred: [...pins,...listed(lists.get(`10002:${e.pubkey}`), 'write')] }];
     for (const p of recipients) groups.push({ id: `mention:${p}`, urls: filter(listed(lists.get(`10002:${p}`), 'read')) });
   }
   const frameBytes = new TextEncoder().encode(JSON.stringify(['EVENT', e])).length;
@@ -123,10 +143,21 @@ export function planRelayDelivery(input, {
       if (p.payment_required === true && !entitlement.has(relay)) reasons.push('payment-required');
       if (p.restricted_writes === true) warnings.push('restricted-write-policy-unverified');
       if (!record) warnings.push('metadata-unavailable-or-stale');
+      const local=outcomes.filter(o=>o.relay===relay&&o.author===e.pubkey&&o.kind===e.kind);
+      const latest=local.filter(o=>o.eventId===e.id).sort((a,b)=>b.at-a.at||Number(b.accepted)-Number(a.accepted))[0];
+      if(latest&&!latest.accepted&&now-latest.at<(latest.code==='rate-limited'?60:['network','timeout'].includes(latest.code)?15:300))reasons.push('recent-'+latest.code);
+      if(local.some(o=>!o.accepted&&o.code==='unsupported-kind'&&now-o.at<300))reasons.push('observed-unsupported-kind');
+      const hints=monitors.filter(m=>m.relay===relay).flatMap(({event})=>{
+        const tags=event.tags.filter(t=>t[0]==='k'&&typeof t[1]==='string'&&/^!?[0-9]{1,5}$/.test(t[1])&&Number(t[1].replace('!',''))===e.kind);
+        return tags.length?[{eventId:event.id,source:event.pubkey,accepted:!tags.some(t=>t[1].startsWith('!'))}]:[];
+      });
+      const positive=hints.filter(h=>h.accepted).length,negative=hints.length-positive,priorReadback=local.some(o=>o.readback);
+      if(negative)warnings.push(positive?'monitor-conflict':'monitor-reports-rejection');
       if (reasons.length) excluded.push({ group: group.id, relay, reasons });
-      else candidates.push({ relay, requiresAuthentication: protectedEvent || p.auth_required === true, policyObservedAt: record?.observedAt ?? null, warnings });
+      else candidates.push({ relay, requiresAuthentication: protectedEvent || p.auth_required === true, policyObservedAt: record?.observedAt ?? null, warnings, evidence:{monitorHints:hints,priorReadback}, rank:[Number(group.preferred?.includes(relay)??false),Number(priorReadback),negative?0:Math.min(2,positive)] });
     }
-    const capped = candidates.slice(0, maxCandidates);
+    candidates.sort((a,b)=>b.rank[0]-a.rank[0]||b.rank[1]-a.rank[1]||b.rank[2]-a.rank[2]);
+    const capped = candidates.slice(0, maxCandidates).map(({rank,...row})=>row);
     return { id: group.id, required: redundancy, selected: capped.slice(0, redundancy), fallbacks: capped.slice(redundancy), omitted: candidates.length - capped.length,
       status: !group.urls.length && group.id.startsWith('mention:') ? 'recipient-list-missing' : capped.length < redundancy ? 'insufficient-candidates' : 'planned-unverified' };
   });
@@ -150,4 +181,35 @@ export function summarizeRelayDelivery(plan, receipts = []) {
   }
   const complete = groups.every(g => g.delivered.length >= g.required);
   return { eventId: plan.eventId, status: complete ? (ephemeral ? 'accepted-ephemeral' : 'verified') : 'partial-or-failed', groups };
+}
+
+/** Execute a freshly computed delivery plan, with explicit destination approval and bounded fallback. */
+export async function executeRelayDelivery(input, options={}) {
+  const {allowedRelays,authSigner,authPubkey,signal,Socket,timeoutMs=10000,maxAttempts=32,...routing}=options;
+  if(!Array.isArray(allowedRelays)||!allowedRelays.length)throw new TypeError('Explicit approved relay destinations required');
+  if(!Number.isInteger(maxAttempts)||maxAttempts<1||maxAttempts>64||!Number.isSafeInteger(timeoutMs)||timeoutMs<1||timeoutMs>120000)throw new RangeError('Invalid execution bounds');
+  if((authSigner!==undefined&&(typeof authSigner?.signEvent!=='function'||!hex(authPubkey)))||(authSigner===undefined&&authPubkey!==undefined))throw new TypeError('Invalid authorized signer identity');
+  const event=routingEvent(input), plan=planRelayDelivery(event,{...routing,allowedRelays,authPubkey,authAvailable:!!authSigner});
+  const receipts=[], attempts=[], observed=[], seen=new Set(), cancelled=()=>{if(signal?.aborted)throw new Error('Relay delivery cancelled');};
+  cancelled();
+  for(const group of plan.groups){
+    for(const candidate of [...group.selected,...group.fallbacks]){
+      cancelled();
+      const groupStatus=summarizeRelayDelivery(plan,receipts).groups.find(g=>g.id===group.id);
+      if(groupStatus.delivered.length>=group.required||attempts.length>=maxAttempts)break;
+      if(seen.has(candidate.relay))continue;
+      seen.add(candidate.relay);
+      try{
+        const receipt=await publishRelay(candidate.relay,event,{Socket,timeoutMs,signal,authSigner,authPubkey,requireAuthentication:candidate.requiresAuthentication,acceptEphemeral:plan.storageClass==='ephemeral'});
+        receipts.push(receipt);attempts.push({relay:candidate.relay,status:'accepted'});
+        observed.push({relay:candidate.relay,eventId:event.id,author:event.pubkey,kind:event.kind,principal:authPubkey??'anonymous',at:nowSeconds(),code:'accepted',accepted:true,readback:receipt.readback});
+      }catch(error){cancelled();const accepted=error?.accepted===true,code=observationCodes.has(error?.code)?error.code:'rejected';
+        attempts.push({relay:candidate.relay,status:accepted?'accepted-unverified':'failed',code});
+        if(accepted)receipts.push({relay:candidate.relay,eventId:event.id,accepted:true,readback:false});
+        observed.push({relay:candidate.relay,eventId:event.id,author:event.pubkey,kind:event.kind,principal:authPubkey??'anonymous',at:nowSeconds(),code,accepted,readback:false});
+      }
+    }
+  }
+  cancelled();
+  return {plan,receipts,attempts,observations:observed,summary:summarizeRelayDelivery(plan,receipts)};
 }

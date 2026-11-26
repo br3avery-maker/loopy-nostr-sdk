@@ -47,19 +47,24 @@ export interface HistorySyncOptions {relays:Endpoint[];filter:HistoryFilter;curs
 export interface RelayDeliveryOptions {
   signedLists?:SignedEvent[]; pinned?:Endpoint[]; defaults?:Endpoint[]; allowedRelays?:Endpoint[]; entitledRelays?:Endpoint[];
   relayPolicies?:Array<{relay:Endpoint;observedAt:number;document:Record<string,unknown>}>;
+  monitorEvents?:SignedEvent[]; observations?:RelayTransportObservation[]; monitorTTL?:number; observationTTL?:number;
   now?:number; policyTTL?:number; redundancy?:number; maxCandidates?:number; visibility?:'public'|'private'; authPubkey?:Hex; authAvailable?:boolean;
 }
-export interface RelayDeliveryCandidate {relay:Endpoint;requiresAuthentication:boolean;policyObservedAt:number|null;warnings:string[]}
+export interface RelayDeliveryCandidate {relay:Endpoint;requiresAuthentication:boolean;policyObservedAt:number|null;warnings:string[];evidence:{monitorHints:Array<{eventId:Hex;source:Hex;accepted:boolean}>;priorReadback:boolean}}
 export interface RelayDeliveryPlan {
   eventId:Hex;kind:number;storageClass:string;frameBytes:number;visibility:'public'|'private';protectedEvent:boolean;at:number;
   groups:Array<{id:string;required:number;selected:RelayDeliveryCandidate[];fallbacks:RelayDeliveryCandidate[];omitted:number;status:'recipient-list-missing'|'insufficient-candidates'|'planned-unverified'}>;
   excluded:Array<{group:string;relay:Endpoint;reasons:string[]}>;
 }
+export interface RelayTransportObservation {relay:Endpoint;eventId:Hex;author:Hex;kind:number;principal:Hex|'anonymous';at:number;code:string;accepted:boolean;readback:boolean}
+export interface RelayPublishOptions {Socket?:any;timeoutMs?:number;signal?:AbortSignal;verify?:boolean;authSigner?:Signer;authPubkey?:Hex;requireAuthentication?:boolean;acceptEphemeral?:boolean}
+export interface RelayDeliveryExecutionOptions extends Omit<RelayDeliveryOptions,'authAvailable'|'allowedRelays'> {allowedRelays:Endpoint[];authSigner?:Signer;signal?:AbortSignal;Socket?:any;timeoutMs?:number;maxAttempts?:number}
 export interface RelayDeliveryReceipt {relay:Endpoint;eventId:Hex;accepted:boolean;readback?:boolean}
 export interface RelayDeliverySummary {eventId:Hex;status:'verified'|'accepted-ephemeral'|'partial-or-failed';groups:Array<{id:string;required:number;accepted:Endpoint[];delivered:Endpoint[];status:'verified'|'accepted-ephemeral'|'accepted-incomplete'|'not-delivered'}>}
 export namespace Nostr {
   function planRelayDelivery(event:SignedEvent,options?:RelayDeliveryOptions):RelayDeliveryPlan;
   function summarizeRelayDelivery(plan:RelayDeliveryPlan,receipts?:RelayDeliveryReceipt[]):RelayDeliverySummary;
+  function executeRelayDelivery(event:SignedEvent,options:RelayDeliveryExecutionOptions):Promise<{plan:RelayDeliveryPlan;receipts:RelayDeliveryReceipt[];attempts:Array<{relay:Endpoint;status:'accepted'|'accepted-unverified'|'failed';code?:string}>;observations:RelayTransportObservation[];summary:RelayDeliverySummary}>;
 
   function reviewEventReplacement(baseline:SignedEvent,template:UnsignedEvent,pubkey:Hex):EventReplacementReview;
   function prepareEventReplacement(baseline:SignedEvent,options?:{pubkey?:Hex;content?:string;replaceTags?:Record<string,string[][]>;created_at?:number}):EventReplacementReview;
@@ -90,7 +95,8 @@ export namespace Nostr {
   function blossomServers(event:SignedEvent):string[];
   function discoverBlossom(pubkey:Hex,options?:RetrievalTransport&{bootstrap?:string[]}):Promise<{sourceEvent:string|null;servers:string[];verified:boolean;errors:Array<{relay:string;error:string}>}>;
   function queryRelay(url:string,filter:object,options?:{Socket?:any;timeoutMs?:number;signal?:AbortSignal;verify?:boolean;maxEvents?:number}):Promise<SignedEvent[]>;
-  function publishRelay(url:string,event:SignedEvent,options?:{Socket?:any;timeoutMs?:number;signal?:AbortSignal;verify?:boolean}):Promise<RelayReceipt>;
+  function publishRelay(url:string,event:SignedEvent,options?:RelayPublishOptions & {acceptEphemeral?:false}):Promise<RelayReceipt>;
+  function publishRelay(url:string,event:SignedEvent,options:RelayPublishOptions):Promise<RelayDeliveryReceipt>;
   function publishMany(event:SignedEvent,relays:string[],options?:{writer?:(url:string,event:SignedEvent,options:object)=>Promise<RelayReceipt>}):Promise<PublishReceipts>;
   function textNote(content:string,options?:{replyTo?:SignedEvent;created_at?:number}):UnsignedEvent;
   function reaction(target:SignedEvent,emoji?:string,options?:{created_at?:number}):UnsignedEvent;

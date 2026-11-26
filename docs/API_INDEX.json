@@ -99,6 +99,10 @@
       "kind": "function"
     },
     {
+      "name": "executeRelayDelivery",
+      "kind": "function"
+    },
+    {
       "name": "fetchFeed",
       "kind": "function"
     },

@@ -90,3 +90,9 @@ async function typecheckResumable(job:ResumablePublicationJob){
   return checkpoint.gateway?.status;
 }
 void typecheckResumable;
+
+// Explicitly approved relay execution and caller-owned transport evidence.
+function typecheckExecution(event:SignedEvent, signer:Signer) {
+  return Nostr.executeRelayDelivery(event,{allowedRelays:['wss://relay.example'],defaults:['wss://relay.example'],authSigner:signer,authPubkey:event.pubkey}).then(r=>Nostr.planRelayDelivery(event,{observations:r.observations,authPubkey:event.pubkey}));
+}
+void typecheckExecution;
