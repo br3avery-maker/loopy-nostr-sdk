@@ -249,7 +249,7 @@ export function analyzeNsiteIdentity(params) {
     const namedSites = existingSites.filter((s) => s.mode === 'named');
     const normalizedSlug = requestedSlug ? slugify(requestedSlug) : undefined;
     const matchingNamedSite = normalizedSlug
-        ? namedSites.find((s) => s.dTag === normalizedSlug || slugify(s.title) === normalizedSlug)
+        ? (namedSites.find((s) => s.dTag === normalizedSlug) ?? namedSites.find((s) => slugify(s.title) === normalizedSlug))
         : undefined;
     const hasIndexHtml = assets.some((a) => /(^|\/)index\.html?$/i.test(a.path || a.name));
     if (!hasIndexHtml) {
