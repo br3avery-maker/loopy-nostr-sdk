@@ -14,6 +14,9 @@ SOURCE_EXT={'.js','.mjs','.cjs','.jsx','.ts','.tsx','.py','.html','.htm','.css',
 MAX_FILES=22000;MAX_SIZE=30_000_000;MAX_RATIO=1000;MAX_TOTAL=360_000_000
 
 def sha(data:bytes)->str:return hashlib.sha256(data).hexdigest()
+def safe_recovery_member(name):
+    return isinstance(name,str) and not any(part in ('','.','..') for part in name.split('/')) and '\\' not in name and '\0' not in name
+
 def source_items(path:Path):
     name=path.name
     if path.suffix.lower() not in ('.zip','.html','.htm'):
@@ -33,7 +36,7 @@ def source_items(path:Path):
                 if info.is_dir():continue
                 total+=info.file_size
                 if total>MAX_TOTAL:raise ValueError('Archive size exceeds budget')
-                yield member,info.file_size,z.read(info) if info.file_size<=MAX_SIZE and info.file_size/max(info.compress_size,1)<=MAX_RATIO and parts.suffix.lower() in SOURCE_EXT else None
+                yield member,info.file_size,z.read(info) if safe_recovery_member(member) and info.file_size<=MAX_SIZE and info.file_size/max(info.compress_size,1)<=MAX_RATIO and parts.suffix.lower() in SOURCE_EXT else None
     else:
         data=path.read_bytes()
         yield name,len(data),data if len(data)<=MAX_SIZE else None
@@ -46,7 +49,10 @@ def export(paths:list[Path],destination:Path)->dict:
             for name,size,data in source_items(path):
                 total+=1
                 entry={'name':name,'bytes':size}
-                if data is None:entry['state']='not_code_or_exceeds_bound';skips['not_code_or_exceeds_bound']+=1
+                if not safe_recovery_member(name):
+                    entry['state']='unsafe_member_path';skips['unsafe_member_path']+=1
+                    errors.append({'path':path.name,'member':name,'error':'Unsafe recovery member'})
+                elif data is None:entry['state']='not_code_or_exceeds_bound';skips['not_code_or_exceeds_bound']+=1
                 else:
                     digest=sha(data);entry.update({'sha256':digest,'state':'exact_source','kind':PurePosixPath(name).suffix.lower()});objects.setdefault(digest,data)
                 root['entries'].append(entry)
@@ -67,7 +73,7 @@ def restore(bundle:Path,destination:Path)->dict:
     def checked_target(archive,name):
         if not isinstance(archive,str) or not re.fullmatch(r'[0-9a-f]{64}',archive):
             raise ValueError('Invalid archive SHA-256')
-        if not isinstance(name,str) or any(part in ('','.','..') for part in name.split('/')) or '\\' in name or '\0' in name:
+        if not safe_recovery_member(name):
             raise ValueError('Unsafe recovery member')
         target=base/archive/name
         if not target.resolve().is_relative_to(base):raise ValueError('Recovery path escapes destination')
