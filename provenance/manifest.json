@@ -124,9 +124,9 @@
     },
     {
       "path": "src/core/urls.js",
-      "sha256": "106fe00c91130e0950821d074cd679e78d4c51ae1daf089db7dce8d0e0892aa4",
+      "sha256": "0d258fb81c45748a8ac782afa047418f23b112772eed1893805b5523ab11fc74",
       "role": "sha256, URL/path validation and shared options",
-      "lineage": "derived and standardized"
+      "lineage": "derived and standardized; publication snapshot and named-host endpoint review repair"
     },
     {
       "path": "src/directory/index.js",
