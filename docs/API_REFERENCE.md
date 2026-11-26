@@ -137,3 +137,7 @@ See [OPEN_SPECS.md](OPEN_SPECS.md) for signed document search, revision-aware in
 ## Reconciled Blossom prerequisites and replicas
 
 `Blossom.preflightBlob`, `Blossom.blossomBatchUploadAuth` and `Blossom.verifyBlobCopies` expose explicit advisory upload preflight, scoped unsigned batch authorization and MIME/size/hash-verified multi-origin readback. See [BLOSSOM_RECONCILIATION.md](BLOSSOM_RECONCILIATION.md). None uploads or signs on behalf of the caller.
+
+### Opt-in version-2 publication
+
+See [PUBLICATION_RECONCILIATION.md](PUBLICATION_RECONCILIATION.md). The existing plan/publish functions accept `storageServers`, `requiredCopies`, and optional `gateway` hostname; execution requires approved digest and verified current-revision resolver, and accepts `resume` with the typed version-2 checkpoint. The original single-server contract remains supported.

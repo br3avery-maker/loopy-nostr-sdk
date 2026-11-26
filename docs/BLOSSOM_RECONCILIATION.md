@@ -31,3 +31,7 @@ const copies = await Blossom.verifyBlobCopies(blob, {...options, required: 2});
 | Resumable publication | publishNsite checkpoints | Outstanding: compare actual resume behavior in other donor versions; checkpoint is not resume. |
 
 The original consumer is unchanged. The new functions are additive, not a replacement for existing publishNsite, uploadVerified or fetchVerified. Eight regression cases exercise simulated HTTP responses and real signing/hash verification. Live servers, browser/CORS behavior, device signer and end-to-end publication remain unverified. Broader donor coverage and reverse adoption stay open.
+
+## Batch 3 follow-through
+
+[Publication reconciliation](PUBLICATION_RECONCILIATION.md) integrates the copy threshold, explicit gateway readback and local resume through the existing publisher. Execution of batched upload authorization, actual live target acceptance and reverse consumer adoption remain open.

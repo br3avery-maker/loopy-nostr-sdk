@@ -116,4 +116,8 @@ See [event-specific relay planning and receipt summaries](docs/RELAY_DELIVERY_RE
 
 ## Blossom reconciliation (draft batch 2)
 
-See [Blossom publishing reconciliation](docs/BLOSSOM_RECONCILIATION.md) for explicit BUD-06 metadata preflight, bounded BUD-11 multi-hash authorization templates and multi-origin readback with exact bytes, size and MIME. These are additive building blocks; multi-copy upload orchestration, gateway verification and application adoption remain open. No network publication is implied.
+See [Blossom publishing reconciliation](docs/BLOSSOM_RECONCILIATION.md) for explicit BUD-06 metadata preflight, bounded BUD-11 multi-hash authorization templates and multi-origin readback with exact bytes, size and MIME. These are additive building blocks. Batch 3 integrates verified copy thresholds, resume and explicit gateway checks into the existing publication APIs; application adoption remains open. No network publication is implied.
+
+## Publication reconciliation (draft batch 3)
+
+[Digest-bound multi-copy publication and resume](docs/PUBLICATION_RECONCILIATION.md) extend the existing Nsite planner and publisher through opt-in version-2 settings. Saved manifest signatures and independently verified existing copies can be reused; gateway verification is a separate explicit result. No release or live publication is implied.

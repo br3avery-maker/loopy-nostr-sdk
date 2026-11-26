@@ -79,3 +79,14 @@ void Blossom.preflightBlob(blobMetadata,blobOptions).then(result=>result.decisio
 const batchAuth=Blossom.blossomBatchUploadAuth({hashes:[blobMetadata.sha256],...blobOptions});
 void batchAuth.tags;
 void Blossom.verifyBlobCopies(blobMetadata,{...blobOptions,required:2}).then(result=>result.copies[0]?.verified);
+
+// Opt-in v2 publication keeps the same entry point and exposes a typed resume checkpoint.
+import type {ResumablePublicationJob} from '../types/index.js';
+async function typecheckResumable(job:ResumablePublicationJob){
+  const settings={...opts,storageServers:[opts.server,'https://replica.example'],requiredCopies:2,gateway:'nsite.lol'};
+  const plan=await Nsite.planNsitePublication(files,settings);
+  const r=await Nsite.publishNsite(files,{...settings,approvedPlan:plan.id,resume:job});
+  const checkpoint:ResumablePublicationJob=r.job;
+  return checkpoint.gateway?.status;
+}
+void typecheckResumable;

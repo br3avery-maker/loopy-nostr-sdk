@@ -1,6 +1,6 @@
 # Capability and API inventory
 
-The complete machine-readable inventory is [docs/API_INDEX.json](docs/API_INDEX.json) (185 runtime API symbols). [API reference](docs/API_REFERENCE.md) and [TypeScript declarations](types/index.d.ts) define usage and contracts. The source families below are implemented; evidence is local rc.9 and rc.10 source tests, not live end-to-end production acceptance.
+The complete machine-readable inventory is [docs/API_INDEX.json](docs/API_INDEX.json) (188 runtime API symbols). [API reference](docs/API_REFERENCE.md) and [TypeScript declarations](types/index.d.ts) define usage and contracts. The source families below are implemented; evidence is local rc.9 and rc.10 source tests, not live end-to-end production acceptance.
 
 | API or capability | Source / export | Consumer or usage | Test evidence | State |
 | --- | --- | --- | --- | --- |
@@ -23,3 +23,5 @@ See GAPS.md for real host/browser/device and publication acceptance. An importab
 The rc.10 profile and NIP-19 corrections retain the public names and add an optional event author hint field. See [regression evidence](docs/PUBLIC_REVIEW_REPAIRS.md).
 
 Additive event-specific delivery planning/summary: [source comparison and limits](docs/RELAY_DELIVERY_RECONCILIATION.md). Local signed regression and archived donor comparisons passed; exact-head CI/review remains separate.
+
+Opt-in version-2 publication plans support required verified storage copies, resume with signed manifest reuse, and explicit gateway checks. See [publication reconciliation](docs/PUBLICATION_RECONCILIATION.md); local simulated transport acceptance, not a live publication claim.

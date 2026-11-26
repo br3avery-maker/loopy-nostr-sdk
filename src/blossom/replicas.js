@@ -8,7 +8,7 @@ function blobMeta(blob) {
   if (!blob || !hex(blob.sha256) || !Number.isSafeInteger(blob.size) || blob.size < 0 || !mime(blob.type)) throw new TypeError('Invalid blob metadata');
   return { sha256: blob.sha256, size: blob.size, type: blob.type.toLowerCase() };
 }
-function candidates(servers) {
+export function normalizeBlobServers(servers) {
   if (!Array.isArray(servers) || !servers.length || servers.length > 16) throw new RangeError('Supply 1–16 explicit Blossom destinations');
   return [...new Set(servers.map(value => {
     if (typeof value !== 'string' || value.length > 2048) throw new TypeError('Invalid Blossom destination');
@@ -38,7 +38,7 @@ async function boundedRequest(url, init, {fetcher, timeoutMs, signal}) {
 const codes = {200:'preflight-accepted',400:'invalid',401:'auth-required',402:'payment-required',403:'policy',404:'preflight-unsupported',405:'preflight-unsupported',411:'length-required',413:'size',415:'media-type',429:'rate-limited',501:'preflight-unsupported',503:'unavailable'};
 /** BUD-06 metadata-only check. No upload, auth token, payment or existence claim. */
 export async function preflightBlob(blob, {servers, fetcher=globalThis.fetch, signal, timeoutMs=10000} = {}) {
-  const metadata = blobMeta(blob), destinations = candidates(servers); checkOptions(fetcher, timeoutMs);
+  const metadata = blobMeta(blob), destinations = normalizeBlobServers(servers); checkOptions(fetcher, timeoutMs);
   const decisions = [];
   for (const server of destinations) {
     cancelled(signal);
@@ -55,7 +55,7 @@ export async function preflightBlob(blob, {servers, fetcher=globalThis.fetch, si
 export function blossomBatchUploadAuth({hashes,servers,now=Math.floor(Date.now()/1000),expiresIn=600} = {}) {
   if (!Array.isArray(hashes) || !hashes.length || hashes.length > 24 || hashes.some(h=>!hex(h))) throw new TypeError('Supply 1–24 SHA-256 hashes');
   if (!Number.isSafeInteger(now) || now < 1 || !Number.isSafeInteger(expiresIn) || expiresIn < 1 || expiresIn > 600 || !Number.isSafeInteger(now+expiresIn)) throw new RangeError('Invalid authorization lifetime');
-  const domains = [...new Set(candidates(servers).map(s=>new URL(s).hostname.toLowerCase()))], unique = [...new Set(hashes)];
+  const domains = [...new Set(normalizeBlobServers(servers).map(s=>new URL(s).hostname.toLowerCase()))], unique = [...new Set(hashes)];
   return eventTemplate({kind:24242,created_at:now-1,content:`Authorize upload of ${unique.length} blob(s) to ${domains.length} server domain(s)`,tags:[['t','upload'],['expiration',String(now+expiresIn)],...unique.map(h=>['x',h]),...domains.map(h=>['server',h])]});
 }
 function contentTypeMatches(expected, value) {
@@ -65,7 +65,7 @@ function contentTypeMatches(expected, value) {
 }
 /** Count actual readbacks, not uploader claims. Distinct origins, not proof of independent operators. */
 export async function verifyBlobCopies(blob, {servers, required=1, fetcher=globalThis.fetch, signal, timeoutMs=15000, maxBytes=128*1024*1024}={}) {
-  const metadata=blobMeta(blob), destinations=candidates(servers); checkOptions(fetcher,timeoutMs);
+  const metadata=blobMeta(blob), destinations=normalizeBlobServers(servers); checkOptions(fetcher,timeoutMs);
   if (!Number.isSafeInteger(required)||required<1||required>16 || !Number.isSafeInteger(maxBytes)||maxBytes<0||metadata.size>maxBytes||maxBytes>128*1024*1024) throw new RangeError('Invalid copy count or byte bound');
   const copies=[], failed=[], seenOrigins=new Set();
   for (const server of destinations) {

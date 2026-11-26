@@ -94,15 +94,15 @@
     },
     {
       "path": "src/blossom/index.js",
-      "sha256": "f77e3d6530d1cab13c3b7278ce10da11f204eccccc65dce379f1660e99d51a59",
+      "sha256": "d50e63604ebce373487c56b3c56f7670b71b15e1004a36ffde19f8cef4fea416",
       "role": "BUD03/BUD11 signed server discovery and exact-byte uploads",
-      "lineage": "derived and standardized; Blossom reconciliation batch 2"
+      "lineage": "derived and standardized; Blossom reconciliation batch 2; publication reconciliation batch 3"
     },
     {
       "path": "src/blossom/replicas.js",
-      "sha256": "40ed855064e46d8147b9cb7a8bf214fc1b6e99781a0f88eb6f83cde8890d2c75",
+      "sha256": "aeb03e719fcba1887f12451ab69c15992b49c8d564ae380836480389d8fadf7b",
       "role": "Scoped batch authorization, metadata preflight and multi-origin exact-byte readback",
-      "lineage": "Independent reconciliation of Pretend Internet relay router and Safehouse publisher contracts; docs/BLOSSOM_RECONCILIATION.md"
+      "lineage": "Independent reconciliation of Pretend Internet relay router and Safehouse publisher contracts; docs/BLOSSOM_RECONCILIATION.md; publication reconciliation batch 3"
     },
     {
       "path": "src/core/bytes.js",
@@ -326,9 +326,9 @@
     },
     {
       "path": "src/nsite/files.js",
-      "sha256": "146fbe10a260285345cd30e1627e1b64dc8e1a1200c2595db3836e8f33c11ac9",
+      "sha256": "dd66f1c3f4d1099462cce9c88298578314998331e4d7e916ac05512c6e5590dd",
       "role": "NIP5A manifest and verified publication pipeline",
-      "lineage": "derived and standardized"
+      "lineage": "derived and standardized; publication reconciliation batch 3"
     },
     {
       "path": "src/nsite/index.js",
@@ -344,15 +344,15 @@
     },
     {
       "path": "src/nsite/plan.js",
-      "sha256": "0bc0ef4529b4757498722ab24c04354e0e31570a86496ca60ecd3178b5f63370",
+      "sha256": "e4da5b7c9453cfff2bbb043420f6fbab844a9b265adb00a6f3454b8cba5d4c84",
       "role": "Shared immutable-byte publication preparation and digest-bound preview",
-      "lineage": "Protocol-based implementation compared with recovered donor sources; see CROSS_DONOR_PUBLICATION.md"
+      "lineage": "Protocol-based implementation compared with recovered donor sources; see CROSS_DONOR_PUBLICATION.md; publication reconciliation batch 3"
     },
     {
       "path": "src/nsite/publisher.js",
-      "sha256": "ab20c86b043cc198b2492da3d67f8b4c5c9af3350b0cd4b9f1a0a1e3aba6e385",
+      "sha256": "f4b8da4d4e7099a7a7d4fa9f4911932912e6d6f149bfb38fdfd7a10b915ecc6f",
       "role": "NIP5A manifest and verified publication pipeline",
-      "lineage": "derived and standardized; rc.3 safe publication comparison; rc.6 Anchor consumer comparison"
+      "lineage": "derived and standardized; rc.3 safe publication comparison; rc.6 Anchor consumer comparison; publication reconciliation batch 3"
     },
     {
       "path": "src/nsite/retrieval.js",
@@ -389,6 +389,12 @@
       "sha256": "e1bdc026518da6cb69df04cc827f93410c1ed20c47017b3b6a43bfa8c1cd6d59",
       "role": "unmodified vendor source and license",
       "lineage": "Nsite-Directory-Editor-v1.1.1.zip / vendor"
+    },
+    {
+      "path": "src/nsite/resumable.js",
+      "role": "Digest-bound replica upload and resumable site verification orchestration",
+      "lineage": "Independent adaptation of Safehouse publisher contracts using existing Loopy verified transport; docs/PUBLICATION_RECONCILIATION.md",
+      "sha256": "4cafe9fe9980a597b5e2705ff75c27cb9c1879419a11ccbca80214e7c64cb45f"
     }
   ],
   "notes": "Public SDK migration; private original archive inventory and full internal audit remain with preserved candidate. Module lineage and exact pins retained.",

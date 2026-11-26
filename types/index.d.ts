@@ -16,9 +16,11 @@ export type FileMap=Record<string,string|Uint8Array|ArrayBuffer>;
 export interface RelayListEntry {url:string;read:boolean;write:boolean}
 export interface SDKOptions {relays?:string[];server?:string;signer?:Signer;storage?:StorageAdapter;Socket?:any;fetcher?:typeof fetch;clock?:()=>number}
 export interface EventReplacementReview {baselineId:Hex;template:UnsignedEvent;contentChanged:boolean;removedTags:string[][];addedTags:string[][];removedProfileFields:string[]}
-export interface PublicationPlanOptions {pubkey:Hex;server:Endpoint;relays:Endpoint[];identifier?:string;title?:string;description?:string;created_at?:number;baseline?:SignedEvent|null;approvedPlan?:Hex}
-export interface PublicationPlan {schema:'nsite-publication-plan/1';id:Hex;pubkey:Hex;identifier:string;server:Endpoint;relays:Endpoint[];baselineId:Hex|null;baselineStatus:'observed'|'unknown';aggregate:Hex;totalBytes:number;files:Array<{path:string;hash:Hex;size:number}>;template:UnsignedEvent;changes:Array<{path:string;change:'added'|'modified'|'deleted';from?:Hex;to?:Hex}>;removedTags:string[][];addedTags:string[][]}
-export interface PublicationOptions extends PublicationPlanOptions {signer:Signer;allowFileRemovals?:boolean;resolveCurrent?:(request:{pubkey:Hex;kind:number;identifier:string;relays:Endpoint[];signal?:AbortSignal})=>Promise<SignedEvent|null>;uploader?:(data:Uint8Array,options:object)=>Promise<{hash:Hex;verified:boolean}>;publisher?:(event:SignedEvent,relays:string[],options?:object)=>Promise<PublishReceipts>;checkpoint?:(job:object)=>Promise<void>|void;signal?:AbortSignal;Socket?:any;fetcher?:typeof fetch}
+export interface PublicationPlanOptions {pubkey:Hex;server:Endpoint;storageServers?:Endpoint[];requiredCopies?:number;gateway?:string;relays:Endpoint[];identifier?:string;title?:string;description?:string;created_at?:number;baseline?:SignedEvent|null;approvedPlan?:Hex}
+export interface PublicationPlan {schema:'nsite-publication-plan/1'|'nsite-publication-plan/2';storage?:{servers:Endpoint[];required:number};gateway?:string|null;id:Hex;pubkey:Hex;identifier:string;server:Endpoint;relays:Endpoint[];baselineId:Hex|null;baselineStatus:'observed'|'unknown';aggregate:Hex;totalBytes:number;files:Array<{path:string;hash:Hex;size:number;type?:string}>;template:UnsignedEvent;changes:Array<{path:string;change:'added'|'modified'|'deleted';from?:Hex;to?:Hex}>;removedTags:string[][];addedTags:string[][]}
+export interface GatewayVerification {url:string;status:'verified'|'unverified';files:Array<{path:string;status:'hash-verified'|'unverified'}>}
+export interface ResumablePublicationJob {schema:'nsite-job/2';identifier:string;aggregate:Hex;planId:Hex;baselineId:Hex|null;files:Array<{path:string;hash:Hex;size:number;type:string;copies:BlobReadbackCopy[];attempts:Array<{server:Endpoint;status:string}>}>;relays:RelayReceipt[];stage:'prepared'|'uploading'|'signed'|'relay-verified'|'site-verified'|'gateway-unverified';event:SignedEvent|null;eventId:Hex|null;gateway:GatewayVerification|null;url?:string}
+export interface PublicationOptions extends PublicationPlanOptions {signer:Signer;resume?:ResumablePublicationJob;allowFileRemovals?:boolean;resolveCurrent?:(request:{pubkey:Hex;kind:number;identifier:string;relays:Endpoint[];signal?:AbortSignal})=>Promise<SignedEvent|null>;uploader?:(data:Uint8Array,options:object)=>Promise<{hash:Hex;verified:boolean}>;publisher?:(event:SignedEvent,relays:string[],options?:object)=>Promise<PublishReceipts>;checkpoint?:(job:object)=>Promise<void>|void;signal?:AbortSignal;Socket?:any;fetcher?:typeof fetch}
 export namespace Core {
   function encode(value:string):Uint8Array;
   function bytes(value:string|Uint8Array|ArrayBuffer):Uint8Array;
@@ -118,6 +120,7 @@ export namespace Nsite {
   function compareFiles(before:FileMap,after:FileMap):Promise<object[]>;
   function mediaType(path:string):string;
   function normalizeFileMap(input:FileMap):Record<string,Uint8Array>;
+  function publishNsite(files:FileMap,options:PublicationOptions & ({storageServers:Endpoint[]}|{requiredCopies:number}|{gateway:string})):Promise<{job:ResumablePublicationJob;event:SignedEvent;manifest:ManifestRecord;receipts:PublishReceipts}>;
   function publishNsite(files:FileMap,options:PublicationOptions):Promise<{job:object;event:SignedEvent;manifest:ManifestRecord;receipts:PublishReceipts}>;
 }
 export interface BlobMetadata {sha256:Hex;size:number;type:string}

@@ -1,2 +1,2 @@
 export * from './client.js';
-export * from './replicas.js';
+export {preflightBlob,blossomBatchUploadAuth,verifyBlobCopies} from './replicas.js';
