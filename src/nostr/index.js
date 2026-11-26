@@ -5,3 +5,9 @@ export {eventIdentity,collectEventObservations} from './history.js';export * fro
 export * from './edit.js';
 
 export * from './delivery.js';
+export * from './pool.js';
+export * from './store.js';
+export * from './nip05.js';
+export * from './health-cache.js';
+export * from './giftwrap.js';
+export { decodeNip19, noteEncode, nprofileEncode, neventEncode, naddrEncode } from '../moderation/identity.js';

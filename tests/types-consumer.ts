@@ -96,3 +96,61 @@ function typecheckExecution(event:SignedEvent, signer:Signer) {
   return Nostr.executeRelayDelivery(event,{allowedRelays:['wss://relay.example'],defaults:['wss://relay.example'],authSigner:signer,authPubkey:event.pubkey}).then(r=>Nostr.planRelayDelivery(event,{observations:r.observations,authPubkey:event.pubkey}));
 }
 void typecheckExecution;
+
+// Batch 3 subpath declaration & lifecycle contracts.
+import { sha256 as coreSha256, classifyEventStorage as coreClassify } from '../types/core.js';
+import { scopedStore } from '../types/storage.js';
+import { compileEmojiPolicy } from '../types/moderation.js';
+const _subpathHash: Promise<string> = coreSha256('subpath');
+const _subpathClass: 'regular'|'replaceable'|'ephemeral'|'addressable' = coreClassify(35128);
+const _scoped = scopedStore(store, 'ns');
+const _compiledPolicy = compileEmojiPolicy({ pubkeys: [live.pubkey] });
+const _closed: Promise<void> = sdk.close();
+void [_subpathHash, _subpathClass, _scoped, _compiledPolicy, _closed];
+
+// Batch 4 & 5 modular stateless brick contracts.
+import { mapLimit, fromBase64Url, decode } from '../types/core.js';
+import { createRelayPool, subscribeRelay, createEventStore, deletionTemplate, verifyNip05, planRelayListUpdate, noteEncode, nprofileEncode, neventEncode, naddrEncode } from '../types/nostr.js';
+import { fsStore } from '../types/storage.js';
+import { findUnreferencedBlobs, repairBlobReplicas } from '../types/blossom.js';
+const _mapped: Promise<number[]> = mapLimit([1, 2, 3], 2, x => x * 2);
+const _decodedUtf8: string = decode(fromBase64Url('aGVsbG8'));
+const _pool = createRelayPool();
+const _sub = subscribeRelay('wss://relay.example', { kinds: [1] }, { onEvent: () => {} });
+const _eventStore = createEventStore(fsStore('/tmp/nsite-test-store'));
+const _delTmpl = deletionTemplate({ ids: ['a'.repeat(64)] });
+const _nip05 = verifyNip05('alice@example.com', { expectedPubkey: 'a'.repeat(64) });
+const _relayPlan = planRelayListUpdate(null, { add: ['wss://relay.example'] });
+const _encodedEntities: string[] = [
+  noteEncode('a'.repeat(64)),
+  nprofileEncode({ pubkey: 'a'.repeat(64), relays: ['wss://relay.example'] }),
+  neventEncode({ id: 'a'.repeat(64), author: 'b'.repeat(64), kind: 1 }),
+  naddrEncode({ identifier: 'site', pubkey: 'a'.repeat(64), kind: 35128 }),
+];
+const _orphans: string[] = findUnreferencedBlobs(['a'.repeat(64)], [{ files: [{ hash: 'b'.repeat(64) }] }]);
+const _repaired = repairBlobReplicas({ files: [{ path: '/index.html', hash: 'a'.repeat(64) }] }, { targetServers: ['https://a.example', 'https://b.example'], signer, pubkey: live.pubkey });
+const _restoredPrefs: Record<string, unknown> = Anchor.restorePublicAccountBackup({ schema: 'anchor-public-backup/1', pubkey: live.pubkey }).preferences;
+void [_mapped, _decodedUtf8, _pool, _sub, _eventStore, _delTmpl, _nip05, _relayPlan, _encodedEntities, _orphans, _repaired, _restoredPrefs];
+
+// Batch 6 modular stateless bricks & consumer testing subpath contracts.
+import { createAccountSession, migrateSchema } from '../types/core.js';
+import { createRelayHealthCache, rumorTemplate, sealTemplate, giftWrapEvent, unwrapGiftWrap, createBunkerSessionDescriptor, restoreBunkerSigner } from '../types/nostr.js';
+import { checkPortablePaths } from '../types/nsite.js';
+import { writeZipAsync } from '../types/archive.js';
+import { createTestSigner, createMockRelay, createMockBlossom, withStrictBrowserFetch } from '../types/testing.js';
+const _session = createAccountSession({ pubkey: live.pubkey, storage: store });
+const _migrated = migrateSchema({ schema: 'v/1' }, { targetSchema: 'v/2', migrations: { 'v/1': d => ({ ...d, schema: 'v/2' }) } });
+const _healthCache = createRelayHealthCache(store);
+const _rumor = rumorTemplate({ pubkey: live.pubkey, content: 'hi' });
+const _portable = checkPortablePaths(['index.html']);
+const _asyncZip: Promise<Uint8Array> = writeZipAsync(files, { compress: true });
+const _bunkerDesc = createBunkerSessionDescriptor({ remotePubkey: live.pubkey, clientPubkey: live.pubkey, relays: ['wss://relay.example'] });
+const _restoredBunker = restoreBunkerSigner(_bunkerDesc, { loadClientSecret: async () => new Uint8Array(32) });
+const _testSigner = createTestSigner();
+const _mockRelay = createMockRelay();
+const _mockBlossom = createMockBlossom();
+const _strictFetch = withStrictBrowserFetch(_mockBlossom.fetcher);
+const _verifiedUpload = Blossom.uploadVerified('hi', { server: 'https://blossom.example', signer, pubkey: live.pubkey, verifyContentType: true });
+void [_session, _migrated, _healthCache, _rumor, sealTemplate, giftWrapEvent, unwrapGiftWrap, _portable, _asyncZip, _bunkerDesc, _restoredBunker, _testSigner, _mockRelay, _mockBlossom, _strictFetch, _verifiedUpload];
+
+

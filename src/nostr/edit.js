@@ -1,4 +1,4 @@
-import {classifyEventStorage} from '../anchor/kinds.js';
+import {classifyEventStorage} from '../core/guards.js';
 import {eventTemplate} from './events.js';
 import {verifiedCopy} from './history.js';
 const dTag=tags=>tags.find(t=>t[0]==='d')?.[1]??'';
@@ -14,7 +14,8 @@ export function reviewEventReplacement(baseline,template,pubkey){
   if(storage==='addressable'&&dTag(next.tags)!==dTag(previous.tags))throw new Error('Replacement identifier changed');
   if(next.created_at<=previous.created_at)throw new Error('Replacement timestamp must be newer than baseline');
   const removedTags=missingTags(previous.tags,next.tags),addedTags=missingTags(next.tags,previous.tags);
-  const removedProfileFields=next.kind===0?objectFields(previous.content).filter(k=>!objectFields(next.content).includes(k)):[];
+  const nextProfileFields=next.kind===0?new Set(objectFields(next.content)):null;
+  const removedProfileFields=nextProfileFields?objectFields(previous.content).filter(k=>!nextProfileFields.has(k)):[];
   return {baselineId:previous.id,template:next,contentChanged:next.content!==previous.content,removedTags,addedTags,removedProfileFields};
 }
 /** Replace only explicitly owned tag names, preserving unknown tags and exact identity. */

@@ -37,4 +37,18 @@ class SourceCollectionTest(unittest.TestCase):
             self.assertEqual([item['name'] for item in items[:3]],['./src/app.js','src//other.js','src/./third.js'])
             self.assertTrue(all(item['state']=='unsafe_member_path' and 'sha256' not in item for item in items[:3]))
             self.assertEqual(list((p/'recovered').rglob('good.js'))[0].read_bytes(),b'good')
+    def test_reject_oversized_manifest_on_restore(self):
+        import source_collection as sc
+        orig=sc.MAX_MANIFEST_BYTES
+        try:
+            sc.MAX_MANIFEST_BYTES=32
+            with tempfile.TemporaryDirectory() as temp:
+                p=Path(temp)
+                with zipfile.ZipFile(p/'site.zip','w') as z:z.writestr('src/a.js',b'export const a=1;')
+                export([p/'site.zip'],p/'pack.zip')
+                with self.assertRaisesRegex(ValueError,'manifest exceeds byte bound'):
+                    restore(p/'pack.zip',p/'out')
+        finally:
+            sc.MAX_MANIFEST_BYTES=orig
 if __name__=='__main__':unittest.main()
+

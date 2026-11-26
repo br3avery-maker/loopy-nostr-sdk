@@ -14,23 +14,62 @@
       "types": "./types/index.d.ts",
       "default": "./src/index.js"
     },
-    "./nostr": "./src/nostr/index.js",
-    "./nsite": "./src/nsite/index.js",
-    "./blossom": "./src/blossom/index.js",
-    "./archive": "./src/archive/index.js",
-    "./directory": "./src/directory/index.js",
-    "./storage": "./src/storage/index.js",
-    "./adapters": "./src/adapters/index.js",
-    "./moderation": "./src/moderation/index.js",
-    "./moji": "./src/moji/index.js",
-    "./anchor": "./src/anchor/index.js",
+    "./core": {
+      "types": "./types/core.d.ts",
+      "default": "./src/core/index.js"
+    },
+    "./nostr": {
+      "types": "./types/nostr.d.ts",
+      "default": "./src/nostr/index.js"
+    },
+    "./nsite": {
+      "types": "./types/nsite.d.ts",
+      "default": "./src/nsite/index.js"
+    },
+    "./blossom": {
+      "types": "./types/blossom.d.ts",
+      "default": "./src/blossom/index.js"
+    },
+    "./archive": {
+      "types": "./types/archive.d.ts",
+      "default": "./src/archive/index.js"
+    },
+    "./directory": {
+      "types": "./types/directory.d.ts",
+      "default": "./src/directory/index.js"
+    },
+    "./storage": {
+      "types": "./types/storage.d.ts",
+      "default": "./src/storage/index.js"
+    },
+    "./adapters": {
+      "types": "./types/adapters.d.ts",
+      "default": "./src/adapters/index.js"
+    },
+    "./moderation": {
+      "types": "./types/moderation.d.ts",
+      "default": "./src/moderation/index.js"
+    },
+    "./moji": {
+      "types": "./types/moji.d.ts",
+      "default": "./src/moji/index.js"
+    },
+    "./anchor": {
+      "types": "./types/anchor.d.ts",
+      "default": "./src/anchor/index.js"
+    },
     "./provenance": "./provenance/manifest.json",
     "./intelligence": {
       "types": "./types/intelligence/index.d.ts",
       "default": "./src/intelligence/index.js"
+    },
+    "./testing": {
+      "types": "./types/testing.d.ts",
+      "default": "./src/testing/index.js"
     }
   },
   "scripts": {
+    "dev": "node scripts/dev_preview.mjs",
     "test": "node --test tests/*.test.js",
     "test:types": "tsc --noEmit -p tsconfig.json",
     "verify": "npm run test && npm run test:types && python3 validation/verify_package.py && python3 validation/verify_repo_audit.py",

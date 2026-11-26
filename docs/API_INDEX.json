@@ -1,7 +1,47 @@
 {
   "Core": [
     {
+      "name": "assertHex",
+      "kind": "function"
+    },
+    {
+      "name": "assertSafeHttpUrl",
+      "kind": "function"
+    },
+    {
+      "name": "assertSafeInt",
+      "kind": "function"
+    },
+    {
+      "name": "boundedFetch",
+      "kind": "function"
+    },
+    {
       "name": "bytes",
+      "kind": "function"
+    },
+    {
+      "name": "canonicalGatewayHost",
+      "kind": "function"
+    },
+    {
+      "name": "checkRuntimeCapabilities",
+      "kind": "function"
+    },
+    {
+      "name": "classifyEventStorage",
+      "kind": "function"
+    },
+    {
+      "name": "createAccountSession",
+      "kind": "function"
+    },
+    {
+      "name": "decode",
+      "kind": "function"
+    },
+    {
+      "name": "defaultFetch",
       "kind": "function"
     },
     {
@@ -17,7 +57,35 @@
       "kind": "function"
     },
     {
+      "name": "fromBase64Url",
+      "kind": "function"
+    },
+    {
+      "name": "hasLoneSurrogate",
+      "kind": "function"
+    },
+    {
       "name": "hex",
+      "kind": "function"
+    },
+    {
+      "name": "isForbiddenKey",
+      "kind": "function"
+    },
+    {
+      "name": "isHex",
+      "kind": "function"
+    },
+    {
+      "name": "isPrivateOrLocalHost",
+      "kind": "function"
+    },
+    {
+      "name": "mapLimit",
+      "kind": "function"
+    },
+    {
+      "name": "migrateSchema",
       "kind": "function"
     },
     {
@@ -29,11 +97,23 @@
       "kind": "function"
     },
     {
+      "name": "safeHttpUrl",
+      "kind": "function"
+    },
+    {
+      "name": "sdkError",
+      "kind": "function"
+    },
+    {
       "name": "sha256",
       "kind": "function"
     },
     {
       "name": "slug",
+      "kind": "function"
+    },
+    {
+      "name": "toBase64",
       "kind": "function"
     },
     {
@@ -76,6 +156,30 @@
     },
     {
       "name": "connectIdentity",
+      "kind": "function"
+    },
+    {
+      "name": "createBunkerSessionDescriptor",
+      "kind": "function"
+    },
+    {
+      "name": "createEventStore",
+      "kind": "function"
+    },
+    {
+      "name": "createRelayHealthCache",
+      "kind": "function"
+    },
+    {
+      "name": "createRelayPool",
+      "kind": "function"
+    },
+    {
+      "name": "decodeNip19",
+      "kind": "function"
+    },
+    {
+      "name": "deletionTemplate",
       "kind": "function"
     },
     {
@@ -123,11 +227,31 @@
       "kind": "function"
     },
     {
+      "name": "giftWrapEvent",
+      "kind": "function"
+    },
+    {
       "name": "httpAuthHeader",
       "kind": "function"
     },
     {
+      "name": "naddrEncode",
+      "kind": "function"
+    },
+    {
+      "name": "neventEncode",
+      "kind": "function"
+    },
+    {
       "name": "nostrConnectRequest",
+      "kind": "function"
+    },
+    {
+      "name": "noteEncode",
+      "kind": "function"
+    },
+    {
+      "name": "nprofileEncode",
       "kind": "function"
     },
     {
@@ -140,6 +264,10 @@
     },
     {
       "name": "planRelayDelivery",
+      "kind": "function"
+    },
+    {
+      "name": "planRelayListUpdate",
       "kind": "function"
     },
     {
@@ -183,7 +311,23 @@
       "kind": "function"
     },
     {
+      "name": "restoreBunkerSigner",
+      "kind": "function"
+    },
+    {
       "name": "reviewEventReplacement",
+      "kind": "function"
+    },
+    {
+      "name": "rumorTemplate",
+      "kind": "function"
+    },
+    {
+      "name": "sealTemplate",
+      "kind": "function"
+    },
+    {
+      "name": "subscribeRelay",
       "kind": "function"
     },
     {
@@ -199,11 +343,19 @@
       "kind": "function"
     },
     {
+      "name": "unwrapGiftWrap",
+      "kind": "function"
+    },
+    {
       "name": "verifyAndroidResult",
       "kind": "function"
     },
     {
       "name": "verifyEvent",
+      "kind": "function"
+    },
+    {
+      "name": "verifyNip05",
       "kind": "function"
     }
   ],
@@ -215,6 +367,10 @@
     {
       "name": "NSITE_ROOT_KIND",
       "kind": "constant"
+    },
+    {
+      "name": "checkPortablePaths",
+      "kind": "function"
     },
     {
       "name": "compareFiles",
@@ -283,7 +439,15 @@
       "kind": "function"
     },
     {
+      "name": "findUnreferencedBlobs",
+      "kind": "function"
+    },
+    {
       "name": "preflightBlob",
+      "kind": "function"
+    },
+    {
+      "name": "repairBlobReplicas",
       "kind": "function"
     },
     {
@@ -370,6 +534,10 @@
     },
     {
       "name": "writeZip",
+      "kind": "function"
+    },
+    {
+      "name": "writeZipAsync",
       "kind": "function"
     }
   ],
@@ -501,11 +669,19 @@
   ],
   "Storage": [
     {
+      "name": "fsStore",
+      "kind": "function"
+    },
+    {
       "name": "indexedDbStore",
       "kind": "function"
     },
     {
       "name": "memoryStore",
+      "kind": "function"
+    },
+    {
+      "name": "scopedStore",
       "kind": "function"
     }
   ],
@@ -549,6 +725,10 @@
       "kind": "function"
     },
     {
+      "name": "compileEmojiPolicy",
+      "kind": "function"
+    },
+    {
       "name": "decodeNip19",
       "kind": "function"
     },
@@ -573,6 +753,14 @@
       "kind": "function"
     },
     {
+      "name": "naddrEncode",
+      "kind": "function"
+    },
+    {
+      "name": "neventEncode",
+      "kind": "function"
+    },
+    {
       "name": "normalizeEmojiHash",
       "kind": "function"
     },
@@ -586,6 +774,14 @@
     },
     {
       "name": "normalizePubkeyList",
+      "kind": "function"
+    },
+    {
+      "name": "noteEncode",
+      "kind": "function"
+    },
+    {
+      "name": "nprofileEncode",
       "kind": "function"
     },
     {
@@ -781,6 +977,24 @@
     },
     {
       "name": "summarizeObservedActivity",
+      "kind": "function"
+    }
+  ],
+  "Testing": [
+    {
+      "name": "createMockBlossom",
+      "kind": "function"
+    },
+    {
+      "name": "createMockRelay",
+      "kind": "function"
+    },
+    {
+      "name": "createTestSigner",
+      "kind": "function"
+    },
+    {
+      "name": "withStrictBrowserFetch",
       "kind": "function"
     }
   ]

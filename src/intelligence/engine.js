@@ -4,6 +4,18 @@
  * Completely independent of React, browser APIs, and any specific Nostr SDK.
  */
 import { getKindSpec } from './nipRegistry.js';
+import { endpoint, nsitePath, slug } from '../core/urls.js';
+import { safeHttpUrl } from '../core/guards.js';
+
+function canonicalUrl(value, type) {
+    if (typeof value !== 'string') return '';
+    try {
+        return endpoint(value, type);
+    }
+    catch {
+        return value.trim().replace(/\/+$/, '').toLowerCase();
+    }
+}
 function slugify(value) {
     const cleaned = value
         .toLowerCase()
@@ -12,6 +24,10 @@ function slugify(value) {
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '');
     return cleaned || 'untitled-release';
+}
+function nsiteSlugify(value) {
+    const cleaned = slugify(value).slice(0, 13).replace(/-+$/, '');
+    return cleaned || 'site';
 }
 function titleFromFilename(filename) {
     const base = filename.split('/').pop() || filename;
@@ -24,22 +40,30 @@ function titleFromFilename(filename) {
         .replace(/\b\w/g, (c) => c.toUpperCase());
 }
 function isAudioAsset(asset) {
-    return (asset.mimeType.startsWith('audio/') ||
-        /\.(mp3|flac|wav|ogg|m4a|opus)$/i.test(asset.name));
+    const mime = String(asset?.mimeType || '');
+    const name = String(asset?.name || '');
+    return (mime.startsWith('audio/') ||
+        /\.(mp3|flac|wav|ogg|m4a|opus)$/i.test(name));
 }
 function isImageAsset(asset) {
-    return (asset.mimeType.startsWith('image/') ||
-        /\.(png|jpe?g|webp|gif|avif|svg)$/i.test(asset.name));
+    const mime = String(asset?.mimeType || '');
+    const name = String(asset?.name || '');
+    return (mime.startsWith('image/') ||
+        /\.(png|jpe?g|webp|gif|avif|svg)$/i.test(name));
 }
 function isMarkdownAsset(asset) {
-    return (asset.mimeType === 'text/markdown' ||
-        /\.(md|markdown)$/i.test(asset.name));
+    const mime = String(asset?.mimeType || '');
+    const name = String(asset?.name || '');
+    return (mime === 'text/markdown' ||
+        /\.(md|markdown)$/i.test(name));
 }
 function isSiteArchiveOrHtml(asset) {
-    return (asset.mimeType === 'application/zip' ||
-        asset.mimeType === 'text/html' ||
-        /\.zip$/i.test(asset.name) ||
-        /(^|\/)index\.html?$/i.test(asset.path || asset.name));
+    const mime = String(asset?.mimeType || '');
+    const name = String(asset?.name || '');
+    return (mime === 'application/zip' ||
+        mime === 'text/html' ||
+        /\.zip$/i.test(name) ||
+        /(^|\/)index\.html?$/i.test(asset?.path || name));
 }
 function extractMarkdownFrontmatter(text) {
     let body = text.trim();
@@ -142,8 +166,13 @@ export function reconstructPreferences(params) {
             provenance: 'unknown',
             sourceNote: 'No license tag found in recovered history',
         };
-    // Default write relays
-    const writeRelays = relays.filter((r) => r.write).map((r) => r.url);
+    // Default write relays (exclude explicitly unreachable relays and canonicalize)
+    const writeRelays = [...new Set(
+        relays
+            .filter((r) => r.write && r.wsReachable !== false && r.status !== 'unreachable')
+            .map((r) => canonicalUrl(r.url, 'relay'))
+            .filter(Boolean)
+    )];
     const defaultWriteRelays = writeRelays.length > 0
         ? {
             value: writeRelays,
@@ -155,8 +184,13 @@ export function reconstructPreferences(params) {
             provenance: 'unknown',
             sourceNote: 'No NIP-65 write relays advertised',
         };
-    // Default Blossom servers
-    const blossomUrls = blossomServers.map((b) => b.url);
+    // Default Blossom servers (exclude explicitly unhealthy/unreachable servers and canonicalize)
+    const blossomUrls = [...new Set(
+        blossomServers
+            .filter((b) => b.healthy !== false && b.status !== 'unreachable' && b.status !== 'unhealthy')
+            .map((b) => canonicalUrl(b.url, 'blossom'))
+            .filter(Boolean)
+    )];
     const defaultBlossomServers = blossomUrls.length > 0
         ? {
             value: blossomUrls,
@@ -168,12 +202,12 @@ export function reconstructPreferences(params) {
             provenance: 'unknown',
             sourceNote: 'No Blossom server list (Kind 10063) found',
         };
-    // Common hashtags
+    // Common hashtags (strip leading '#' per NIP-12/NIP-24)
     const tagCounts = new Map();
     for (const ev of events) {
         for (const tag of ev.tags) {
             if (tag[0] === 't' && tag[1]) {
-                const norm = tag[1].toLowerCase().trim();
+                const norm = tag[1].trim().replace(/^#+/, '').toLowerCase();
                 if (norm)
                     tagCounts.set(norm, (tagCounts.get(norm) || 0) + 1);
             }
@@ -473,9 +507,20 @@ export function detectAndPrepareContent(params) {
                 message: 'Add an audio file (.mp3, .flac, .wav, .ogg) or a direct Blossom audio URL to publish a music release.',
             });
         }
+        const safeCoverUrl = submission.externalCoverUrl?.trim()
+            ? safeHttpUrl(submission.externalCoverUrl.trim(), { allowHttp: true, maxLength: 4096 })
+            : null;
+        if (submission.externalCoverUrl?.trim() && !safeCoverUrl) {
+            validationIssues.push({
+                level: 'error',
+                code: 'INVALID_EXTERNAL_URL',
+                field: 'externalCoverUrl',
+                message: 'External cover URL must use a valid http(s) URL without credentials.',
+            });
+        }
         const resolvedCoverUrl = coverImage
             ? `${blobBase}/${coverImage.sha256 || 'pending-cover-sha256'}`
-            : submission.externalCoverUrl?.trim();
+            : safeCoverUrl;
         if (resolvedCoverUrl) {
             tags.push(['image', resolvedCoverUrl]);
         }
@@ -526,7 +571,18 @@ export function detectAndPrepareContent(params) {
             tags.push(['image', `${blobBase}/${imageAssets[0].sha256 || 'pending-image-sha256'}`]);
         }
         else if (submission.externalImageUrl?.trim()) {
-            tags.push(['image', submission.externalImageUrl.trim()]);
+            const safeImg = safeHttpUrl(submission.externalImageUrl.trim(), { allowHttp: true, maxLength: 4096 });
+            if (safeImg) {
+                tags.push(['image', safeImg]);
+            }
+            else {
+                validationIssues.push({
+                    level: 'error',
+                    code: 'INVALID_EXTERNAL_URL',
+                    field: 'externalImageUrl',
+                    message: 'External image URL must use a valid http(s) URL without credentials.',
+                });
+            }
         }
         if (!title) {
             validationIssues.push({
@@ -568,15 +624,25 @@ export function detectAndPrepareContent(params) {
             }
         }
         else if (submission.externalImageUrl?.trim()) {
-            const extUrl = submission.externalImageUrl.trim();
-            const shaMatch = extUrl.match(/\/([0-9a-f]{64})(?:[.?/#]|$)/i);
-            const imeta = [`url ${extUrl}`, 'm image/jpeg'];
-            if (shaMatch)
-                imeta.push(`x ${shaMatch[1].toLowerCase()}`);
-            if (submission.externalAlt?.trim() || title) {
-                imeta.push(`alt ${submission.externalAlt?.trim() || title}`);
+            const extUrl = safeHttpUrl(submission.externalImageUrl.trim(), { allowHttp: true, maxLength: 4096 });
+            if (!extUrl) {
+                validationIssues.push({
+                    level: 'error',
+                    code: 'INVALID_EXTERNAL_URL',
+                    field: 'externalImageUrl',
+                    message: 'External image URL must use a valid http(s) URL without credentials.',
+                });
             }
-            tags.push(['imeta', ...imeta]);
+            else {
+                const shaMatch = extUrl.match(/\/([0-9a-f]{64})(?:[.?/#]|$)/i);
+                const imeta = [`url ${extUrl}`, 'm image/jpeg'];
+                if (shaMatch)
+                    imeta.push(`x ${shaMatch[1].toLowerCase()}`);
+                if (submission.externalAlt?.trim() || title) {
+                    imeta.push(`alt ${submission.externalAlt?.trim() || title}`);
+                }
+                tags.push(['imeta', ...imeta]);
+            }
         }
         else {
             validationIssues.push({
@@ -596,6 +662,19 @@ export function detectAndPrepareContent(params) {
         });
         kind = nsiteAnalysis.recommendedKind;
         dTag = nsiteAnalysis.recommendedDTag;
+        if (kind === 35128 && dTag) {
+            try {
+                slug(dTag);
+            }
+            catch {
+                validationIssues.push({
+                    level: 'error',
+                    code: 'INVALID_NSITE_SLUG',
+                    field: 'dTag',
+                    message: 'Named nsite identifier must be 1–13 lowercase alphanumeric/hyphen characters without a trailing hyphen.',
+                });
+            }
+        }
         title =
             title ||
                 nsiteAnalysis.existingTarget?.title ||
@@ -609,10 +688,18 @@ export function detectAndPrepareContent(params) {
         tags.push(['title', title]);
         tags.push(['description', summary]);
         for (const asset of assets) {
-            const normalizedPath = (asset.path || asset.name).startsWith('/')
-                ? asset.path || asset.name
-                : `/${asset.path || asset.name}`;
-            tags.push(['path', normalizedPath, asset.sha256 || 'pending-sha256']);
+            try {
+                const normalizedPath = nsitePath(asset.path || asset.name);
+                tags.push(['path', normalizedPath, asset.sha256 || 'pending-sha256']);
+            }
+            catch {
+                validationIssues.push({
+                    level: 'error',
+                    code: 'UNSAFE_ASSET_PATH',
+                    field: 'assets',
+                    message: `Unsafe nsite asset path rejected: ${asset.path || asset.name}`,
+                });
+            }
         }
         for (const server of targetBlossomServers) {
             tags.push(['server', server]);
@@ -700,6 +787,21 @@ export function detectAndPrepareContent(params) {
             message: 'Assets detected, but no Blossom server is configured. Add a Blossom server to host media blobs.',
         });
     }
+    const hasPendingPlaceholders = tags.some((tag) =>
+        Array.isArray(tag) &&
+        tag.some((cell) =>
+            typeof cell === 'string' &&
+            /\bblossom\.pending\b|\bpending(?:-[a-z]+)?-sha256\b/i.test(cell)
+        )
+    );
+    if (hasPendingPlaceholders) {
+        validationIssues.push({
+            level: 'error',
+            code: 'PENDING_BLOB_UPLOAD',
+            field: 'tags',
+            message: 'Upload pending media blobs and replace placeholder URLs or hashes before publishing.',
+        });
+    }
     const kindSpec = getKindSpec(kind);
     const hasErrors = validationIssues.some((v) => v.level === 'error');
     return {
@@ -740,8 +842,8 @@ export function auditCoverage(publications, nowSec = Math.floor(Date.now() / 100
     let mediaRatioSum = 0;
     let mediaCheckedCount = 0;
     for (const pub of active) {
-        const publishedSet = new Set(pub.publishedRelays);
-        const missingRelays = pub.expectedRelays.filter((r) => !publishedSet.has(r));
+        const publishedSet = new Set(pub.publishedRelays.map((r) => canonicalUrl(r, 'relay')));
+        const missingRelays = pub.expectedRelays.filter((r) => !publishedSet.has(canonicalUrl(r, 'relay')));
         const relayCoverageRatio = pub.expectedRelays.length > 0
             ? (pub.expectedRelays.length - missingRelays.length) / pub.expectedRelays.length
             : 1;
@@ -750,8 +852,8 @@ export function auditCoverage(publications, nowSec = Math.floor(Date.now() / 100
         let totalAssetSlots = 0;
         let presentAssetSlots = 0;
         for (const hash of pub.assetHashes) {
-            const present = new Set(pub.assetLocations[hash] || []);
-            const missingServers = pub.expectedBlossomServers.filter((s) => !present.has(s));
+            const present = new Set((pub.assetLocations[hash] || []).map((s) => canonicalUrl(s, 'blossom')));
+            const missingServers = pub.expectedBlossomServers.filter((s) => !present.has(canonicalUrl(s, 'blossom')));
             totalAssetSlots += pub.expectedBlossomServers.length;
             presentAssetSlots += pub.expectedBlossomServers.length - missingServers.length;
             if (missingServers.length > 0) {
@@ -827,7 +929,9 @@ export function summarizeObservedActivity(records, queriedRelays) {
         follower: 0,
     };
     for (const r of records) {
-        counts[r.type] += 1;
+        if (r && Object.hasOwn(counts, r.type)) {
+            counts[r.type] += 1;
+        }
     }
     const relayCount = queriedRelays.length;
     const provenanceStatement = relayCount > 0

@@ -17,6 +17,7 @@ import zipfile
 
 MAX_MEMBER_BYTES = 550_000
 MAX_ARCHIVE_BYTES = 120_000_000
+MAX_TOTAL_BYTES = 256 * 1024 * 1024
 MAX_MEMBER_COUNT = 12_000
 MAX_COMPRESSION_RATIO = 500
 CODE_SUFFIX = {'.js','.mjs','.cjs','.ts','.tsx','.jsx','.py','.html','.json','.md','.yaml','.yml','.sh','.css'}
@@ -42,6 +43,7 @@ def archive_members(path:Path):
         infos=z.infolist()
         if len(infos)>MAX_MEMBER_COUNT:raise ValueError('archive has too many entries')
         names=set()
+        total_bytes=0
         for m in infos:
             n=PurePosixPath(m.filename)
             if m.filename in names:raise ValueError('duplicate archive member path')
@@ -51,6 +53,8 @@ def archive_members(path:Path):
             mode=(m.external_attr>>16) & 0xFFFF
             if stat.S_ISLNK(mode):raise ValueError('symlink archive member rejected')
             if m.is_dir():continue
+            total_bytes += m.file_size
+            if total_bytes > MAX_TOTAL_BYTES:raise ValueError('archive uncompressed total exceeds budget')
             ratio=m.file_size/max(m.compress_size,1)
             if ratio>MAX_COMPRESSION_RATIO:raise ValueError('oversized compressed member ratio')
             if m.file_size>MAX_MEMBER_BYTES:

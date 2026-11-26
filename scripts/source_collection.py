@@ -11,7 +11,7 @@ from pathlib import Path,PurePosixPath
 from io import BytesIO
 
 SOURCE_EXT={'.js','.mjs','.cjs','.jsx','.ts','.tsx','.py','.html','.htm','.css','.scss','.json','.md','.txt','.xml','.yaml','.yml','.toml','.kt','.java','.sh','.c','.h','.cpp','.hpp','.sql','.svg','.svelte','.vue','.astro'}
-MAX_FILES=22000;MAX_SIZE=30_000_000;MAX_RATIO=1000;MAX_TOTAL=360_000_000
+MAX_FILES=22000;MAX_SIZE=30_000_000;MAX_RATIO=100;MAX_TOTAL=256*1024*1024;MAX_MANIFEST_BYTES=16*1024*1024
 
 def sha(data:bytes)->str:return hashlib.sha256(data).hexdigest()
 def safe_recovery_member(name):
@@ -83,9 +83,14 @@ def restore(bundle:Path,destination:Path)->dict:
         return target
     restored=0
     with zipfile.ZipFile(bundle) as z:
-        manifest=json.loads(z.read('MANIFEST.json'))
+        manifest_info=z.getinfo('MANIFEST.json')
+        if manifest_info.file_size>MAX_MANIFEST_BYTES:
+            raise ValueError('Collection manifest exceeds byte bound')
+        if manifest_info.file_size/max(manifest_info.compress_size,1)>MAX_RATIO:
+            raise ValueError('Collection manifest compression ratio exceeds budget')
+        manifest=json.loads(z.read(manifest_info))
         if manifest.get('schema')!='nsite-loopy-source-collection/1':raise ValueError('Wrong collection schema')
-        plan=[];targets={}
+        plan=[];targets={};verified_objects={};total_bytes=0
         for root in manifest['sources']:
             archive=root['archive_sha256']
             if not isinstance(archive,str) or not re.fullmatch(r'[0-9a-f]{64}',archive):raise ValueError('Invalid archive SHA-256')
@@ -99,18 +104,24 @@ def restore(bundle:Path,destination:Path)->dict:
                 obj='objects/sha256/'+digest[:2]+'/'+digest
                 info=z.getinfo(obj)
                 if info.file_size>MAX_SIZE or info.file_size!=item['bytes']:raise ValueError('Invalid object size')
-                if sha(z.read(info))!=digest:raise ValueError('Donor object hash mismatch')
-                plan.append((archive,item['name'],obj))
+                if info.file_size/max(info.compress_size,1)>MAX_RATIO:raise ValueError('Object compression ratio exceeds budget')
+                total_bytes+=info.file_size
+                if total_bytes>MAX_TOTAL:raise ValueError('Restored total size exceeds budget')
+                if digest not in verified_objects:
+                    raw=z.read(info)
+                    if sha(raw)!=digest:raise ValueError('Donor object hash mismatch')
+                    verified_objects[digest]=raw
+                plan.append((archive,item['name'],digest))
         # Validate the complete metadata before writing, and replace files atomically
         # rather than truncating pre-existing hardlinks. Use a private output directory.
-        for archive,name,obj in plan:
+        for archive,name,digest in plan:
             target=checked_target(archive,name)
             target.parent.mkdir(parents=True,exist_ok=True)
             target=checked_target(archive,name)
             tmp=None
             try:
                 with tempfile.NamedTemporaryFile(dir=target.parent,delete=False) as f:
-                    tmp=Path(f.name);f.write(z.read(obj))
+                    tmp=Path(f.name);f.write(verified_objects[digest])
                 os.replace(tmp,target);restored+=1
             finally:
                 if tmp is not None:tmp.unlink(missing_ok=True)

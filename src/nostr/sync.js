@@ -1,6 +1,6 @@
 import {endpoints} from '../core/urls.js';
 import {verifiedCopy} from './history.js';
-import {classifyEventStorage} from '../anchor/kinds.js';
+import {classifyEventStorage} from '../core/guards.js';
 import {matchesFilter} from './filter.js';
 import {queryRelay} from './relay-transport.js';
 const isTime=x=>Number.isSafeInteger(x)&&x>=0;

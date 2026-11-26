@@ -4,15 +4,17 @@
   "modules": [
     {
       "path": "src/adapters/android.js",
-      "sha256": "e868b0f135dbeac986efc7389b4fd4497f9aaa57d1f7426b0eee6a67f5257349",
+      "sha256": "4ed03caaa544c833170d11b05ea13c754be66a55de35276372bc94d8e2dd542e",
       "role": "browser and Android host integration",
-      "lineage": "derived and standardized; signer lifecycle review repair"
+      "lineage": "derived and standardized; signer lifecycle review repair",
+      "parent_sha256": "e868b0f135dbeac986efc7389b4fd4497f9aaa57d1f7426b0eee6a67f5257349"
     },
     {
       "path": "src/adapters/browser.js",
-      "sha256": "73e9e0a5394d2d2e4b383b6385e9e7f409aac61493e29d5a661479e1f79129d4",
+      "sha256": "9ad918952201a7121f1e401416964e450f1a54e130160679e4eb97512549d395",
       "role": "browser and Android host integration",
-      "lineage": "derived and standardized"
+      "lineage": "derived and standardized",
+      "parent_sha256": "73e9e0a5394d2d2e4b383b6385e9e7f409aac61493e29d5a661479e1f79129d4"
     },
     {
       "path": "src/adapters/index.js",
@@ -22,39 +24,45 @@
     },
     {
       "path": "src/anchor/index.js",
-      "sha256": "9715acd62d59e288ed5375ee4fa09e16f8fde42fb6c8cfd724099e92172a6544",
+      "sha256": "0ce1c4fdb46db5d17338e27e53e6a3fc5550f6da7037dc811ecc5a64ca945e48",
       "role": "protocol-adapter",
-      "lineage": "adapted from user-owned repo; see repo-capabilities.json; rc.6 Anchor consumer comparison"
+      "lineage": "adapted from user-owned repo; see repo-capabilities.json; rc.6 Anchor consumer comparison",
+      "parent_sha256": "8faf81708b6da5ffa1886e8bce90e8bf1cb5b766924c2318d23623de517b6712"
     },
     {
       "path": "src/anchor/kinds.js",
-      "sha256": "eaa7c15bda12e5bedc21ebefd989a45b562f30e27dbd659e7dddff02507aa79b",
+      "sha256": "b93f4b3b3b6775182504b96c3d38f8b353dd6270e94ba4bd34bc1a636b7e66e3",
       "role": "protocol-adapter",
-      "lineage": "adapted from user-owned repo; see repo-capabilities.json"
+      "lineage": "adapted from user-owned repo; see repo-capabilities.json",
+      "parent_sha256": "eaa7c15bda12e5bedc21ebefd989a45b562f30e27dbd659e7dddff02507aa79b"
     },
     {
       "path": "src/anchor/relays.js",
-      "sha256": "5dd13db8e3d10ff979e74c8b1d197f04fed1eaeb14f177fe4677de47a9be8f53",
+      "sha256": "14edada96e6e08948f3fe1a834fa860167c50f84f9b4d41ba323cc11141ffedf",
       "role": "protocol-adapter",
-      "lineage": "adapted from user-owned repo; see repo-capabilities.json"
+      "lineage": "adapted from user-owned repo; see repo-capabilities.json",
+      "parent_sha256": "5dd13db8e3d10ff979e74c8b1d197f04fed1eaeb14f177fe4677de47a9be8f53"
     },
     {
       "path": "src/archive/catalog.js",
-      "sha256": "de531c3b224b4b2ae8802254465203e8e68dc558d606104664c756d1ae69b75a",
+      "sha256": "014e73de7d239d59f149116eb51608e751f594d412a809a4d67fca5c766af686",
       "role": "ZIP/CAS/version/directory lineage",
-      "lineage": "derived and standardized"
+      "lineage": "derived and standardized",
+      "parent_sha256": "5a0e256b8095af9d161d6d36264d76dbc5d27e8314728688d017acbb997cea0c"
     },
     {
       "path": "src/archive/chunks.js",
-      "sha256": "c24d65e7bcaab8ba45ef77bb84d26c5cc6aa2022e0612338139fcdf802ac4acd",
+      "sha256": "4a17046352b323987b69dae731a645f73304cf3c2d82d52aa5f0c94b8319196a",
       "role": "archive-cdc",
-      "lineage": "Reproduced Gear-v1 boundaries from br3avery-maker/Pretend-Internet/tools/nsite-archive/chunks.mjs"
+      "lineage": "Reproduced Gear-v1 boundaries from br3avery-maker/Pretend-Internet/tools/nsite-archive/chunks.mjs",
+      "parent_sha256": "c24d65e7bcaab8ba45ef77bb84d26c5cc6aa2022e0612338139fcdf802ac4acd"
     },
     {
       "path": "src/archive/content-addressable.js",
-      "sha256": "82395489386542b69f04f972b4004bd18c2fffb70f17d77be240b881ff9bb814",
+      "sha256": "5c9cb2942728f97bd14a2e32c2b6bf19c30334f973e1fe5c4281e3b98ac8ca92",
       "role": "ZIP/CAS/version/directory lineage",
-      "lineage": "derived and standardized; rc.4 verified retrieval comparison"
+      "lineage": "derived and standardized; rc.4 verified retrieval comparison",
+      "parent_sha256": "82395489386542b69f04f972b4004bd18c2fffb70f17d77be240b881ff9bb814"
     },
     {
       "path": "src/archive/index.js",
@@ -76,57 +84,66 @@
     },
     {
       "path": "src/archive/versions.js",
-      "sha256": "8f22908d98e5d977103055a300dd47093d4df9e87c986a106acf92118526dd09",
+      "sha256": "e9639373c1d80c75fe59421f1d9b3b513712c6297d03c8340e432f52f220ddc8",
       "role": "ZIP/CAS/version/directory lineage",
-      "lineage": "derived and standardized; rc.5 verified historical recovery"
+      "lineage": "derived and standardized; rc.5 verified historical recovery",
+      "parent_sha256": "8f22908d98e5d977103055a300dd47093d4df9e87c986a106acf92118526dd09"
     },
     {
       "path": "src/archive/zip.js",
-      "sha256": "055f352b6251309992ba717d57dcb98db5e920bfa1a9f9e2e4e82862762c2e82",
+      "sha256": "4957d7226263fe494559ae9b8a982d1d51238ff7d781acff1d89e8c4a8248879",
       "role": "ZIP/CAS/version/directory lineage",
-      "lineage": "derived and standardized"
+      "lineage": "derived and standardized",
+      "parent_sha256": "1ea3f43cee182f455a902546145a67a5850c30310d98f4fc6e99905d27326c4f"
     },
     {
       "path": "src/blossom/client.js",
-      "sha256": "89ed67dbe6305dbfd20f8b2a29e5795773049ec410306569b62c014af499963b",
+      "sha256": "ef30bd33ad0983a4d9150dd216da441e0715b1c6d6f4d0bd7a926f4940c824a2",
       "role": "BUD03/BUD11 signed server discovery and exact-byte uploads",
-      "lineage": "derived and standardized; rc.3 safe publication comparison; rc.4 verified retrieval comparison"
+      "lineage": "derived and standardized; rc.3 safe publication comparison; rc.4 verified retrieval comparison",
+      "parent_sha256": "640658b9f8728ee5557599f223d5299df12f676005f0432ddabaf3a291cf7642"
     },
     {
       "path": "src/blossom/index.js",
-      "sha256": "d50e63604ebce373487c56b3c56f7670b71b15e1004a36ffde19f8cef4fea416",
+      "sha256": "6b55a353795a5ec9e5790ba4874d24075f81892fe5fca4916951e3ff8a9e1ef2",
       "role": "BUD03/BUD11 signed server discovery and exact-byte uploads",
-      "lineage": "derived and standardized; Blossom reconciliation batch 2; publication reconciliation batch 3"
+      "lineage": "derived and standardized; Blossom reconciliation batch 2; publication reconciliation batch 3",
+      "parent_sha256": "d50e63604ebce373487c56b3c56f7670b71b15e1004a36ffde19f8cef4fea416"
     },
     {
       "path": "src/blossom/replicas.js",
-      "sha256": "aeb03e719fcba1887f12451ab69c15992b49c8d564ae380836480389d8fadf7b",
+      "sha256": "488cde550fe419182a8de3c50f4ee586a4ed8d360dfb3793f5484747112fbc3e",
       "role": "Scoped batch authorization, metadata preflight and multi-origin exact-byte readback",
-      "lineage": "Independent reconciliation of Pretend Internet relay router and Safehouse publisher contracts; docs/BLOSSOM_RECONCILIATION.md; publication reconciliation batch 3"
+      "lineage": "Independent reconciliation of Pretend Internet relay router and Safehouse publisher contracts; docs/BLOSSOM_RECONCILIATION.md; publication reconciliation batch 3",
+      "parent_sha256": "7e36cdd92bfa7190e80050ce3b53a4cab67c534459e97328e1cf69aa4151db0e"
     },
     {
       "path": "src/core/bytes.js",
-      "sha256": "6b82c1128d482f3a2d86dcc304445ea9c63a7d6c3f080395a0c04c36a12d6d64",
+      "sha256": "ce685b92f1fc3844ccea74a92db474212cd69c315296afacca96135b9ed97465",
       "role": "sha256, URL/path validation and shared options",
-      "lineage": "derived and standardized"
+      "lineage": "derived and standardized",
+      "parent_sha256": "760a9a6d4936e8a1e83f83b3ad1a5a785429b939457ef00e923ce523496cc45d"
     },
     {
       "path": "src/core/index.js",
-      "sha256": "39ab9e88b396ae0692245a71e3719e3378d03de73c2dc16390484594eb786940",
+      "sha256": "75cc812ff62b08c448206e60ae6bcbb9ec46916b7bee4f8b9c8df114e698f4e0",
       "role": "sha256, URL/path validation and shared options",
-      "lineage": "derived and standardized"
+      "lineage": "derived and standardized",
+      "parent_sha256": "9b5a2e055ce7a5405bdcd2583b6122d12663d3b07b32e6a59999f19d33adfcdb"
     },
     {
       "path": "src/core/options.js",
-      "sha256": "82246bf078e40775f9d3bd7765f2e7d6b45aee9b16cba0ce87d5783e1c9b5888",
+      "sha256": "e17d4e986280e6137fb772eb80f6373a5cfe7c363b4a42b3a6c3aef13e996807",
       "role": "sha256, URL/path validation and shared options",
-      "lineage": "derived and standardized"
+      "lineage": "derived and standardized",
+      "parent_sha256": "82246bf078e40775f9d3bd7765f2e7d6b45aee9b16cba0ce87d5783e1c9b5888"
     },
     {
       "path": "src/core/urls.js",
-      "sha256": "0d258fb81c45748a8ac782afa047418f23b112772eed1893805b5523ab11fc74",
+      "sha256": "d85f743afa0889110c2eb64b79cc09ea21741469dc9d69721f294c90cd600e3f",
       "role": "sha256, URL/path validation and shared options",
-      "lineage": "derived and standardized; publication snapshot and named-host endpoint review repair"
+      "lineage": "derived and standardized; publication snapshot and named-host endpoint review repair",
+      "parent_sha256": "9caa1ac5ec9f010cdb935b8c031cb79fb4e6d9cfbc28800964aa08cddc14a477"
     },
     {
       "path": "src/directory/index.js",
@@ -136,21 +153,24 @@
     },
     {
       "path": "src/directory/metadata.js",
-      "sha256": "0f7f42cb4f22397af29e531b997dfd354e3acf9e8afa8f71ba22794564b241da",
+      "sha256": "d1ef54edc99712fe904c8bea62d1b8d8ed429459b3c3ab94f1799d25e25a62d2",
       "role": "search, collection, stack, filter and safe metadata",
-      "lineage": "derived and standardized"
+      "lineage": "derived and standardized",
+      "parent_sha256": "45be1a581692985efc641835745db7afee5048630f54aa2474fb7a4c3467dee3"
     },
     {
       "path": "src/directory/model.js",
-      "sha256": "6a5a5a43f7aa291b11c0ebf55e89f5d9057887bfd5cddb529f89122526b8c9a2",
+      "sha256": "b37cef2ed23f4a321b97bef1d9ddae12f36c5a2ab1a1514959f5ad161e35dad7",
       "role": "search, collection, stack, filter and safe metadata",
-      "lineage": "exact source from Nsite-Directory-Editor-v1.1.1.zip / Nsite-Directory-Editor/app/model.js"
+      "lineage": "exact source from Nsite-Directory-Editor-v1.1.1.zip / Nsite-Directory-Editor/app/model.js",
+      "parent_sha256": "94af91efd5f6194a54132c2d727a2ebb11697a0532da400da4a36473e3621310"
     },
     {
       "path": "src/index.js",
-      "sha256": "549bdd51d73c8ed8494bcab0901636518742d829fd8df5b5437ff87b51c56911",
+      "sha256": "134e9cfba65454e579b2cb1baf8360a8c179a90c44c161bc8620117ffe5bc795",
       "role": "general",
-      "lineage": "derived and standardized; rc.6 Anchor consumer comparison"
+      "lineage": "derived and standardized; rc.6 Anchor consumer comparison",
+      "parent_sha256": "0657a3bd16c663362b2d83fdf8bf8d3fa034c94156b57fddfd27b10344fc4944"
     },
     {
       "path": "src/intelligence/ecosystemOptimizer.js",
@@ -162,7 +182,8 @@
       "path": "src/intelligence/engine.js",
       "role": "Advisory Anchor intelligence extraction",
       "lineage": "Anchor integration; see ANCHOR_INTELLIGENCE.md; rc.6 Anchor consumer comparison; exact named nsite identifier precedence review repair",
-      "sha256": "2f5f55b8957e1e043e763276885b7009cc4deae5480315130342d1addf965844"
+      "sha256": "3f911cf65456233914204ee56abfe521b435622a251de6fd29926a3dd59ec160",
+      "parent_sha256": "7e9776d224ab4f96b29baac3bfea236e8e83f39fa4f035e2fa780e5550920dde"
     },
     {
       "path": "src/intelligence/index.js",
@@ -174,18 +195,21 @@
       "path": "src/intelligence/nipRegistry.js",
       "role": "Advisory Anchor intelligence extraction",
       "lineage": "Anchor integration; see ANCHOR_INTELLIGENCE.md; rc.6 Anchor consumer comparison",
-      "sha256": "9f16a68d578885809347d4b6968f81db2f23c0bf77d1375531a8e202505405fe"
+      "sha256": "0b16b33020aac1f9585bd302bf986bea9f6c230287aa2711bedbb86046d95309",
+      "parent_sha256": "9f16a68d578885809347d4b6968f81db2f23c0bf77d1375531a8e202505405fe"
     },
     {
       "path": "src/intelligence/open-specs.js",
-      "sha256": "3b5e18e78fd3107e0a0aa6fece070b923e12665c0da4f059afcf903e61de16a8",
-      "source": "Open Specs source contract; independent Loopy adapter"
+      "sha256": "c159b2a252cc24b5d1a4a1bf15c3ea600fc70c0e57ad70adf09a97b0f27170ba",
+      "source": "Open Specs source contract; independent Loopy adapter",
+      "parent_sha256": "3b5e18e78fd3107e0a0aa6fece070b923e12665c0da4f059afcf903e61de16a8"
     },
     {
       "path": "src/intelligence/relayIntelligence.js",
       "role": "Advisory Anchor intelligence extraction",
       "lineage": "Anchor integration; see ANCHOR_INTELLIGENCE.md; rc.6 Anchor consumer comparison; rc.8 review repair (docs/REVIEW_REPAIRS.md)",
-      "sha256": "3c4705f7950f9721c5e419c18a78dfe5df18537c55a1745e214b4fb49155be67"
+      "sha256": "667ffb92b9625dc9bb703b8fb3ac34e65b1a5bd5a61d0d79cd718402badc86a3",
+      "parent_sha256": "3c4705f7950f9721c5e419c18a78dfe5df18537c55a1745e214b4fb49155be67"
     },
     {
       "path": "src/intelligence/types.js",
@@ -195,16 +219,17 @@
     },
     {
       "path": "src/moderation/campaigns.js",
-      "sha256": "cdfe731da398cd2e17b3e5dd00abbbf247dd9942d78231a913ebbde6452e5f40",
+      "sha256": "45a99c083e6b3c582bf5fbc9a61d7ed9418d6003e1b138ff6106707e2a9b2d61",
       "role": "protocol-adapter",
-      "lineage": "adapted from user-owned repo; see repo-capabilities.json"
+      "lineage": "adapted from user-owned repo; see repo-capabilities.json",
+      "parent_sha256": "cdfe731da398cd2e17b3e5dd00abbbf247dd9942d78231a913ebbde6452e5f40"
     },
     {
       "path": "src/moderation/identity.js",
-      "sha256": "25f831b22530935710f58db466cd823d61fb427ebd5e4b2f0bcaa374f5e518fc",
+      "sha256": "18fdc91f9cbbc7ef4f94f3b45591e3a0b2d1d79568dbc0b1a27609f19ee3e9cb",
       "role": "protocol-adapter",
       "lineage": "adapted from user-owned repo; see repo-capabilities.json; rc.10 public review repair (docs/PUBLIC_REVIEW_REPAIRS.md)",
-      "parent_sha256": "34212df4c024e8857deaeec69342fd2da30b42d02f0daff8679856fab065006b"
+      "parent_sha256": "d39767e3f90b9d87f15a305c223bc1358225e16322cb36d5e230d0514ac5674d"
     },
     {
       "path": "src/moderation/index.js",
@@ -214,121 +239,136 @@
     },
     {
       "path": "src/moderation/lists.js",
-      "sha256": "0b76f55dd397f28ce21534dcd6228bb8ce577400c90c22850dc96370cf58b31d",
+      "sha256": "f87b2af48757a42620cbb280902d5bd627341336a14b0ed9d549e5b28fe95202",
       "role": "protocol-adapter",
-      "lineage": "adapted from user-owned repo; see repo-capabilities.json"
+      "lineage": "adapted from user-owned repo; see repo-capabilities.json",
+      "parent_sha256": "121455b514e808a146b1628264d2e781d98948eea57b9ac22be02fb1b070760b"
     },
     {
       "path": "src/moji/index.js",
-      "sha256": "fb0320b48540629849299785e76530a9b5f827f7c47444285b89dc695f7ae2f0",
+      "sha256": "bbc28c150603439b1200c004e402fbc8c5ea752102f5a8288d0d0bfeb24b0fc6",
       "role": "protocol-adapter",
-      "lineage": "adapted from user-owned repo; see repo-capabilities.json"
+      "lineage": "adapted from user-owned repo; see repo-capabilities.json",
+      "parent_sha256": "c789c7872f798b0774e3a0c688a1b958ec04d42193524f24c840c0a8de6e9196"
     },
     {
       "path": "src/nostr/delivery.js",
-      "sha256": "42ed77791a481dcfe6d274320bbaae6c60159ec87f7215fd3a09068e1b44264c",
+      "sha256": "7b9c47f2540abad1ac705b755f41609b73b5dc725edd34b51f29b0c6b9fcca50",
       "role": "Event-specific offline relay delivery plan and exact-receipt summary",
-      "lineage": "Independent implementation of Pretend Internet tools/relay-router/router.mjs planning contracts; see docs/RELAY_DELIVERY_RECONCILIATION.md.; Pretend Internet relay router reconciliation batch 4 (docs/RELAY_AUTH_RECONCILIATION.md)"
+      "lineage": "Independent implementation of Pretend Internet tools/relay-router/router.mjs planning contracts; see docs/RELAY_DELIVERY_RECONCILIATION.md.; Pretend Internet relay router reconciliation batch 4 (docs/RELAY_AUTH_RECONCILIATION.md)",
+      "parent_sha256": "42ed77791a481dcfe6d274320bbaae6c60159ec87f7215fd3a09068e1b44264c"
     },
     {
       "path": "src/nostr/discovery.js",
-      "sha256": "5ba325691db48670425779b56662cffbec1907718b7fda32fa846a9c8fdc842c",
+      "sha256": "2012c4cf623da38e9ef81e6ab16f3045a92ccc64f06530107980c815a2b77e6f",
       "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
       "lineage": "derived and standardized; independent protocol hardening, NIP-01 and cross-donor regression cases 2026-11-25; rc.4 verified retrieval comparison",
-      "parent_sha256": "5d3015be7f26c7e970a04f99fdd7540fccbd655b059d533d0a8b705bec314d71"
+      "parent_sha256": "5ba325691db48670425779b56662cffbec1907718b7fda32fa846a9c8fdc842c"
     },
     {
       "path": "src/nostr/edit.js",
-      "sha256": "ce5157c4f45ed56ba13b0bf74fe73cb0a15e508b7b98cb2739c2b8830627f281",
+      "sha256": "bc176887ccea140d9637cf51993d34caeb9c1284d04d94857ff76baa45ac278f",
       "role": "Explicit signed-baseline review and owned tag editing",
-      "lineage": "Protocol-based implementation compared with recovered donor sources; see CROSS_DONOR_PUBLICATION.md"
+      "lineage": "Protocol-based implementation compared with recovered donor sources; see CROSS_DONOR_PUBLICATION.md",
+      "parent_sha256": "ce5157c4f45ed56ba13b0bf74fe73cb0a15e508b7b98cb2739c2b8830627f281"
     },
     {
       "path": "src/nostr/events.js",
-      "sha256": "463a4bf34e107f40027aae4ffa72c36be2ae601dc9bcf19ee44f95ce716a9288",
+      "sha256": "97521e24815644ae79f1ba5ffe55abdb8e9592f9a5e81af8616ee8f436bea2f6",
       "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
       "lineage": "derived and standardized; independent protocol hardening, NIP-01 and cross-donor regression cases 2026-11-25",
-      "parent_sha256": "349fb2243cb07bdb5b7475468211d0d85fd1703d98b6d7e4f74b7c0eaaf620a6"
+      "parent_sha256": "463a4bf34e107f40027aae4ffa72c36be2ae601dc9bcf19ee44f95ce716a9288"
     },
     {
       "path": "src/nostr/feed.js",
-      "sha256": "e4dd55c38ad070fa75c138ff7ad389c2cca5e1522f6c20e2fb5e19d51fe22c3e",
+      "sha256": "431e98dae4ee1d98853f8d69775b235dcf2317eabef2b5eb9fdc94fe04efa92e",
       "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
-      "lineage": "derived and standardized; rc.3 safe publication comparison; rc.6 Anchor consumer comparison"
+      "lineage": "derived and standardized; rc.3 safe publication comparison; rc.6 Anchor consumer comparison",
+      "parent_sha256": "e4dd55c38ad070fa75c138ff7ad389c2cca5e1522f6c20e2fb5e19d51fe22c3e"
     },
     {
       "path": "src/nostr/filter.js",
       "role": "shared NIP-01 local predicate extracted unchanged from rc.1 relay transport",
       "lineage": "new implementation from protocol requirements and cross-donor behavior comparison; no donor text copied",
-      "sha256": "8fc66b7f9aee7515d9a062885e38ba55759ebc80d4cd4ea4b85f57bf5b78b558"
+      "sha256": "64211bff69d70da48ed6e336d309f164658ace4bf1c8fe9d1dc6b5897ca04087",
+      "parent_sha256": "8fc66b7f9aee7515d9a062885e38ba55759ebc80d4cd4ea4b85f57bf5b78b558"
     },
     {
       "path": "src/nostr/history.js",
       "role": "verified event identities, revision materialization and relay provenance",
       "lineage": "new implementation from protocol requirements and cross-donor behavior comparison; no donor text copied",
-      "sha256": "a38acae45b5c393ab469f8be35bf4d3b0b324949b0da59258210b23fe0591a53"
+      "sha256": "34b4f2f1a38c9e1a5067c23311a58a38a113c61f9481075c160340c92b8af948",
+      "parent_sha256": "a38acae45b5c393ab469f8be35bf4d3b0b324949b0da59258210b23fe0591a53"
     },
     {
       "path": "src/nostr/index.js",
-      "sha256": "f1b3931839b69c29d9d1662093cfdc0b87909643506130fbc4af6c6830b13f1b",
+      "sha256": "9af4c2f12edb6f5a67917586962707325fd7d9a6545008ddc6f5f38fc5a474ee",
       "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
-      "lineage": "derived and standardized; rc.3 safe publication comparison; event-specific delivery reconciliation"
+      "lineage": "derived and standardized; rc.3 safe publication comparison; event-specific delivery reconciliation",
+      "parent_sha256": "feb13a6a3e48e1cfc50f9075b8f3c8605819d7afad3aad2b03d797694f671606"
     },
     {
       "path": "src/nostr/nip55.js",
-      "sha256": "0afc61bd7c046880503561934a5c6b956aecd99e677c51841f760935ab7a41f2",
+      "sha256": "1bcded84295d4ef12f18a01916abdcbd9288d0a95759fbe6c7406fdefe5fc20c",
       "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
-      "lineage": "derived and standardized"
+      "lineage": "derived and standardized",
+      "parent_sha256": "0afc61bd7c046880503561934a5c6b956aecd99e677c51841f760935ab7a41f2"
     },
     {
       "path": "src/nostr/nip65.js",
-      "sha256": "1b035cfe6c783909515c85e4dbf8fd522f5adda78abb2ab464edf80b99e2286c",
+      "sha256": "7fc504b56712b210563d8969a1095c9bdfa2d4120bf840db9efa342acd8289b9",
       "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
-      "lineage": "derived and standardized"
+      "lineage": "derived and standardized",
+      "parent_sha256": "f9f1d6a3e47ddcd80eb471c65a1a0f9f041db439421c2677dfef33c46a9f6cc4"
     },
     {
       "path": "src/nostr/other-nips.js",
-      "sha256": "ddac782076ce5d22514c5e4579b970182318bc6347e5c1641cce562e7e608f96",
+      "sha256": "ea36e24ba9f108a1a3fb3015e6afefffba508aba2aa1b8a2d587ad3669e176e4",
       "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
-      "lineage": "derived and standardized; NIP-98 standard Base64 review repair"
+      "lineage": "derived and standardized; NIP-98 standard Base64 review repair",
+      "parent_sha256": "ef7749f55ece948066d54617d37beca313102ac57c877fc13f1560ed20db0b72"
     },
     {
       "path": "src/nostr/profiles.js",
-      "sha256": "b48633dd5993028127e99ea450d24bdbd17baa7ed3ae74c9d454ba2b3ea95cd6",
+      "sha256": "0a7012053e1927327c58940ca951b6c9b130132f2cca98a3d820799d88559873",
       "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
       "lineage": "derived and standardized; rc.10 public review repair (docs/PUBLIC_REVIEW_REPAIRS.md)",
-      "parent_sha256": "ca66a4b0da801c7f644349abe8b41a71db67b8f8504f020c42d24b51c071936a"
+      "parent_sha256": "b48633dd5993028127e99ea450d24bdbd17baa7ed3ae74c9d454ba2b3ea95cd6"
     },
     {
       "path": "src/nostr/receipts.js",
       "role": "Shared publication receipt validation",
       "lineage": "Anchor integration; see ANCHOR_INTELLIGENCE.md; rc.6 Anchor consumer comparison",
-      "sha256": "13821acc2e5e3f2af4370d818ee06e7cf4f0f7f0da8b2325348509168073a684"
+      "sha256": "4b87370d14e6e659d3f57c7ab8a59e75eb6f17530b29baa92c45f856c8f24726",
+      "parent_sha256": "13821acc2e5e3f2af4370d818ee06e7cf4f0f7f0da8b2325348509168073a684"
     },
     {
       "path": "src/nostr/relay-transport.js",
-      "sha256": "932cd796ecd5d2ca515ded6166eb0ec3dc0b77cf28e07efc9104debbaef1ca7d",
+      "sha256": "43b6f97d7d09714f43a5f9efaf5913ee3808d791b1f7a5db331a391f614d5044",
       "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
       "lineage": "derived and standardized; independent protocol hardening, NIP-01 and cross-donor regression cases 2026-11-25; rc.6 Anchor consumer comparison; Pretend Internet relay router reconciliation batch 4 (docs/RELAY_AUTH_RECONCILIATION.md)",
-      "parent_sha256": "a9ee6daf01a85df2f2677f72a2fb7151669a1c9fdd5ea378cac312e35792b6dd"
+      "parent_sha256": "932cd796ecd5d2ca515ded6166eb0ec3dc0b77cf28e07efc9104debbaef1ca7d"
     },
     {
       "path": "src/nostr/signers.js",
-      "sha256": "9f7d5feca119f809cf02ab77a4fffc8d05716b56a70de3d8e5a7710af0a5f3f0",
+      "sha256": "d1b1fecc38247a794f7c237a30a7af51e0f595178f84ddb764deac1a00f7d134",
       "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
-      "lineage": "derived and standardized; signer lifecycle review repair"
+      "lineage": "derived and standardized; signer lifecycle review repair",
+      "parent_sha256": "b9a7c39b072806028b7dadeff4b8ca3bb32b651243c89119cd1b2982c148f7c3"
     },
     {
       "path": "src/nostr/sync.js",
       "role": "bounded resumable per-relay history and explicit ambiguous-boundary state",
       "lineage": "new implementation from protocol requirements and cross-donor behavior comparison; no donor text copied",
-      "sha256": "11f84b04b5658f98d0776694aaad9d4b399ad9525c5a789d4a605256038b33d0"
+      "sha256": "d42ce98d08cfded9d873b0621d63013876f3f1f373924a287a79b25ab4be059e",
+      "parent_sha256": "11f84b04b5658f98d0776694aaad9d4b399ad9525c5a789d4a605256038b33d0"
     },
     {
       "path": "src/nsite/files.js",
-      "sha256": "dd66f1c3f4d1099462cce9c88298578314998331e4d7e916ac05512c6e5590dd",
+      "sha256": "e64350aa1c4408aceafd8dc351d299465b68532f5ab9c1a8f04807de99a9d4a4",
       "role": "NIP5A manifest and verified publication pipeline",
-      "lineage": "derived and standardized; publication reconciliation batch 3"
+      "lineage": "derived and standardized; publication reconciliation batch 3",
+      "parent_sha256": "c478c32d71ab17790df4d328805c4ecb569126a0c4b07fff87675df75462316d"
     },
     {
       "path": "src/nsite/index.js",
@@ -338,45 +378,52 @@
     },
     {
       "path": "src/nsite/manifest.js",
-      "sha256": "91e24ef9222f6fc6aa71a5c0aca4082f43a70affb4f39b85121ef5c77578bc25",
+      "sha256": "19162deeb9a1302a813572d8b3d338b202c96794bbf9fe8b4758ec62f355a9fd",
       "role": "NIP5A manifest and verified publication pipeline",
-      "lineage": "derived and standardized; rc.3 safe publication comparison; rc.4 verified retrieval comparison"
+      "lineage": "derived and standardized; rc.3 safe publication comparison; rc.4 verified retrieval comparison",
+      "parent_sha256": "95c29a5d553cfdb7a54491be1786300b8f52fd845b08beac29f6aba4de6316f1"
     },
     {
       "path": "src/nsite/plan.js",
-      "sha256": "e4da5b7c9453cfff2bbb043420f6fbab844a9b265adb00a6f3454b8cba5d4c84",
+      "sha256": "ffdcbbc84e3c058321711dc1d4961df3c9d31f9c48ed51621cfb76070d284946",
       "role": "Shared immutable-byte publication preparation and digest-bound preview",
-      "lineage": "Protocol-based implementation compared with recovered donor sources; see CROSS_DONOR_PUBLICATION.md; publication reconciliation batch 3"
+      "lineage": "Protocol-based implementation compared with recovered donor sources; see CROSS_DONOR_PUBLICATION.md; publication reconciliation batch 3",
+      "parent_sha256": "536951023ea0184ae1747ad541044c0a8d38bb74940b5d62f604cf3b046617af"
     },
     {
       "path": "src/nsite/publisher.js",
-      "sha256": "f4b8da4d4e7099a7a7d4fa9f4911932912e6d6f149bfb38fdfd7a10b915ecc6f",
+      "sha256": "fdf993140776f6ff6f4f5b8761d0c0b1bd3330d28ae1794931e71a2a0070f02a",
       "role": "NIP5A manifest and verified publication pipeline",
-      "lineage": "derived and standardized; rc.3 safe publication comparison; rc.6 Anchor consumer comparison; publication reconciliation batch 3"
+      "lineage": "derived and standardized; rc.3 safe publication comparison; rc.6 Anchor consumer comparison; publication reconciliation batch 3",
+      "parent_sha256": "cdf027b3330f8cc6138538b923d10b57c7bd7b36044c509030ee1ca8ffd14044"
     },
     {
       "path": "src/nsite/retrieval.js",
       "role": "Verified manifest resolution and content-addressed retrieval",
       "lineage": "Independent implementation of recovered nsite-gateway, NostrApps and nostrsite patterns; see CROSS_DONOR_RETRIEVAL.md",
-      "sha256": "188f6ca8bb8e0cabe7e61c772218d9e3fd2dfe1efcc7fb8080fc5cb522c5c2eb"
+      "sha256": "44f02a1c679c46510cd20b5b207176db105dc7b0f4dd34b737e86432c6957f45",
+      "parent_sha256": "d621176a48a5eea8b34a61d402ed6a5e6c3b2ca0e9772e536fb8dba219ca0e75"
     },
     {
       "path": "src/storage/index.js",
-      "sha256": "579d4fd16b9b54956616ab47f5673083007ff5d2458998d307476b30601ccd27",
+      "sha256": "620122550bc8fa84f19b2921187f9e9275fae09f379c30acbf74255f2f7650f3",
       "role": "IndexedDB/memory interface",
-      "lineage": "derived and standardized"
+      "lineage": "derived and standardized",
+      "parent_sha256": "e0b135ba550b5b51f7f8dd0bb763c10b2ed54915fae141ac7d246b85fabb83ee"
     },
     {
       "path": "src/storage/indexeddb.js",
-      "sha256": "5e081cd40fe36e2a5c0fe4ee9e7a757a20e47e8fd331963f4b4b0e42f559d0cf",
+      "sha256": "d551899676f55e4efe03eae97a93a9563da66a9b619940aabeb3c482d9ec1617",
       "role": "IndexedDB/memory interface",
-      "lineage": "derived and standardized"
+      "lineage": "derived and standardized",
+      "parent_sha256": "151d6a140e36d2f9d52b03a0e5ac4f4ce85837dfffbb29f624ef4bed83ce3c7b"
     },
     {
       "path": "src/storage/memory.js",
-      "sha256": "187b1fa74bb5a96de6acf48698e743eeb09bbd09771cc2d90d43251596adf3df",
+      "sha256": "e0a9e28b2df28b35301db4fd7d1812751e311e59d2328137eff8a9be3ad61d2a",
       "role": "IndexedDB/memory interface",
-      "lineage": "derived and standardized"
+      "lineage": "derived and standardized",
+      "parent_sha256": "187b1fa74bb5a96de6acf48698e743eeb09bbd09771cc2d90d43251596adf3df"
     },
     {
       "path": "vendor/nostr-tools.LICENSE",
@@ -394,7 +441,101 @@
       "path": "src/nsite/resumable.js",
       "role": "Digest-bound replica upload and resumable site verification orchestration",
       "lineage": "Independent adaptation of Safehouse publisher contracts using existing Loopy verified transport; docs/PUBLICATION_RECONCILIATION.md",
-      "sha256": "4cafe9fe9980a597b5e2705ff75c27cb9c1879419a11ccbca80214e7c64cb45f"
+      "sha256": "04ba68c21d43a1ff54509eb67ca4b478932708a0509a1766ef1339b71cb6e0a2",
+      "parent_sha256": "f94989a3058151b6468723a169d4ca249d19b722e675c28021a43122dcba1241"
+    },
+    {
+      "path": "src/core/guards.js",
+      "sha256": "6659a23ab4d454030ee230ad199a91001803492c35a2e4fd86276bc0532ceffa",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation"
+    },
+    {
+      "path": "src/core/http.js",
+      "sha256": "1231f121ca66632a29aaa60b9061b43052828c0b3a303b0934a0d94068e00b15",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation",
+      "parent_sha256": "25cb9ba458a6b75ed350bac0f3833fb72f80e106ec6843274cbd3aecf9625aa8"
+    },
+    {
+      "path": "src/storage/scoped.js",
+      "sha256": "877bf8c914dc78bbc632f366c1c9cb8c94dcd60cd07f8279823a12c68557beaa",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation",
+      "parent_sha256": "5091693ab50b77d062ebdb6776b860410f6ba8dc747a65163676687f44fa5c7c"
+    },
+    {
+      "path": "src/blossom/repair.js",
+      "sha256": "ae78b5564717aed22bd166f9d87f7b79224f8a4200c0385b7bdb8fc9bac9c5b5",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation",
+      "parent_sha256": "429fbccdc8c6f56b47d525c80eedef9d0c91ffa0a436e478ff1bfc26e51fe85d"
+    },
+    {
+      "path": "src/core/concurrency.js",
+      "sha256": "2996983423a6c601f01fed6ef134eb587752a7b5f3015f6985aaa7c1bfbec6e4",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation"
+    },
+    {
+      "path": "src/nostr/nip05.js",
+      "sha256": "223ebdc83294670868120475655e152bc72a36389509a68e280bfe94f2440847",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation",
+      "parent_sha256": "ed07873e27eaab84fff115b481021305fc5db3e7ae489d118d418056b31d882b"
+    },
+    {
+      "path": "src/nostr/pool.js",
+      "sha256": "228c98bb686b9394dc97fa3f124f61261643ea867fe16c58905a121d0e8c7189",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation"
+    },
+    {
+      "path": "src/nostr/store.js",
+      "sha256": "a9409f78d965518d59719bcbf7498ed6df1686387504dad0f10d8958bf313458",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation",
+      "parent_sha256": "38b724ba0cca0a65a002c0034e412993ac3dfdffddea6d801ffcbe973412ec80"
+    },
+    {
+      "path": "src/storage/fs.js",
+      "sha256": "d689f0f48f312739a32706d75171247ce82fa9018f68b7dde7f4ebcd67b7bb69",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation",
+      "parent_sha256": "667a38239aa357db7867f464621e9f1d5a36948184be426c9b200041f8d789c1"
+    },
+    {
+      "path": "src/core/schemas.js",
+      "sha256": "934dd8f234e9587e20e40922c9c169120287905156f5063cc3a8fbec63c9a066",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation"
+    },
+    {
+      "path": "src/core/session.js",
+      "sha256": "ce9da5581b459026877cf492c8aba5935507ed8d8619107400b7027d4d20e85f",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation",
+      "parent_sha256": "823574da08d3ded3969e78beb15418789cd5f82471307a7e3ff6a9092395b6de"
+    },
+    {
+      "path": "src/nostr/giftwrap.js",
+      "sha256": "2f89761e9c9983a68b49123dbe9478234748cfae11d4337b4b31a23b55798d0e",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation"
+    },
+    {
+      "path": "src/nostr/health-cache.js",
+      "sha256": "382c64897cad6c7b0cc58050fd6e583a8193eb0b45dd16c4efa86308702d5dc6",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation",
+      "parent_sha256": "b22f1bf65a8bac36d490c351a27e67e180fa0c595b17dc850ac3f8534996aab7"
+    },
+    {
+      "path": "src/testing/index.js",
+      "sha256": "55df9c031c747f5190aaeb094a41762c4bc59e94d251d315e615a3556aacb827",
+      "role": "shared stateless core brick",
+      "lineage": "derived and standardized; modular core contract consolidation",
+      "parent_sha256": "09ab73a100a6ed1622f88903df8aada5680a0e58df48c6f054f1c79f2362e2ab"
     }
   ],
   "notes": "Public SDK migration; private original archive inventory and full internal audit remain with preserved candidate. Module lineage and exact pins retained.",

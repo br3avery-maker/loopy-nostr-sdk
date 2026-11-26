@@ -4,6 +4,8 @@
  * and category-specific discovery relays.
  * Zero dependency on React, DOM, or any Nostr SDK.
  */
+import { classifyEventStorage } from '../core/guards.js';
+export { classifyEventStorage };
 export const NIP_KIND_REGISTRY = {
     0: {
         kind: 0,
@@ -276,18 +278,6 @@ export const ECOSYSTEM_CLIENTS = [
         notes: 'Outbox-aware clients perform best with 3–5 fast healthy write relays (Kind 10002), 2–4 mirrored Blossom servers (Kind 10063), and complete Kind 0 metadata.',
     },
 ];
-export function classifyEventStorage(kind) {
-    if (kind === 0 || kind === 3 || (kind >= 10000 && kind < 20000)) {
-        return 'replaceable';
-    }
-    if (kind >= 20000 && kind < 30000) {
-        return 'ephemeral';
-    }
-    if (kind >= 30000 && kind < 40000) {
-        return 'addressable';
-    }
-    return 'regular';
-}
 export function getKindSpec(kind) {
     return (NIP_KIND_REGISTRY[kind] ?? {
         kind,

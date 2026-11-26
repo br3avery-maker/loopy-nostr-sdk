@@ -4,7 +4,7 @@ import {queryRelay} from '../nostr/relay-transport.js';
 import {discoverRelays} from '../nostr/discovery.js';
 import {endpoint,endpoints} from '../core/urls.js';
 import {getKindSpec,NIP_KIND_REGISTRY} from './nipRegistry.js';
-import {classifyEventStorage} from '../anchor/kinds.js';
+import {classifyEventStorage} from '../core/guards.js';
 
 export const OPEN_SPEC_KIND=30817;
 // Read-only defaults, including the upstream importer relay. Never used for publishing.

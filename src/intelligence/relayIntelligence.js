@@ -8,6 +8,7 @@
  * evaluates real NIP-11 / WebSocket / audience-overlap evidence, and produces a concrete Kind 10002 plan.
  */
 import { ECOSYSTEM_DISCOVERY_RELAYS } from './nipRegistry.js';
+import { endpoint } from '../core/urls.js';
 export const CANDIDATE_DISCOVERY_RELAYS = [
     { url: 'wss://relay.damus.io', roleHint: 'general-outbox', label: 'Damus Public Outbox' },
     { url: 'wss://nos.lol', roleHint: 'general-outbox', label: 'nos.lol Public Outbox' },
@@ -57,7 +58,23 @@ const DM_CHAT_RE = /(whitenoise|inbox|dm\.|chat\.|mls|nip17|nip-17|gift.?wrap|pr
 const BRIDGE_RE = /(mostr\.pub|ditto\.pub|momostr|fediverse|activitypub|brid\.gy|bluesky|mastodon)/i;
 const DIRECTORY_TEXT_RE = /(profile\s+directory|kind\s*0|metadata\s+only|indexer|purple\s*pages)/i;
 function normalizeRelay(url) {
-    return url.trim().replace(/\/+$/, '').toLowerCase();
+    if (typeof url !== 'string') return '';
+    try {
+        return endpoint(url, 'relay');
+    }
+    catch {
+        return url.trim().replace(/\/+$/, '').toLowerCase();
+    }
+}
+function isSafeRelayUrl(url) {
+    if (typeof url !== 'string') return false;
+    try {
+        endpoint(url, 'relay');
+        return true;
+    }
+    catch {
+        return false;
+    }
 }
 function getHostname(url) {
     try {
@@ -310,6 +327,7 @@ export function buildRelayOptimizationPlan(params) {
     }
     // Also include top relays discovered from follow graph that aren't in currentRelays yet
     for (const [url, count] of Object.entries(followRelayCounts)) {
+        if (!isSafeRelayUrl(url)) continue;
         const norm = normalizeRelay(url);
         if (count >= 2 && !currentMap.has(norm) && !candidateMap.has(norm)) {
             candidateMap.set(norm, {

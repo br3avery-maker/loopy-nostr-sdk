@@ -54,5 +54,16 @@ class AuditTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as t:
             p=Path(t)/'nsite.html';p.write_text('<script>const x="blossom and readback"</script>');r=mod.inspect(p)
             self.assertIn('blossom',r['topics']);self.assertEqual(r['classification'],'html')
+    def test_reject_cumulative_uncompressed_total(self):
+        orig=mod.MAX_TOTAL_BYTES
+        try:
+            mod.MAX_TOTAL_BYTES=100
+            with tempfile.TemporaryDirectory() as t:
+                p=Path(t)/'big.zip'
+                self.make_zip(p,[('a.js','x'*60),('b.js','y'*60)])
+                with self.assertRaisesRegex(ValueError,'uncompressed total'):list(mod.archive_members(p))
+        finally:
+            mod.MAX_TOTAL_BYTES=orig
 
 if __name__=='__main__':unittest.main()
+
