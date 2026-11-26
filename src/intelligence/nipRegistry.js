@@ -1,0 +1,357 @@
+/**
+ * Portable Nostr Intelligence Engine — Structured NIP & Ecosystem Registry
+ * Encodes canonical kind semantics, storage classes, client compatibility expectations,
+ * and category-specific discovery relays.
+ * Zero dependency on React, DOM, or any Nostr SDK.
+ */
+export const NIP_KIND_REGISTRY = {
+    0: {
+        kind: 0,
+        label: 'Account Profile Metadata',
+        nip: 'NIP-01',
+        storageClass: 'replaceable',
+        requiresDTag: false,
+        summary: 'Profile identity metadata (name, about, picture, NIP-05, lud16).',
+    },
+    1: {
+        kind: 1,
+        label: 'Short Text Note',
+        nip: 'NIP-01',
+        storageClass: 'regular',
+        requiresDTag: false,
+        summary: 'Standard Nostr note or post.',
+    },
+    3: {
+        kind: 3,
+        label: 'Follow List',
+        nip: 'NIP-02',
+        storageClass: 'replaceable',
+        requiresDTag: false,
+        summary: 'Followed public keys with optional relay hints and petnames.',
+    },
+    5: {
+        kind: 5,
+        label: 'Event Deletion Request',
+        nip: 'NIP-09',
+        storageClass: 'regular',
+        requiresDTag: false,
+        summary: 'Signed request asking relays to stop serving referenced events.',
+    },
+    6: {
+        kind: 6,
+        label: 'Repost',
+        nip: 'NIP-18',
+        storageClass: 'regular',
+        requiresDTag: false,
+        summary: 'Amplifies an existing signed note.',
+    },
+    7: {
+        kind: 7,
+        label: 'Reaction',
+        nip: 'NIP-25',
+        storageClass: 'regular',
+        requiresDTag: false,
+        summary: 'Observed reaction to an event.',
+    },
+    20: {
+        kind: 20,
+        label: 'Picture Publication',
+        nip: 'NIP-68',
+        storageClass: 'regular',
+        requiresDTag: false,
+        summary: 'Image-first post with imeta tags, dimensions, and alt text for Olas, Amethyst, and Primal.',
+    },
+    1063: {
+        kind: 1063,
+        label: 'File Metadata',
+        nip: 'NIP-94',
+        storageClass: 'regular',
+        requiresDTag: false,
+        summary: 'Structured media/file descriptor with MIME type and SHA-256 hash.',
+    },
+    10002: {
+        kind: 10002,
+        label: 'Relay List Metadata',
+        nip: 'NIP-65',
+        storageClass: 'replaceable',
+        requiresDTag: false,
+        summary: 'Advertised read and write relay endpoints for outbox routing.',
+    },
+    10063: {
+        kind: 10063,
+        label: 'Blossom Server List',
+        nip: 'BUD-03',
+        storageClass: 'replaceable',
+        requiresDTag: false,
+        summary: 'User media storage servers for content-addressed SHA-256 blobs.',
+    },
+    15128: {
+        kind: 15128,
+        label: 'Root Nsite Manifest',
+        nip: 'NIP-5A',
+        storageClass: 'replaceable',
+        requiresDTag: false,
+        summary: 'Modern replaceable manifest for the account root static site.',
+    },
+    24242: {
+        kind: 24242,
+        label: 'Blossom Authorization',
+        nip: 'BUD-11',
+        storageClass: 'ephemeral',
+        requiresDTag: false,
+        summary: 'Scoped ephemeral authorization event for Blossom uploads/deletions.',
+    },
+    27235: {
+        kind: 27235,
+        label: 'HTTP Auth',
+        nip: 'NIP-98',
+        storageClass: 'ephemeral',
+        requiresDTag: false,
+        summary: 'Ephemeral HTTP authentication token.',
+    },
+    30023: {
+        kind: 30023,
+        label: 'Long-form Article',
+        nip: 'NIP-23',
+        storageClass: 'addressable',
+        requiresDTag: true,
+        summary: 'Addressable Markdown publication for Yakihonne, Habla, and Highlighter.',
+    },
+    30315: {
+        kind: 30315,
+        label: 'User Status / Now Playing',
+        nip: 'NIP-38',
+        storageClass: 'addressable',
+        requiresDTag: true,
+        summary: 'Live status event (e.g. d="music") linking listeners to an active track.',
+    },
+    31337: {
+        kind: 31337,
+        label: 'Audio Track Release (Legacy Compat)',
+        nip: 'NIP-Audio / 31337',
+        storageClass: 'addressable',
+        requiresDTag: true,
+        summary: 'Early Zapstr/Coracle addressable audio track format with Blossom URL, artwork, and license.',
+    },
+    31990: {
+        kind: 31990,
+        label: 'Application Handler Info',
+        nip: 'NIP-89',
+        storageClass: 'addressable',
+        requiresDTag: true,
+        summary: 'Advertises clients capable of rendering specific Nostr event kinds.',
+    },
+    32123: {
+        kind: 32123,
+        label: 'Audio / Podcast Clip',
+        nip: 'NIP-Audio / 32123',
+        storageClass: 'addressable',
+        requiresDTag: true,
+        summary: 'Addressable audio episode or podcast release.',
+    },
+    34128: {
+        kind: 34128,
+        label: 'Legacy Nsite Path Event',
+        nip: 'NSITE-Legacy',
+        storageClass: 'addressable',
+        requiresDTag: true,
+        summary: 'Legacy per-path root nsite format undergoing migration to Kind 15128.',
+    },
+    35128: {
+        kind: 35128,
+        label: 'Named Nsite Manifest',
+        nip: 'NIP-5A',
+        storageClass: 'addressable',
+        requiresDTag: true,
+        summary: 'Addressable manifest for a named static site scoped by a short d-tag slug.',
+    },
+    36787: {
+        kind: 36787,
+        label: 'Music Track Release',
+        nip: 'NIP-Music / 36787',
+        storageClass: 'addressable',
+        requiresDTag: true,
+        summary: 'Modern Nostr music track standard indexed by Amethyst, Gruuv, Wisp, and V4V music apps.',
+    },
+};
+export const ECOSYSTEM_DISCOVERY_RELAYS = {
+    generalOutbox: [
+        'wss://relay.damus.io',
+        'wss://nos.lol',
+        'wss://relay.primal.net',
+    ],
+    music: [
+        'wss://relay.damus.io',
+        'wss://nos.lol',
+        'wss://relay.primal.net',
+        'wss://relay.wavlake.com',
+    ],
+    articles: [
+        'wss://nostr-01.yakihonne.com',
+        'wss://relay.damus.io',
+        'wss://nos.lol',
+        'wss://relay.primal.net',
+    ],
+    photos: [
+        'wss://relay.damus.io',
+        'wss://nos.lol',
+        'wss://relay.primal.net',
+    ],
+    nsites: [
+        'wss://relay.damus.io',
+        'wss://nos.lol',
+        'wss://relay.primal.net',
+        'wss://purplepag.es',
+    ],
+};
+export const ECOSYSTEM_CLIENTS = [
+    {
+        id: 'amethyst-gruuv-music',
+        name: 'Amethyst · Gruuv · Wisp',
+        category: 'music',
+        supportedKinds: [36787],
+        requiredTags: ['d', 'title', 'artist', 'url'],
+        recommendedTags: ['imeta', 'image', 'duration', 'format', 't', 'license', 'ai_generated', 'zap'],
+        discoveryRelays: [...ECOSYSTEM_DISCOVERY_RELAYS.music],
+        notes: 'Native Nostr music streaming & in-feed track players expect Kind 36787 with direct Blossom audio url, imeta, cover image, duration, and genre #t tags.',
+    },
+    {
+        id: 'zapstr-legacy-music',
+        name: 'Zapstr · Legacy Audio',
+        category: 'music',
+        supportedKinds: [31337, 36787],
+        requiredTags: ['d', 'title', 'artist', 'imeta'],
+        recommendedTags: ['url', 'image', 'duration', 'license', 't', 'zap'],
+        discoveryRelays: [...ECOSYSTEM_DISCOVERY_RELAYS.music],
+        notes: 'Supports Kind 31337 audio events and emerging Kind 36787 tracks with cover art and license attribution.',
+    },
+    {
+        id: 'wavlake-fountain-v4v',
+        name: 'Wavlake · Fountain (V4V)',
+        category: 'music',
+        supportedKinds: [36787, 31337],
+        requiredTags: ['d', 'title', 'artist', 'url', 'zap'],
+        recommendedTags: ['image', 'duration', 't', 'license'],
+        discoveryRelays: ['wss://relay.wavlake.com', 'wss://relay.damus.io', 'wss://nos.lol'],
+        notes: 'Value-for-Value music discovery requires a Lightning Address (Kind 0 lud16), explicit zap split tags, cover art, and broadcast to music-indexed relays.',
+    },
+    {
+        id: 'yakihonne-habla-articles',
+        name: 'Yakihonne · Habla · Highlighter',
+        category: 'article',
+        supportedKinds: [30023],
+        requiredTags: ['d', 'title'],
+        recommendedTags: ['summary', 'image', 'published_at', 't'],
+        discoveryRelays: [...ECOSYSTEM_DISCOVERY_RELAYS.articles],
+        notes: 'Long-form readers render preview cards using title, summary, header image, published_at, and topic #t tags.',
+    },
+    {
+        id: 'olas-primal-photos',
+        name: 'Olas · Primal · Amethyst Pictures',
+        category: 'photo',
+        supportedKinds: [20],
+        requiredTags: ['imeta'],
+        recommendedTags: ['title', 'alt', 't'],
+        discoveryRelays: [...ECOSYSTEM_DISCOVERY_RELAYS.photos],
+        notes: 'Picture-first clients specifically index NIP-68 Kind 20 with imeta (url, m, x, dim, alt) and skip bare-URL Kind 1 posts.',
+    },
+    {
+        id: 'nsite-gateways',
+        name: 'Nsite Gateways (nsite.lol)',
+        category: 'nsite',
+        supportedKinds: [15128, 35128],
+        requiredTags: ['path'],
+        recommendedTags: ['d', 'title', 'description', 'server'],
+        discoveryRelays: [...ECOSYSTEM_DISCOVERY_RELAYS.nsites],
+        notes: 'Gateways resolve sites via Kind 10002 write relays + Kind 10063 Blossom servers. Named sites (35128) need a short <=13-char d-tag and /index.html.',
+    },
+    {
+        id: 'social-outbox-clients',
+        name: 'Damus · Primal · Coracle',
+        category: 'social',
+        supportedKinds: [0, 1, 10002, 10063],
+        requiredTags: [],
+        recommendedTags: ['t', 'imeta'],
+        discoveryRelays: [...ECOSYSTEM_DISCOVERY_RELAYS.generalOutbox],
+        notes: 'Outbox-aware clients perform best with 3–5 fast healthy write relays (Kind 10002), 2–4 mirrored Blossom servers (Kind 10063), and complete Kind 0 metadata.',
+    },
+];
+export function classifyEventStorage(kind) {
+    if (kind === 0 || kind === 3 || (kind >= 10000 && kind < 20000)) {
+        return 'replaceable';
+    }
+    if (kind >= 20000 && kind < 30000) {
+        return 'ephemeral';
+    }
+    if (kind >= 30000 && kind < 40000) {
+        return 'addressable';
+    }
+    return 'regular';
+}
+export function getKindSpec(kind) {
+    return (NIP_KIND_REGISTRY[kind] ?? {
+        kind,
+        label: `Nostr Event (Kind ${kind})`,
+        nip: 'NIP-01',
+        storageClass: classifyEventStorage(kind),
+        requiresDTag: kind >= 30000 && kind < 40000,
+        summary: 'Custom or application-specific Nostr event kind.',
+    });
+}
+export const LICENSE_OPTIONS = [
+    'CC BY-SA 4.0',
+    'CC BY 4.0',
+    'CC0 1.0 Public Domain',
+    'All Rights Reserved',
+    'MIT',
+];
+export const LICENSE_GUIDE = [
+    {
+        value: 'All Rights Reserved',
+        shortLabel: 'All Rights Reserved',
+        plainDescription: 'You keep full copyright. People can listen or view, not reuse or remix without asking.',
+        categories: ['music', 'photo', 'article', 'nsite', 'file'],
+    },
+    {
+        value: 'CC BY 4.0',
+        shortLabel: 'Share with credit (CC BY 4.0)',
+        plainDescription: 'Anyone can share or remix your work as long as they credit you.',
+        categories: ['music', 'photo', 'article', 'nsite', 'file'],
+    },
+    {
+        value: 'CC BY-SA 4.0',
+        shortLabel: 'Share-alike (CC BY-SA 4.0)',
+        plainDescription: 'Free to share and remix with credit, as long as remixes stay open under the same license.',
+        categories: ['music', 'photo', 'article', 'nsite', 'file'],
+    },
+    {
+        value: 'CC0 1.0 Public Domain',
+        shortLabel: 'Public Domain (CC0 1.0)',
+        plainDescription: 'No rights reserved — completely free for anyone to use anywhere.',
+        categories: ['music', 'photo', 'article', 'nsite', 'file'],
+    },
+    {
+        value: 'MIT',
+        shortLabel: 'MIT Open Source',
+        plainDescription: 'Standard open-source license for websites, apps, and code files.',
+        categories: ['nsite', 'file'],
+    },
+];
+export function getLicensesForCategory(category) {
+    if (category === 'post')
+        return LICENSE_GUIDE.slice(0, 4);
+    return LICENSE_GUIDE.filter((entry) => entry.categories.includes(category));
+}
+export const MUSIC_GENRE_SUGGESTIONS = [
+    'nostrmusic',
+    'music',
+    'electronic',
+    'synth',
+    'ambient',
+    'indie',
+    'hiphop',
+    'rock',
+    'lofi',
+    'experimental',
+    'v4v',
+];

@@ -1,0 +1,83 @@
+{
+  "name": "@chaoticka/nsite-loopy-sdk",
+  "version": "1.1.1-rc.10",
+  "description": "Portable, source-derived Nostr/nsite SDK: event signatures, signers, relays, Blossom, publishing, archives and directory curation",
+  "type": "module",
+  "private": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "./src/index.js",
+  "types": "./types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./nostr": "./src/nostr/index.js",
+    "./nsite": "./src/nsite/index.js",
+    "./blossom": "./src/blossom/index.js",
+    "./archive": "./src/archive/index.js",
+    "./directory": "./src/directory/index.js",
+    "./storage": "./src/storage/index.js",
+    "./adapters": "./src/adapters/index.js",
+    "./moderation": "./src/moderation/index.js",
+    "./moji": "./src/moji/index.js",
+    "./anchor": "./src/anchor/index.js",
+    "./provenance": "./provenance/manifest.json",
+    "./intelligence": {
+      "types": "./types/intelligence/index.d.ts",
+      "default": "./src/intelligence/index.js"
+    }
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "test:types": "tsc --noEmit -p tsconfig.json",
+    "verify": "npm run test && npm run test:types && python3 validation/verify_package.py && python3 validation/verify_repo_audit.py",
+    "example": "node examples/offline-publish-plan.js"
+  },
+  "files": [
+    "src/**/*.js",
+    "vendor/nostr.js",
+    "vendor/nostr-tools.LICENSE",
+    "vendor/NOBLE-SCURE.LICENSE",
+    "vendor/OPEN-SPECS.REFERENCE-LICENSE",
+    "types/**/*.d.ts",
+    "docs/*.md",
+    "docs/*.json",
+    "skills/**/SKILL.md",
+    "workflows/*.json",
+    "examples/*.js",
+    "provenance/*.json",
+    "provenance/anchor-intelligence-source/*.ts",
+    "scripts/*.py",
+    "tests/*.test.js",
+    "tests/test_*.py",
+    "tests/*.ts",
+    "validation/*.py",
+    "validation/*.json",
+    "README.md",
+    "LICENSE",
+    "LICENSES.md",
+    "AI-DEVELOPMENT.md",
+    "THIRD_PARTY_NOTICES.md",
+    "tsconfig.json",
+    "AGENTS.md",
+    "PROJECT.md",
+    "DEVELOPMENT.md",
+    "CAPABILITIES.md",
+    "RELEASE.md",
+    "GAPS.md",
+    "TEMPLATE-GUIDE.md",
+    "UI.md",
+    "ARCHITECTURE.md",
+    "REUSE.md",
+    "SECURITY.md",
+    "CHANGELOG.md"
+  ],
+  "license": "SEE LICENSE IN LICENSES.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/br3avery-maker/loopy-nostr-sdk.git"
+  }
+}

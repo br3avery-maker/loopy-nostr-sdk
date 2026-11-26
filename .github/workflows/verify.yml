@@ -1,0 +1,47 @@
+name: Verify Loopy Nostr SDK
+on:
+  workflow_dispatch:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  unit-and-package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm install --no-save --ignore-scripts --package-lock=false typescript@5.6.3
+      - run: npm run verify
+      - run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Package and install an independent offline consumer
+        shell: bash
+        run: |
+          set -euo pipefail
+          tmp="$(mktemp -d)"
+          npm pack --ignore-scripts --pack-destination "$tmp" --json > "$tmp/pack.json"
+          tarball="$(find "$tmp" -maxdepth 1 -name '*.tgz' -print -quit)"
+          test -f "$tarball"
+          python3 - "$tarball" <<'PY'
+          import sys, tarfile, hashlib
+          from pathlib import Path
+          p = Path(sys.argv[1])
+          with tarfile.open(p) as t:
+              names = set(t.getnames())
+              for path in ['LICENSE','LICENSES.md','AI-DEVELOPMENT.md','THIRD_PARTY_NOTICES.md','vendor/nostr-tools.LICENSE','vendor/NOBLE-SCURE.LICENSE','vendor/OPEN-SPECS.REFERENCE-LICENSE','src/index.js','types/index.d.ts']:
+                  assert 'package/'+path in names, path
+              assert not any('__pycache__' in n or n.endswith(('.pyc','.pyo','.zip','.tgz')) for n in names)
+          print('Pack SHA-256:', hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+          mkdir "$tmp/consumer"
+          cd "$tmp/consumer"
+          printf '{"type":"module","private":true}\n' > package.json
+          npm install --offline --ignore-scripts --no-audit --no-fund "$tarball"
+          node --input-type=module -e 'import {Nostr,Storage,Intelligence} from "@chaoticka/nsite-loopy-sdk"; const e=Nostr.finalizeEvent(Nostr.eventTemplate({content:"public consumer"}),Nostr.generateSecretKey()); if(!Nostr.verifyEvent(e)) throw Error("signature"); const store=Storage.memoryStore(); await store.set("event",e); if((await store.get("event")).id!==e.id) throw Error("storage"); if(!Intelligence.lookupKindDefinitions(1,[]).builtin) throw Error("registry"); console.log("Independent consumer PASS")'

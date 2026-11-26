@@ -1,0 +1,12 @@
+{
+  "schema": "loopy.consumer-adoption.v1",
+  "target": "example social client",
+  "status": "recipe only, not deployed",
+  "consumer_acceptance": [
+    "verified signer identity",
+    "signed posts, replies and reactions",
+    "readback after reload",
+    "signer denial leaves no false success",
+    "verified media hashes"
+  ]
+}

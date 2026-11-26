@@ -1,0 +1,12 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {Nostr} from '../src/index.js';
+const key=Nostr.generateSecretKey(),pubkey=Nostr.getPublicKey(key);
+const signer={getPublicKey:async()=>pubkey,signEvent:async t=>Nostr.finalizeEvent(t,key)};
+test('real BIP340 signed kind1 event verifies; tampered content fails',()=>{const event=Nostr.finalizeEvent(Nostr.eventTemplate({content:'hello'}),key);assert.equal(Nostr.verifyEvent(event),true);assert.throws(()=>Nostr.assertSignedEvent({...event,content:'wrong'}));});
+test('checked sign refuses mutated template/identity',async()=>{const template=Nostr.eventTemplate({content:'original'});assert.equal((await Nostr.checkedSign(signer,template,pubkey)).pubkey,pubkey);await assert.rejects(Nostr.checkedSign({signEvent:async t=>Nostr.finalizeEvent({...t,content:'modified'},key)},template,pubkey),/changed/);});
+test('kind and tag validators reject invalid event',()=>{assert.throws(()=>Nostr.eventTemplate({kind:99999}));assert.throws(()=>Nostr.eventTemplate({tags:[['ok',4]]}));});
+test('NIP55 URI encodes request and signature result checked',()=>{const template=Nostr.eventTemplate({content:'android'});const id='test-1234';const url=Nostr.androidIntent({type:'sign_event',requestId:id,event:template,currentPubkey:pubkey});assert.match(url,/^nostrsigner:/);assert.match(url,/id=test-1234/);const event=Nostr.finalizeEvent(template,key);assert.equal(Nostr.verifyAndroidResult({requestId:id,returnedId:id,event,template,expectedPubkey:pubkey}).id,event.id);assert.throws(()=>Nostr.verifyAndroidResult({requestId:id,returnedId:'other',event,template,expectedPubkey:pubkey}),/correlation/);});
+test('NIP55 refuses missing sign event and bad IDs',()=>{assert.throws(()=>Nostr.androidIntent({type:'sign_event',requestId:'id123'}));assert.throws(()=>Nostr.androidIntent({requestId:'!'}));});
+test('browser adapter requires real methods',()=>{const b=Nostr.browserSigner({getPublicKey:signer.getPublicKey,signEvent:signer.signEvent});assert.equal(b.mode,'nip07');assert.throws(()=>Nostr.browserSigner({}),/No NIP-07/);});
+test('NIP-46 copy code has no private key in public fields',()=>{const req=Nostr.nostrConnectRequest({relays:['wss://relay.example.org']});assert.match(req.uri,/^nostrconnect:\/\//);assert.equal(typeof req.start,'function');assert.equal(Object.keys(req).includes('clientSecret'),false);});
+test('Bunker link parser rejects invalid URI',async()=>{await assert.rejects(Nostr.bunkerSigner('nsec1invalid'),/Invalid NIP-46/);});

@@ -1,0 +1,129 @@
+{
+  "schema": "nsite-loopy-public-provenance/1",
+  "entries": [
+    {
+      "repo": "br3avery-maker/MojiSurvivor",
+      "path": "src/lib/moderationLists.ts",
+      "capability": "curated NSFW emoji hash and publisher blocklists; import and safe-list",
+      "disposition": "adopted",
+      "sdk_contract": "Moderation.parseCuratorBlocklist",
+      "source_url": "https://github.com/br3avery-maker/MojiSurvivor/blob/main/src/lib/moderationLists.ts"
+    },
+    {
+      "repo": "br3avery-maker/MojiSurvivor",
+      "path": "src/lib/cryptoStats.ts",
+      "capability": "stable media-hash identity and deterministic emoji traits",
+      "disposition": "adopted",
+      "sdk_contract": "Moji.deriveEmojiStatsFromHash",
+      "source_url": "https://github.com/br3avery-maker/MojiSurvivor/blob/main/src/lib/cryptoStats.ts"
+    },
+    {
+      "repo": "br3avery-maker/MojiSurvivor",
+      "path": "src/lib/nostrEngine.ts",
+      "capability": "NIP-30 packs, NIP-51 mute-list, verified signed emoji media discovery",
+      "disposition": "adopted-partial",
+      "sdk_contract": "Moji.parseNip30Event",
+      "source_url": "https://github.com/br3avery-maker/MojiSurvivor/blob/main/src/lib/nostrEngine.ts"
+    },
+    {
+      "repo": "br3avery-maker/MojiSurvivor",
+      "path": "src/lib/nsitePublisher.ts",
+      "capability": "signer-mediated NIP-5A and Blossom BUD-11 uploads",
+      "disposition": "already-covered",
+      "sdk_contract": "Nsite.publishNsite",
+      "source_url": "https://github.com/br3avery-maker/MojiSurvivor/blob/main/src/lib/nsitePublisher.ts"
+    },
+    {
+      "repo": "br3avery-maker/anchor",
+      "path": "src/nostr/signers.ts",
+      "capability": "NIP-07, NIP-46, NIP-55 signers and lifecycle",
+      "disposition": "already-covered",
+      "sdk_contract": "Nostr.androidIntent",
+      "source_url": "https://github.com/br3avery-maker/anchor/blob/main/src/nostr/signers.ts"
+    },
+    {
+      "repo": "br3avery-maker/anchor",
+      "path": "src/nostr/backup.ts",
+      "capability": "public-only backup and safe signed publication restoration",
+      "disposition": "adopted",
+      "sdk_contract": "Anchor.restorePublicAccountBackup",
+      "source_url": "https://github.com/br3avery-maker/anchor/blob/main/src/nostr/backup.ts"
+    },
+    {
+      "repo": "br3avery-maker/anchor",
+      "path": "src/nostr/network.ts",
+      "capability": "profile recovery, live relay audit, BUD-11 uploads, signed receipt stages",
+      "disposition": "adopted-partial",
+      "sdk_contract": "Anchor.summarizePublicationReceipts",
+      "source_url": "https://github.com/br3avery-maker/anchor/blob/main/src/nostr/network.ts"
+    },
+    {
+      "repo": "br3avery-maker/anchor",
+      "path": "src/intelligence/nipRegistry.ts",
+      "capability": "NIP event kinds, storage classes, ecosystem compatibility registry",
+      "disposition": "adopted-partial",
+      "sdk_contract": "Anchor.kindSpec",
+      "source_url": "https://github.com/br3avery-maker/anchor/blob/main/src/intelligence/nipRegistry.ts"
+    },
+    {
+      "repo": "br3avery-maker/anchor",
+      "path": "src/intelligence/relayIntelligence.ts",
+      "capability": "health-aware relay role classification, outbox optimization",
+      "disposition": "adopted-partial",
+      "sdk_contract": "Anchor.planVerifiedOutbox",
+      "source_url": "https://github.com/br3avery-maker/anchor/blob/main/src/intelligence/relayIntelligence.ts"
+    },
+    {
+      "repo": "br3avery-maker/Pretend-Internet",
+      "path": "apps/nsite-archive/campaign.js",
+      "capability": "three-signal campaign pattern detection",
+      "disposition": "adopted",
+      "sdk_contract": "Moderation.campaignMatch",
+      "source_url": "https://github.com/br3avery-maker/Pretend-Internet/blob/main/apps/nsite-archive/campaign.js"
+    },
+    {
+      "repo": "br3avery-maker/Pretend-Internet",
+      "path": "tools/nsite-archive/chunks.mjs",
+      "capability": "Gear CDC with Hashtree file and directory nodes",
+      "disposition": "adopted-partial",
+      "sdk_contract": "Archive.gearChunks",
+      "source_url": "https://github.com/br3avery-maker/Pretend-Internet/blob/main/tools/nsite-archive/chunks.mjs"
+    },
+    {
+      "repo": "br3avery-maker/Pretend-Internet",
+      "path": "tools/relay-router/router.mjs",
+      "capability": "signature-checked relay discovery, classifications, bounded router",
+      "disposition": "already-covered-partial",
+      "sdk_contract": "Nostr.discoverRelays",
+      "source_url": "https://github.com/br3avery-maker/Pretend-Internet/blob/main/tools/relay-router/router.mjs"
+    },
+    {
+      "repo": "br3avery-maker/Pretend-Internet",
+      "path": "apps/nsite-archive/model.js",
+      "capability": "directory grouping, clone analysis, version browse, hide filters",
+      "disposition": "already-covered",
+      "sdk_contract": "Directory.directoryRows",
+      "source_url": "https://github.com/br3avery-maker/Pretend-Internet/blob/main/apps/nsite-archive/model.js"
+    },
+    {
+      "repo": "br3avery-maker/piShell-",
+      "path": "app/src/main/java/com/example/data/nsite/CampaignDetector.kt",
+      "capability": "same confirmed campaign signature on Android",
+      "disposition": "adopted",
+      "sdk_contract": "Moderation.campaignMatch",
+      "source_url": "https://github.com/br3avery-maker/piShell-/blob/main/app/src/main/java/com/example/data/nsite/CampaignDetector.kt"
+    },
+    {
+      "repo": "br3avery-maker/HowAmIADeveloper-Studio",
+      "path": "app/src/main/java/com/example/nostr/NsiteSpamFilter.kt",
+      "capability": "bot campaign clusters and four-signal structural spam detection",
+      "disposition": "adopted-partial",
+      "sdk_contract": "Moderation.clusterNsiteSpam",
+      "source_url": "https://github.com/br3avery-maker/HowAmIADeveloper-Studio/blob/main/app/src/main/java/com/example/nostr/NsiteSpamFilter.kt"
+    }
+  ],
+  "summary": {
+    "entries": 15
+  },
+  "audit_scope": "Public adopted and already-covered contracts only; internal repository inventory retained privately."
+}

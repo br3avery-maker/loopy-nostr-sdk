@@ -5,12 +5,12 @@ import argparse
 import re
 from pathlib import Path
 
-REQUIRED = ('AGENTS.md', 'README.md', 'PROJECT.md', 'DEVELOPMENT.md', 'CAPABILITIES.md', 'RELEASE.md', 'GAPS.md', 'TEMPLATE-GUIDE.md', 'UI.md', 'ARCHITECTURE.md', 'REUSE.md', 'SECURITY.md', 'CHANGELOG.md')
+REQUIRED = ('AGENTS.md', 'README.md', 'PROJECT.md', 'DEVELOPMENT.md', 'CAPABILITIES.md', 'RELEASE.md', 'GAPS.md', 'TEMPLATE-GUIDE.md', 'UI.md', 'ARCHITECTURE.md', 'REUSE.md', 'SECURITY.md', 'CHANGELOG.md', 'LICENSE', 'AI-DEVELOPMENT.md', 'THIRD_PARTY_NOTICES.md')
 # Tokens deliberately use ASCII slugs to support simple grep and code review.
 TOKEN = re.compile(r'\{\{FILL:([a-z0-9]+(?:-[a-z0-9]+)*)\}\}')
 ANNOTATION = re.compile(r'<!--\s*FILL:([a-z0-9]+(?:-[a-z0-9]+)*)\s*\|\s*DISCOVER:\s*([^|\n]+)\s*\|\s*ACCEPT:\s*([^\n]+?)\s*-->')
 # Check genuinely required project docs; examples/instructions may mention a placeholder as an example.
-FILLED_DOCS = ('README.md', 'PROJECT.md', 'DEVELOPMENT.md', 'CAPABILITIES.md', 'RELEASE.md', 'UI.md', 'ARCHITECTURE.md', 'REUSE.md', 'SECURITY.md', 'CHANGELOG.md')
+FILLED_DOCS = ('README.md', 'PROJECT.md', 'DEVELOPMENT.md', 'CAPABILITIES.md', 'RELEASE.md', 'UI.md', 'ARCHITECTURE.md', 'REUSE.md', 'SECURITY.md', 'CHANGELOG.md', 'THIRD_PARTY_NOTICES.md')
 FILLER = re.compile(r'(?im)^\s*(?:\*\*)?(?:TBD|TODO|COMING SOON|LOREM IPSUM)(?:\*\*)?\s*$')
 
 

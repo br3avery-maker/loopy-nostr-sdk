@@ -1,13 +1,10 @@
 # Release and publication controls
 
-<!-- FILL:artifact | DISCOVER: build artifacts, output formats, release names, versions and hashes. | ACCEPT: exact deliverable identity or evidence-backed 'not yet produced' with GAP. -->
-**Artifact identity:** {{FILL:artifact}}
+**Artifact identity:** Source candidate `@chaoticka/nsite-loopy-sdk@1.1.1-rc.10`; build with `npm pack --ignore-scripts`. The local source file pins are in `provenance/manifest.json`; exact public commit and tarball digest must be recorded by the repository CI before a registry release. GAP-002 tracks release and independent installation.
 
-<!-- FILL:versioning | DISCOVER: existing release tags, deployment pipeline, backward-compatibility requirements, and source status. | ACCEPT: explicit version/upgrade policy, not an invented number. -->
-**Versioning / updates:** {{FILL:versioning}}
+**Versioning / updates:** Keep the existing npm package identity and semantic version progression; rc.10 supersedes public rc.9; the earlier private rc.8 archive and public rc.9 commit remain unchanged. Document changed defaults/timing and maintain API compatibility. No automatic publication.
 
-<!-- FILL:rollback | DISCOVER: existing release or revision rollback pathway. | ACCEPT: tested recovery method or explicit unverified GAP, not merely 'git revert'. -->
-**Recovery and rollback:** {{FILL:rollback}}
+**Recovery and rollback:** Earlier candidates remain preserved with original hashes. Recovery uses checked-out exact prior source or an already verified versioned tarball; test consumer compatibility before switching. Public rc.10 clean-install and rollback acceptance still require the release gate (GAP-002).
 
 ## Release acceptance
 - Actual source and intended release bytes are inventoried, reviewed and hashed.
@@ -18,3 +15,5 @@
 - Deployment/publication requires a **separate explicit owner authorization**. This template does not trigger one.
 
 - Resolve applicable [UI](UI.md), [security](SECURITY.md), [architecture](ARCHITECTURE.md) and [reuse](REUSE.md) acceptance criteria; document legitimate inapplicability and actual gaps. Update [CHANGELOG.md](CHANGELOG.md) with evidence and compatibility changes. A successful documentation gate is not release authorization.
+
+- Include [MIT](LICENSE), [third-party notices](THIRD_PARTY_NOTICES.md), the bundled upstream license files and [AI development notice](AI-DEVELOPMENT.md) in the actual npm package. Check contents before any publication.

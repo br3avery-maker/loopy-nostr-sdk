@@ -1,0 +1,10 @@
+{
+  "schema":"loopy.workflow/1","id":"recover-unify-verify-nsite","trigger":"new Nostr/nsite ZIP, HTML, or donor code needs reusable API","steps":[
+  {"id":"discover","action":"scripts/nsite_source_audit.py scan","output":"source index, exact hashes","gate":"source safely inspected"},
+  {"id":"restore","action":"scripts/source_collection.py export","output":"exact source collection","gate":"no path traversal / object hash mismatches"},
+  {"id":"reuse","action":"inspect IC Loopy/Embeddy and Code Quarry + docs/API_INDEX.json","output":"candidate and existing API mapping","gate":"avoid parallel implementations"},
+  {"id":"implement","action":"extend src namespace and types/index.d.ts","output":"callable implementation and documented options","gate":"no mock-only claims"},
+  {"id":"verify","action":"npm run verify; python3 -m unittest discover -s tests -p test_*.py","output":"test receipt","gate":"all local checks pass"},
+  {"id":"consumer","action":"test adapted module outside donor app","output":"working consumer or explicit live/device gap","gate":"requires evidence of requested behavior"},
+  {"id":"export","action":"pack source, skills, docs, workflows, tests, provenance","output":"portable SDK and private source archive","gate":"re-extract and exact hash readback"}
+ ],"authority":"read, local build, local test, private owner-controlled preservation; no unauthorized publication"}

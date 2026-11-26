@@ -2,11 +2,9 @@
 
 Read the current [AgentOps interface quality policy](https://github.com/br3avery-maker/AgentOps/blob/main/policies/interface-quality.md) before choosing an interface, framework, layout or theme. This file records project-specific decisions; the canonical policy and explicit owner-approved exceptions take precedence.
 
-<!-- FILL:ui-scope | DISCOVER: actual source tree, product requirements and intended user-facing surfaces including examples, docs sites and plugin UI. | ACCEPT: exactly applicable or headless. Headless means no user-facing graphical interface in this project scope. -->
-**Interface scope:** {{FILL:ui-scope}}
+**Interface scope:** headless
 
-<!-- FILL:ui-scope-evidence | DISCOVER: current project requirements and actual source/entrypoints. | ACCEPT: concrete source path or requirement explaining applicable/headless; do not use bare N/A. -->
-**Scope evidence:** {{FILL:ui-scope-evidence}}
+**Scope evidence:** The repository contains an ESM library (`src/index.js`), API declarations, CLI recovery scripts, documentation and examples, not a graphical application or theme. `src/adapters` exposes host interaction contracts without supplying rendered chrome.
 
 ## Required interface baseline
 
@@ -18,12 +16,10 @@ Target WCAG 2.2 AA where applicable: reflow at 320 CSS px, 200% text enlargement
 
 ## Project-specific design
 
-<!-- FILL:ui-design | DISCOVER: owner-approved theme, actual navigation and interaction flows, existing design source and intended platform. | ACCEPT: source-backed design and exceptions, or explain why a headless project has no such surfaces. -->
-{{FILL:ui-design}}
+No graphical layout or palette applies to this SDK. Consuming applications own their navigation, accessible controls, signer handoff and state recovery. The documented Android/browser adapters must not be confused with an installed or rendered UI.
 
 ## Verification and evidence
 
-<!-- FILL:ui-verification | DISCOVER: actual palette scan, rendered/browser/device checks and source revision, or headless scope evidence. | ACCEPT: observed checks with paths/results, unverified GAP references, or reasoned headless inapplicability. Never claim a test that was not run. -->
-{{FILL:ui-verification}}
+No graphical source or device screenshot test is claimed. API and CLI acceptance is covered by source/consumer tests; target browser and Android integration are outstanding in GAPS.md. Re-evaluate UI scope if a graphical demo or application is added.
 
 A headless SDK need not invent graphical UI tests. Its CLI, API, documentation and examples still need the applicable usability, accessibility and consumer checks; re-evaluate scope if graphical surfaces are added. The starter checker validates documentation structure, not UI compliance.
