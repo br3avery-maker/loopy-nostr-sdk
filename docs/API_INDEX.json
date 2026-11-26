@@ -99,6 +99,10 @@
       "kind": "function"
     },
     {
+      "name": "executeRelayDelivery",
+      "kind": "function"
+    },
+    {
       "name": "fetchFeed",
       "kind": "function"
     },
@@ -132,6 +136,10 @@
     },
     {
       "name": "parseProfile",
+      "kind": "function"
+    },
+    {
+      "name": "planRelayDelivery",
       "kind": "function"
     },
     {
@@ -176,6 +184,10 @@
     },
     {
       "name": "reviewEventReplacement",
+      "kind": "function"
+    },
+    {
+      "name": "summarizeRelayDelivery",
       "kind": "function"
     },
     {
@@ -259,6 +271,10 @@
       "kind": "function"
     },
     {
+      "name": "blossomBatchUploadAuth",
+      "kind": "function"
+    },
+    {
       "name": "blossomUploadAuth",
       "kind": "function"
     },
@@ -267,7 +283,15 @@
       "kind": "function"
     },
     {
+      "name": "preflightBlob",
+      "kind": "function"
+    },
+    {
       "name": "uploadVerified",
+      "kind": "function"
+    },
+    {
+      "name": "verifyBlobCopies",
       "kind": "function"
     }
   ],

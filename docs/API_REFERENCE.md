@@ -129,3 +129,19 @@ Verified relay receipts now require explicit acknowledgment and exact event ID.
 ## Open Specs registry adapter
 
 See [OPEN_SPECS.md](OPEN_SPECS.md) for signed document search, revision-aware indexing and advisory kind definitions.
+
+### Event-specific relay delivery
+
+`Nostr.planRelayDelivery(signedEvent, options)` and `Nostr.summarizeRelayDelivery(plan, receipts)` are offline advisory APIs. See [relay delivery reconciliation](RELAY_DELIVERY_RECONCILIATION.md) for group/policy contracts, exact receipts, explicit private/authentication boundaries and remaining transport work.
+
+## Reconciled Blossom prerequisites and replicas
+
+`Blossom.preflightBlob`, `Blossom.blossomBatchUploadAuth` and `Blossom.verifyBlobCopies` expose explicit advisory upload preflight, scoped unsigned batch authorization and MIME/size/hash-verified multi-origin readback. See [BLOSSOM_RECONCILIATION.md](BLOSSOM_RECONCILIATION.md). None uploads or signs on behalf of the caller.
+
+### Opt-in version-2 publication
+
+See [PUBLICATION_RECONCILIATION.md](PUBLICATION_RECONCILIATION.md). The existing plan/publish functions accept `storageServers`, `requiredCopies`, and optional `gateway` hostname; execution requires approved digest and verified current-revision resolver, and accepts `resume` with the typed version-2 checkpoint. The original single-server contract remains supported.
+
+### Authenticated relay delivery
+
+`Nostr.executeRelayDelivery(event, options)` recomputes an approved-destination plan and performs bounded fallback, optionally using a caller-approved NIP-42 signer. Signed NIP-66 monitor hints and principal-scoped observations can inform planning; neither is proof of relay compatibility. See [relay authentication reconciliation](RELAY_AUTH_RECONCILIATION.md) for cancellation, protected/ephemeral event semantics and remaining integration limits.

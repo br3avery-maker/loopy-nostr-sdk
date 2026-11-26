@@ -109,3 +109,15 @@ This candidate fixes premature NIP-46 relay connection and resolves IndexedDB wr
 ## Project documentation
 
 [Project](PROJECT.md) · [Architecture](ARCHITECTURE.md) · [Development](DEVELOPMENT.md) · [Capabilities](CAPABILITIES.md) · [Security](SECURITY.md) · [Reuse](REUSE.md) · [UI scope](UI.md) · [Changelog](CHANGELOG.md) · [Release](RELEASE.md) · [Gaps](GAPS.md)
+
+## Unreleased reconciliation: relay delivery
+
+See [event-specific relay planning and receipt summaries](docs/RELAY_DELIVERY_RECONCILIATION.md). Offline, additive APIs; no transport changes or publication authorization. The existing rc.10 candidate version is not a new release.
+
+## Blossom reconciliation (draft batch 2)
+
+See [Blossom publishing reconciliation](docs/BLOSSOM_RECONCILIATION.md) for explicit BUD-06 metadata preflight, bounded BUD-11 multi-hash authorization templates and multi-origin readback with exact bytes, size and MIME. These are additive building blocks. Batch 3 integrates verified copy thresholds, resume and explicit gateway checks into the existing publication APIs; application adoption remains open. No network publication is implied.
+
+## Publication reconciliation (draft batch 3)
+
+[Digest-bound multi-copy publication and resume](docs/PUBLICATION_RECONCILIATION.md) extend the existing Nsite planner and publisher through opt-in version-2 settings. Saved manifest signatures and independently verified existing copies can be reused; gateway verification is a separate explicit result. No release or live publication is implied.

@@ -16,9 +16,11 @@ export type FileMap=Record<string,string|Uint8Array|ArrayBuffer>;
 export interface RelayListEntry {url:string;read:boolean;write:boolean}
 export interface SDKOptions {relays?:string[];server?:string;signer?:Signer;storage?:StorageAdapter;Socket?:any;fetcher?:typeof fetch;clock?:()=>number}
 export interface EventReplacementReview {baselineId:Hex;template:UnsignedEvent;contentChanged:boolean;removedTags:string[][];addedTags:string[][];removedProfileFields:string[]}
-export interface PublicationPlanOptions {pubkey:Hex;server:Endpoint;relays:Endpoint[];identifier?:string;title?:string;description?:string;created_at?:number;baseline?:SignedEvent|null;approvedPlan?:Hex}
-export interface PublicationPlan {schema:'nsite-publication-plan/1';id:Hex;pubkey:Hex;identifier:string;server:Endpoint;relays:Endpoint[];baselineId:Hex|null;baselineStatus:'observed'|'unknown';aggregate:Hex;totalBytes:number;files:Array<{path:string;hash:Hex;size:number}>;template:UnsignedEvent;changes:Array<{path:string;change:'added'|'modified'|'deleted';from?:Hex;to?:Hex}>;removedTags:string[][];addedTags:string[][]}
-export interface PublicationOptions extends PublicationPlanOptions {signer:Signer;allowFileRemovals?:boolean;resolveCurrent?:(request:{pubkey:Hex;kind:number;identifier:string;relays:Endpoint[];signal?:AbortSignal})=>Promise<SignedEvent|null>;uploader?:(data:Uint8Array,options:object)=>Promise<{hash:Hex;verified:boolean}>;publisher?:(event:SignedEvent,relays:string[],options?:object)=>Promise<PublishReceipts>;checkpoint?:(job:object)=>Promise<void>|void;signal?:AbortSignal;Socket?:any;fetcher?:typeof fetch}
+export interface PublicationPlanOptions {pubkey:Hex;server:Endpoint;storageServers?:Endpoint[];requiredCopies?:number;gateway?:string;relays:Endpoint[];identifier?:string;title?:string;description?:string;created_at?:number;baseline?:SignedEvent|null;approvedPlan?:Hex}
+export interface PublicationPlan {schema:'nsite-publication-plan/1'|'nsite-publication-plan/2';storage?:{servers:Endpoint[];required:number};gateway?:string|null;id:Hex;pubkey:Hex;identifier:string;server:Endpoint;relays:Endpoint[];baselineId:Hex|null;baselineStatus:'observed'|'unknown';aggregate:Hex;totalBytes:number;files:Array<{path:string;hash:Hex;size:number;type?:string}>;template:UnsignedEvent;changes:Array<{path:string;change:'added'|'modified'|'deleted';from?:Hex;to?:Hex}>;removedTags:string[][];addedTags:string[][]}
+export interface GatewayVerification {url:string;status:'verified'|'unverified';files:Array<{path:string;status:'hash-verified'|'unverified'}>}
+export interface ResumablePublicationJob {schema:'nsite-job/2';identifier:string;aggregate:Hex;planId:Hex;baselineId:Hex|null;files:Array<{path:string;hash:Hex;size:number;type:string;copies:BlobReadbackCopy[];attempts:Array<{server:Endpoint;status:string}>}>;relays:RelayReceipt[];stage:'prepared'|'uploading'|'signed'|'relay-verified'|'site-verified'|'gateway-unverified';event:SignedEvent|null;eventId:Hex|null;gateway:GatewayVerification|null;url?:string}
+export interface PublicationOptions extends PublicationPlanOptions {signer:Signer;resume?:ResumablePublicationJob;allowFileRemovals?:boolean;resolveCurrent?:(request:{pubkey:Hex;kind:number;identifier:string;relays:Endpoint[];signal?:AbortSignal})=>Promise<SignedEvent|null>;uploader?:(data:Uint8Array,options:object)=>Promise<{hash:Hex;verified:boolean}>;publisher?:(event:SignedEvent,relays:string[],options?:object)=>Promise<PublishReceipts>;checkpoint?:(job:object)=>Promise<void>|void;signal?:AbortSignal;Socket?:any;fetcher?:typeof fetch}
 export namespace Core {
   function encode(value:string):Uint8Array;
   function bytes(value:string|Uint8Array|ArrayBuffer):Uint8Array;
@@ -41,7 +43,29 @@ export interface HistoryCursor {relay:Endpoint;scope:string;watermark:number|nul
 export type HistoryStatus='window-read'|'partial'|'boundary-stalled'|'failed'|'cancelled'|'not-yet-in-window';
 export interface HistorySyncResult {observations:EventObservation[];cursors:Record<Endpoint,HistoryCursor>;relays:Array<{relay:Endpoint;pages:number;status:HistoryStatus;error:string|null}>}
 export interface HistorySyncOptions {relays:Endpoint[];filter:HistoryFilter;cursors?:Record<Endpoint,HistoryCursor>;pageSize?:number;boundaryLimit?:number;maxPages?:number;now?:number;timeoutMs?:number;signal?:AbortSignal;Socket?:any;query?:(url:Endpoint,filter:HistoryFilter&{since:number;until:number;limit:number},options:{signal?:AbortSignal;timeoutMs:number;maxEvents:number;Socket?:any})=>Promise<SignedEvent[]>}
+/** Advisory, offline event-specific relay routing. Explicit network/signing authorization remains separate. */
+export interface RelayDeliveryOptions {
+  signedLists?:SignedEvent[]; pinned?:Endpoint[]; defaults?:Endpoint[]; allowedRelays?:Endpoint[]; entitledRelays?:Endpoint[];
+  relayPolicies?:Array<{relay:Endpoint;observedAt:number;document:Record<string,unknown>}>;
+  monitorEvents?:SignedEvent[]; observations?:RelayTransportObservation[]; monitorTTL?:number; observationTTL?:number;
+  now?:number; policyTTL?:number; redundancy?:number; maxCandidates?:number; visibility?:'public'|'private'; authPubkey?:Hex; authAvailable?:boolean;
+}
+export interface RelayDeliveryCandidate {relay:Endpoint;requiresAuthentication:boolean;policyObservedAt:number|null;warnings:string[];evidence:{monitorHints:Array<{eventId:Hex;source:Hex;accepted:boolean}>;priorReadback:boolean}}
+export interface RelayDeliveryPlan {
+  eventId:Hex;kind:number;storageClass:string;frameBytes:number;visibility:'public'|'private';protectedEvent:boolean;at:number;
+  groups:Array<{id:string;required:number;selected:RelayDeliveryCandidate[];fallbacks:RelayDeliveryCandidate[];omitted:number;status:'recipient-list-missing'|'insufficient-candidates'|'planned-unverified'}>;
+  excluded:Array<{group:string;relay:Endpoint;reasons:string[]}>;
+}
+export interface RelayTransportObservation {relay:Endpoint;eventId:Hex;author:Hex;kind:number;principal:Hex|'anonymous';at:number;code:string;accepted:boolean;readback:boolean}
+export interface RelayPublishOptions {Socket?:any;timeoutMs?:number;signal?:AbortSignal;verify?:boolean;authSigner?:Signer;authPubkey?:Hex;requireAuthentication?:boolean;acceptEphemeral?:boolean}
+export interface RelayDeliveryExecutionOptions extends Omit<RelayDeliveryOptions,'authAvailable'|'allowedRelays'> {allowedRelays:Endpoint[];authSigner?:Signer;signal?:AbortSignal;Socket?:any;timeoutMs?:number;maxAttempts?:number}
+export interface RelayDeliveryReceipt {relay:Endpoint;eventId:Hex;accepted:boolean;readback?:boolean}
+export interface RelayDeliverySummary {eventId:Hex;status:'verified'|'accepted-ephemeral'|'partial-or-failed';groups:Array<{id:string;required:number;accepted:Endpoint[];delivered:Endpoint[];status:'verified'|'accepted-ephemeral'|'accepted-incomplete'|'not-delivered'}>}
 export namespace Nostr {
+  function planRelayDelivery(event:SignedEvent,options?:RelayDeliveryOptions):RelayDeliveryPlan;
+  function summarizeRelayDelivery(plan:RelayDeliveryPlan,receipts?:RelayDeliveryReceipt[]):RelayDeliverySummary;
+  function executeRelayDelivery(event:SignedEvent,options:RelayDeliveryExecutionOptions):Promise<{plan:RelayDeliveryPlan;receipts:RelayDeliveryReceipt[];attempts:Array<{relay:Endpoint;status:'accepted'|'accepted-unverified'|'failed';code?:string}>;observations:RelayTransportObservation[];summary:RelayDeliverySummary}>;
+
   function reviewEventReplacement(baseline:SignedEvent,template:UnsignedEvent,pubkey:Hex):EventReplacementReview;
   function prepareEventReplacement(baseline:SignedEvent,options?:{pubkey?:Hex;content?:string;replaceTags?:Record<string,string[][]>;created_at?:number}):EventReplacementReview;
   function eventIdentity(event:SignedEvent):string;
@@ -71,7 +95,8 @@ export namespace Nostr {
   function blossomServers(event:SignedEvent):string[];
   function discoverBlossom(pubkey:Hex,options?:RetrievalTransport&{bootstrap?:string[]}):Promise<{sourceEvent:string|null;servers:string[];verified:boolean;errors:Array<{relay:string;error:string}>}>;
   function queryRelay(url:string,filter:object,options?:{Socket?:any;timeoutMs?:number;signal?:AbortSignal;verify?:boolean;maxEvents?:number}):Promise<SignedEvent[]>;
-  function publishRelay(url:string,event:SignedEvent,options?:{Socket?:any;timeoutMs?:number;signal?:AbortSignal;verify?:boolean}):Promise<RelayReceipt>;
+  function publishRelay(url:string,event:SignedEvent,options?:RelayPublishOptions & {acceptEphemeral?:false}):Promise<RelayReceipt>;
+  function publishRelay(url:string,event:SignedEvent,options:RelayPublishOptions):Promise<RelayDeliveryReceipt>;
   function publishMany(event:SignedEvent,relays:string[],options?:{writer?:(url:string,event:SignedEvent,options:object)=>Promise<RelayReceipt>}):Promise<PublishReceipts>;
   function textNote(content:string,options?:{replyTo?:SignedEvent;created_at?:number}):UnsignedEvent;
   function reaction(target:SignedEvent,emoji?:string,options?:{created_at?:number}):UnsignedEvent;
@@ -101,9 +126,17 @@ export namespace Nsite {
   function compareFiles(before:FileMap,after:FileMap):Promise<object[]>;
   function mediaType(path:string):string;
   function normalizeFileMap(input:FileMap):Record<string,Uint8Array>;
+  function publishNsite(files:FileMap,options:PublicationOptions & ({storageServers:Endpoint[]}|{requiredCopies:number}|{gateway:string})):Promise<{job:ResumablePublicationJob;event:SignedEvent;manifest:ManifestRecord;receipts:PublishReceipts}>;
   function publishNsite(files:FileMap,options:PublicationOptions):Promise<{job:object;event:SignedEvent;manifest:ManifestRecord;receipts:PublishReceipts}>;
 }
+export interface BlobMetadata {sha256:Hex;size:number;type:string}
+export interface BlobPreflightDecision {server:string;status:number|null;code:string;verified:false}
+export interface BlobReadbackCopy {server:string;hash:Hex;size:number;type:string;verified:true}
+export interface BlobNetworkOptions {servers:string[];fetcher?:typeof fetch;signal?:AbortSignal;timeoutMs?:number}
 export namespace Blossom {
+  function preflightBlob(blob:BlobMetadata,options:BlobNetworkOptions):Promise<BlobMetadata & {decisions:BlobPreflightDecision[];selected:string[];fallbacks:string[]}>;
+  function blossomBatchUploadAuth(options:{hashes:Hex[];servers:string[];now?:number;expiresIn?:number}):UnsignedEvent;
+  function verifyBlobCopies(blob:BlobMetadata,options:BlobNetworkOptions & {required?:number;maxBytes?:number}):Promise<BlobMetadata & {required:number;copies:BlobReadbackCopy[];failed:Array<{server:string;code:string}>;status:'verified'|'partial'|'unverified'}>;
   function blossomAuthHeader(event:SignedEvent):string;
   function blossomUploadAuth(options:{hash:Hex;server:string;expiresIn?:number;now?:number}):UnsignedEvent;
   function uploadVerified(data:string|Uint8Array,options:{server:string;signer:Signer;pubkey:Hex;path?:string;fetcher?:typeof fetch;signal?:AbortSignal}):Promise<{hash:Hex;size:number;server:string;verified:true;url:string}>;

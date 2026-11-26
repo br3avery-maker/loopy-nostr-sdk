@@ -64,3 +64,35 @@ void SpecsIntelligence.queryOpenSpecs({covers:[31337],outbox:false});
 
 const decodedAuthor: string | null | undefined = Moderation.decodeNip19('nevent1fixture').author;
 void decodedAuthor;
+
+import type {RelayDeliveryPlan,RelayDeliverySummary} from '../types/index.js';
+function typecheckDelivery(event:SignedEvent):RelayDeliverySummary {
+  const plan:RelayDeliveryPlan=Nostr.planRelayDelivery(event,{defaults:['wss://relay.example'],redundancy:2});
+  return Nostr.summarizeRelayDelivery(plan,[]);
+}
+void typecheckDelivery;
+
+// Reconciled Blossom publication prerequisites and verified storage replicas.
+const blobMetadata={sha256:'a'.repeat(64),size:12,type:'text/html'};
+const blobOptions={servers:['https://blossom.example']};
+void Blossom.preflightBlob(blobMetadata,blobOptions).then(result=>result.decisions[0]?.verified);
+const batchAuth=Blossom.blossomBatchUploadAuth({hashes:[blobMetadata.sha256],...blobOptions});
+void batchAuth.tags;
+void Blossom.verifyBlobCopies(blobMetadata,{...blobOptions,required:2}).then(result=>result.copies[0]?.verified);
+
+// Opt-in v2 publication keeps the same entry point and exposes a typed resume checkpoint.
+import type {ResumablePublicationJob} from '../types/index.js';
+async function typecheckResumable(job:ResumablePublicationJob){
+  const settings={...opts,storageServers:[opts.server,'https://replica.example'],requiredCopies:2,gateway:'nsite.lol'};
+  const plan=await Nsite.planNsitePublication(files,settings);
+  const r=await Nsite.publishNsite(files,{...settings,approvedPlan:plan.id,resume:job});
+  const checkpoint:ResumablePublicationJob=r.job;
+  return checkpoint.gateway?.status;
+}
+void typecheckResumable;
+
+// Explicitly approved relay execution and caller-owned transport evidence.
+function typecheckExecution(event:SignedEvent, signer:Signer) {
+  return Nostr.executeRelayDelivery(event,{allowedRelays:['wss://relay.example'],defaults:['wss://relay.example'],authSigner:signer,authPubkey:event.pubkey}).then(r=>Nostr.planRelayDelivery(event,{observations:r.observations,authPubkey:event.pubkey}));
+}
+void typecheckExecution;

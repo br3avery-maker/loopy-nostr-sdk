@@ -94,9 +94,15 @@
     },
     {
       "path": "src/blossom/index.js",
-      "sha256": "e8f76c98d4ad1e080155c93ff29eb75d80515bcf991a27153f283ddd4c288476",
+      "sha256": "d50e63604ebce373487c56b3c56f7670b71b15e1004a36ffde19f8cef4fea416",
       "role": "BUD03/BUD11 signed server discovery and exact-byte uploads",
-      "lineage": "derived and standardized"
+      "lineage": "derived and standardized; Blossom reconciliation batch 2; publication reconciliation batch 3"
+    },
+    {
+      "path": "src/blossom/replicas.js",
+      "sha256": "aeb03e719fcba1887f12451ab69c15992b49c8d564ae380836480389d8fadf7b",
+      "role": "Scoped batch authorization, metadata preflight and multi-origin exact-byte readback",
+      "lineage": "Independent reconciliation of Pretend Internet relay router and Safehouse publisher contracts; docs/BLOSSOM_RECONCILIATION.md; publication reconciliation batch 3"
     },
     {
       "path": "src/core/bytes.js",
@@ -219,6 +225,12 @@
       "lineage": "adapted from user-owned repo; see repo-capabilities.json"
     },
     {
+      "path": "src/nostr/delivery.js",
+      "sha256": "42ed77791a481dcfe6d274320bbaae6c60159ec87f7215fd3a09068e1b44264c",
+      "role": "Event-specific offline relay delivery plan and exact-receipt summary",
+      "lineage": "Independent implementation of Pretend Internet tools/relay-router/router.mjs planning contracts; see docs/RELAY_DELIVERY_RECONCILIATION.md.; Pretend Internet relay router reconciliation batch 4 (docs/RELAY_AUTH_RECONCILIATION.md)"
+    },
+    {
       "path": "src/nostr/discovery.js",
       "sha256": "5ba325691db48670425779b56662cffbec1907718b7fda32fa846a9c8fdc842c",
       "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
@@ -258,9 +270,9 @@
     },
     {
       "path": "src/nostr/index.js",
-      "sha256": "7e1cec744d657c4c9117cc4f5259e7ee1918f6e802c105c8a58f3211329173a8",
+      "sha256": "f1b3931839b69c29d9d1662093cfdc0b87909643506130fbc4af6c6830b13f1b",
       "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
-      "lineage": "derived and standardized; rc.3 safe publication comparison"
+      "lineage": "derived and standardized; rc.3 safe publication comparison; event-specific delivery reconciliation"
     },
     {
       "path": "src/nostr/nip55.js",
@@ -295,9 +307,9 @@
     },
     {
       "path": "src/nostr/relay-transport.js",
-      "sha256": "84762f0271633945928dc9746c86db495443074dc4c08d6938b713f053ef13a9",
+      "sha256": "932cd796ecd5d2ca515ded6166eb0ec3dc0b77cf28e07efc9104debbaef1ca7d",
       "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
-      "lineage": "derived and standardized; independent protocol hardening, NIP-01 and cross-donor regression cases 2026-11-25; rc.6 Anchor consumer comparison; publication snapshot and named-host endpoint review repair",
+      "lineage": "derived and standardized; independent protocol hardening, NIP-01 and cross-donor regression cases 2026-11-25; rc.6 Anchor consumer comparison; Pretend Internet relay router reconciliation batch 4 (docs/RELAY_AUTH_RECONCILIATION.md)",
       "parent_sha256": "a9ee6daf01a85df2f2677f72a2fb7151669a1c9fdd5ea378cac312e35792b6dd"
     },
     {
@@ -314,9 +326,9 @@
     },
     {
       "path": "src/nsite/files.js",
-      "sha256": "146fbe10a260285345cd30e1627e1b64dc8e1a1200c2595db3836e8f33c11ac9",
+      "sha256": "dd66f1c3f4d1099462cce9c88298578314998331e4d7e916ac05512c6e5590dd",
       "role": "NIP5A manifest and verified publication pipeline",
-      "lineage": "derived and standardized"
+      "lineage": "derived and standardized; publication reconciliation batch 3"
     },
     {
       "path": "src/nsite/index.js",
@@ -332,15 +344,15 @@
     },
     {
       "path": "src/nsite/plan.js",
-      "sha256": "0bc0ef4529b4757498722ab24c04354e0e31570a86496ca60ecd3178b5f63370",
+      "sha256": "e4da5b7c9453cfff2bbb043420f6fbab844a9b265adb00a6f3454b8cba5d4c84",
       "role": "Shared immutable-byte publication preparation and digest-bound preview",
-      "lineage": "Protocol-based implementation compared with recovered donor sources; see CROSS_DONOR_PUBLICATION.md"
+      "lineage": "Protocol-based implementation compared with recovered donor sources; see CROSS_DONOR_PUBLICATION.md; publication reconciliation batch 3"
     },
     {
       "path": "src/nsite/publisher.js",
-      "sha256": "ab20c86b043cc198b2492da3d67f8b4c5c9af3350b0cd4b9f1a0a1e3aba6e385",
+      "sha256": "f4b8da4d4e7099a7a7d4fa9f4911932912e6d6f149bfb38fdfd7a10b915ecc6f",
       "role": "NIP5A manifest and verified publication pipeline",
-      "lineage": "derived and standardized; rc.3 safe publication comparison; rc.6 Anchor consumer comparison"
+      "lineage": "derived and standardized; rc.3 safe publication comparison; rc.6 Anchor consumer comparison; publication reconciliation batch 3"
     },
     {
       "path": "src/nsite/retrieval.js",
@@ -377,6 +389,12 @@
       "sha256": "e1bdc026518da6cb69df04cc827f93410c1ed20c47017b3b6a43bfa8c1cd6d59",
       "role": "unmodified vendor source and license",
       "lineage": "Nsite-Directory-Editor-v1.1.1.zip / vendor"
+    },
+    {
+      "path": "src/nsite/resumable.js",
+      "role": "Digest-bound replica upload and resumable site verification orchestration",
+      "lineage": "Independent adaptation of Safehouse publisher contracts using existing Loopy verified transport; docs/PUBLICATION_RECONCILIATION.md",
+      "sha256": "4cafe9fe9980a597b5e2705ff75c27cb9c1879419a11ccbca80214e7c64cb45f"
     }
   ],
   "notes": "Public SDK migration; private original archive inventory and full internal audit remain with preserved candidate. Module lineage and exact pins retained.",
@@ -451,5 +469,13 @@
     "parent_version": "1.1.1-rc.9",
     "doc": "docs/PUBLIC_REVIEW_REPAIRS.md",
     "tests": "tests/review-profiles-identifiers.test.js"
+  },
+  "relay_delivery_reconciliation": {
+    "parent": "e611870edd7ca0ab987b4508325df21e2a54dc07",
+    "reference_tree": "05fee992a984cd373e4283b29033f3d6256e5ab4",
+    "source": "https://github.com/br3avery-maker/Pretend-Internet/tree/05fee992a984cd373e4283b29033f3d6256e5ab4/tools/relay-router",
+    "source_blob": "e647688aab92893f0d134ed268ca221998d01bf7",
+    "document": "docs/RELAY_DELIVERY_RECONCILIATION.md",
+    "authority": "offline-advisory-only"
   }
 }
