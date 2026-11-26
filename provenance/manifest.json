@@ -161,8 +161,8 @@
     {
       "path": "src/intelligence/engine.js",
       "role": "Advisory Anchor intelligence extraction",
-      "lineage": "Anchor integration; see ANCHOR_INTELLIGENCE.md; rc.6 Anchor consumer comparison",
-      "sha256": "73c2fe30ca2593d83f4c0c9da422a8fe735e61fd7f28c8efc3d0a2ac84328053"
+      "lineage": "Anchor integration; see ANCHOR_INTELLIGENCE.md; rc.6 Anchor consumer comparison; exact named nsite identifier precedence review repair",
+      "sha256": "2f5f55b8957e1e043e763276885b7009cc4deae5480315130342d1addf965844"
     },
     {
       "path": "src/intelligence/index.js",
