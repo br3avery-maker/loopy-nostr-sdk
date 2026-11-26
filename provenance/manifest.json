@@ -4,9 +4,9 @@
   "modules": [
     {
       "path": "src/adapters/android.js",
-      "sha256": "5671caf8d69d73804606f8478900bc0d32b66b028a4f40729f28e7718feb5adc",
+      "sha256": "e868b0f135dbeac986efc7389b4fd4497f9aaa57d1f7426b0eee6a67f5257349",
       "role": "browser and Android host integration",
-      "lineage": "derived and standardized"
+      "lineage": "derived and standardized; signer lifecycle review repair"
     },
     {
       "path": "src/adapters/browser.js",
@@ -302,9 +302,9 @@
     },
     {
       "path": "src/nostr/signers.js",
-      "sha256": "ad2cff95f8db8bb1f4197a0f86c5a9c9c5cf74cad6d7614725ea1f87406ce4f0",
+      "sha256": "9f7d5feca119f809cf02ab77a4fffc8d05716b56a70de3d8e5a7710af0a5f3f0",
       "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
-      "lineage": "derived and standardized"
+      "lineage": "derived and standardized; signer lifecycle review repair"
     },
     {
       "path": "src/nostr/sync.js",

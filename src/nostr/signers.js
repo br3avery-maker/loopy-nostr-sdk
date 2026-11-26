@@ -10,20 +10,28 @@ export async function bunkerSigner(uri,{clientSecret=generateSecretKey(),connect
   const pointer=await parseBunkerInput(uri);
   if (!pointer) throw new TypeError('Invalid NIP-46 bunker URI');
   let signer=null, pending=null, connected=false, closed=false;
+  const operations=new Set();
+  const cancellable=fn=>{
+    if(closed)return Promise.reject(new Error('NIP-46 signer closed'));
+    let cancel;const stopped=new Promise((_,reject)=>{cancel=()=>reject(new Error('NIP-46 signer closed'));});
+    operations.add(cancel);
+    const work=Promise.resolve().then(()=>{if(closed)throw new Error('NIP-46 signer closed');return fn();});
+    return Promise.race([work,stopped]).finally(()=>operations.delete(cancel));
+  };
   const requireConnected=()=>{if(!connected||!signer||closed)throw new Error('NIP-46 signer not connected');return signer;};
   return {
     mode:'nip46',
     async connect(){
       if(closed)throw new Error('NIP-46 signer closed');
-      if(connected)return signer.getPublicKey();
+      if(connected)return cancellable(()=>requireConnected().getPublicKey());
       if(pending)return pending;
       const attempt=BunkerSigner.fromBunker(clientSecret,pointer);signer=attempt;
-      pending=(async()=>{try{await attempt.connect(connectOptions);if(closed||signer!==attempt)throw new Error('NIP-46 signer closed');const key=await attempt.getPublicKey();if(closed||signer!==attempt)throw new Error('NIP-46 signer closed');connected=true;return key;}catch(e){if(signer===attempt){signer=null;connected=false;try{await attempt.close()}catch{}}throw e;}finally{pending=null;}})();
+      pending=(async()=>{try{await cancellable(()=>attempt.connect(connectOptions));if(closed||signer!==attempt)throw new Error('NIP-46 signer closed');const key=await cancellable(()=>attempt.getPublicKey());if(closed||signer!==attempt)throw new Error('NIP-46 signer closed');connected=true;return key;}catch(e){if(signer===attempt){signer=null;connected=false;try{await attempt.close()}catch{}}throw e;}finally{pending=null;}})();
       return pending;
     },
-    getPublicKey:async()=>requireConnected().getPublicKey(),
-    signEvent:async template=>requireConnected().signEvent(template),
-    async close(){closed=true;connected=false;const active=signer;signer=null;if(active)await active.close();}
+    getPublicKey:async()=>cancellable(()=>requireConnected().getPublicKey()),
+    signEvent:async template=>cancellable(()=>requireConnected().signEvent(template)),
+    async close(){closed=true;connected=false;const active=signer;signer=null;for(const cancel of operations)cancel();operations.clear();if(active)await active.close();}
   };
 }
 /** Copy-to-signer NIP-46 request. start() begins listening before the user switches apps. */
