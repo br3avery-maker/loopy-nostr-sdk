@@ -1,6 +1,6 @@
 import {eventTemplate,checkedSign} from './events.js';
 import {endpoint} from '../core/urls.js';
-import {toBase64Url,encode} from '../core/bytes.js';
+import {encode} from '../core/bytes.js';
 /** NIP-42 authentication: challenge and relay binding are mandatory; no automatic signing. */
 export function relayAuthTemplate({challenge,relay,created_at=Math.floor(Date.now()/1000)}={}){
   if(typeof challenge!=='string'||!challenge||challenge.length>512)throw new TypeError('Relay AUTH challenge required');
@@ -11,7 +11,11 @@ export async function httpAuthHeader({url,method,signer,pubkey,created_at=Math.f
   const u=new URL(url);if(u.protocol!=='https:'||u.username||u.password)throw new TypeError('HTTPS URL without credentials required');
   if(!['GET','POST','PUT','PATCH','DELETE','HEAD'].includes(method))throw new TypeError('HTTP method required');
   const event=await checkedSign(signer,eventTemplate({kind:27235,created_at,tags:[['u',u.href],['method',method]],content:''}),pubkey);
-  return 'Nostr '+toBase64Url(encode(JSON.stringify(event)));
+  // NIP-98 uses standard padded Base64, unlike Blossom's existing encoding.
+  const data=encode(JSON.stringify(event));
+  if(typeof Buffer!=='undefined')return 'Nostr '+Buffer.from(data).toString('base64');
+  let binary='';for(const byte of data)binary+=String.fromCharCode(byte);
+  return 'Nostr '+btoa(binary);
 }
 /** NIP-44 encryption adapter. A trusted signer must provide approved nip44 operations. */
 export function encryptionAdapter(signer){

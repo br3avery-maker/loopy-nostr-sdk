@@ -276,9 +276,9 @@
     },
     {
       "path": "src/nostr/other-nips.js",
-      "sha256": "020d1c4f70786deef360b843ef00c49f586820c4bff55b43ec6b610bcb69dda5",
+      "sha256": "ddac782076ce5d22514c5e4579b970182318bc6347e5c1641cce562e7e608f96",
       "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
-      "lineage": "derived and standardized"
+      "lineage": "derived and standardized; NIP-98 standard Base64 review repair"
     },
     {
       "path": "src/nostr/profiles.js",
