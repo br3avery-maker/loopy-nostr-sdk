@@ -1,5 +1,6 @@
 import {endpoint,endpoints} from '../core/urls.js';
 import {assertSignedEvent} from './events.js';
+import {verifiedCopy} from './history.js';
 import {isVerifiedReceipt} from './receipts.js';
 import {matchesFilter} from './filter.js';
 function frame(raw){try {return JSON.parse(typeof raw==='string'?raw:String(raw));} catch{return null;}}
@@ -30,7 +31,7 @@ export function queryRelay(url,filter,{Socket=globalThis.WebSocket,timeoutMs=800
 }
 /** Publish exact event and verify relay OK plus subsequent exact-ID REQ readback. */
 export function publishRelay(url,event,{Socket=globalThis.WebSocket,timeoutMs=10000,signal,verify=true}={}){
-  url=endpoint(url);if(verify)assertSignedEvent(event);if(!Socket)throw new Error('WebSocket transport unavailable');
+  url=endpoint(url);event=verify?verifiedCopy(event):structuredClone(event);if(!Socket)throw new Error('WebSocket transport unavailable');
   return new Promise((resolve,reject)=>{
     const ws=new Socket(url),id='read-'+event.id.slice(0,16);let done=false,accepted=false,timer;
     const abort=()=>finish(new Error('Publish cancelled'));

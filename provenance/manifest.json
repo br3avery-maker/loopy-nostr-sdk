@@ -118,9 +118,9 @@
     },
     {
       "path": "src/core/urls.js",
-      "sha256": "106fe00c91130e0950821d074cd679e78d4c51ae1daf089db7dce8d0e0892aa4",
+      "sha256": "0d258fb81c45748a8ac782afa047418f23b112772eed1893805b5523ab11fc74",
       "role": "sha256, URL/path validation and shared options",
-      "lineage": "derived and standardized"
+      "lineage": "derived and standardized; publication snapshot and named-host endpoint review repair"
     },
     {
       "path": "src/directory/index.js",
@@ -295,9 +295,9 @@
     },
     {
       "path": "src/nostr/relay-transport.js",
-      "sha256": "bb427bbd272390417a409f65e4f7209f68e8fd75d117114f3766b8539a5daf00",
+      "sha256": "84762f0271633945928dc9746c86db495443074dc4c08d6938b713f053ef13a9",
       "role": "signer adapters, actual BIP340 validation, relay discovery/transport, post/profile functions",
-      "lineage": "derived and standardized; independent protocol hardening, NIP-01 and cross-donor regression cases 2026-11-25; rc.6 Anchor consumer comparison",
+      "lineage": "derived and standardized; independent protocol hardening, NIP-01 and cross-donor regression cases 2026-11-25; rc.6 Anchor consumer comparison; publication snapshot and named-host endpoint review repair",
       "parent_sha256": "a9ee6daf01a85df2f2677f72a2fb7151669a1c9fdd5ea378cac312e35792b6dd"
     },
     {

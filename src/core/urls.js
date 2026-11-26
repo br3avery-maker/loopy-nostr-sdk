@@ -3,7 +3,10 @@ export function endpoint(input, type = 'relay') {
   let url; try { url = new URL(input); } catch { throw new TypeError(`Invalid ${type} URL`); }
   const scheme = type === 'relay' ? 'wss:' : 'https:';
   if (url.protocol !== scheme || !url.hostname || url.username || url.password || url.hash || url.search) throw new TypeError(`${type} must be a plain ${scheme}// endpoint`);
-  if (type !== 'relay' && (url.hostname === 'localhost' || url.hostname.endsWith('.local') || url.hostname.endsWith('.internal') || /^(127\.|10\.|192\.168\.|169\.254\.)/.test(url.hostname))) throw new TypeError('Private/loopback Blossom endpoint disallowed by default');
+  // Untrusted Blossom hints must use DNS names, not literal addresses or local names.
+  // This syntactic guard is not DNS resolution or a server-side egress policy.
+  const host=url.hostname.toLowerCase().replace(/\.$/,'');
+  if(type!=='relay'&&(!host.includes('.')||host.includes(':')||/^\d+(?:\.\d+){3}$/.test(host)||/\.(?:localhost|local|internal)$/.test(host)))throw new TypeError('Private/loopback Blossom endpoint disallowed by default; named HTTPS host required');
   return url.href.replace(/\/$/, '');
 }
 export function endpoints(values, type='relay', max=32) {
